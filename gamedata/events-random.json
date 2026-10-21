@@ -154,7 +154,97 @@
         "duree_mois": 6
       }
     ],
-    "justification": "Crises bancaires systémiques rares (2008, 2011-2012, Credit Suisse 2023) ; plus probables quand les spreads sont déjà tendus."
+    "justification": "Crises bancaires systémiques rares (2008, 2011-2012, Credit Suisse 2023) ; plus probables quand les spreads sont déjà tendus.",
+    "choix": [
+      {
+        "id": "rassurer",
+        "label": "Rassurer sans engager d'argent public",
+        "description": "Déclarations communes avec la BCE : les marchés restent nerveux.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "prime_risque"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          }
+        ]
+      },
+      {
+        "id": "garantie",
+        "label": "Garantir les dépôts et les prêts interbancaires",
+        "description": "La garantie de l'État calme la panique ; le risque passe sur la dette publique.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "prime_risque"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "indicator",
+              "id": "croissance_pib"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.autres"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          }
+        ]
+      },
+      {
+        "id": "recapitalisation",
+        "label": "Recapitaliser les banques fragiles",
+        "description": "L'État entre au capital : le crédit repart, la dette grimpe.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.autres"
+            },
+            "direction": 1,
+            "magnitude": "forte",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "indicator",
+              "id": "croissance_pib"
+            },
+            "direction": 1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 4
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "defiance_dette",
@@ -374,7 +464,107 @@
         "duree_mois": 4
       }
     ],
-    "justification": "Plans sociaux d'ampleur plusieurs fois par an ; plus nombreux quand la croissance est faible."
+    "justification": "Plans sociaux d'ampleur plusieurs fois par an ; plus nombreux quand la croissance est faible.",
+    "choix": [
+      {
+        "id": "laisser_faire",
+        "label": "Laisser faire le repreneur éventuel",
+        "description": "Pas d'argent public : le site ferme si aucun repreneur ne se présente.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "group",
+              "id": "ouvriers_employes"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          },
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          }
+        ]
+      },
+      {
+        "id": "plan_reprise",
+        "label": "Financer un plan de reprise",
+        "description": "Prêt public et formation des salariés pour attirer un repreneur.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.autres"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "group",
+              "id": "ouvriers_employes"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          }
+        ]
+      },
+      {
+        "id": "nationalisation",
+        "label": "Nationaliser temporairement le site",
+        "description": "L'État reprend l'usine le temps de trouver une solution : les emplois sont sauvés, la facture est lourde.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.autres"
+            },
+            "direction": 1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 24
+          },
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 6
+          },
+          {
+            "cible": {
+              "kind": "group",
+              "id": "ouvriers_employes"
+            },
+            "direction": 1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 8
+          },
+          {
+            "cible": {
+              "kind": "prime_risque"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "inondations",
@@ -425,7 +615,96 @@
         "duree_mois": 3
       }
     ],
-    "justification": "Épisodes majeurs presque chaque automne-hiver (Pas-de-Calais 2023-2024, Var, Gard…)."
+    "justification": "Épisodes majeurs presque chaque automne-hiver (Pas-de-Calais 2023-2024, Var, Gard…).",
+    "choix": [
+      {
+        "id": "catnat",
+        "label": "Appliquer le régime de catastrophe naturelle",
+        "description": "Les assureurs indemnisent, l'État complète à la marge.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      },
+      {
+        "id": "fonds_urgence",
+        "label": "Débloquer un fonds d'urgence",
+        "description": "Aide directe aux sinistrés et aux communes : la reconstruction va plus vite.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.collectivites"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 4
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      },
+      {
+        "id": "plan_adaptation",
+        "label": "Lancer un plan d'adaptation climatique",
+        "description": "Digues, renaturation, interdiction de construire en zone inondable : coûteux, utile à long terme.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.ecologie"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "niveau",
+            "duree_mois": 36
+          },
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          },
+          {
+            "cible": {
+              "kind": "group",
+              "id": "agriculteurs"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 4
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "canicule_secheresse",
@@ -662,7 +941,105 @@
         "duree_mois": 3
       }
     ],
-    "justification": "Épisodes de 2005 et 2023 ; bien plus probables quand la tension, le chômage et le malaise des jeunes sont élevés."
+    "justification": "Épisodes de 2005 et 2023 ; bien plus probables quand la tension, le chômage et le malaise des jeunes sont élevés.",
+    "choix": [
+      {
+        "id": "apaisement",
+        "label": "Appeler au calme et à la justice",
+        "description": "Le Président reçoit la famille et promet une enquête indépendante.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "tension"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      },
+      {
+        "id": "fermete",
+        "label": "Couvre-feu et renforts de police",
+        "description": "L'ordre revient vite ; l'image des quartiers sous couvre-feu fait le tour du monde.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 3
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 4
+          },
+          {
+            "cible": {
+              "kind": "group",
+              "id": "etudiants_jeunes"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 6
+          }
+        ]
+      },
+      {
+        "id": "plan_quartiers",
+        "label": "Annoncer un plan pour les quartiers",
+        "description": "Rénovation urbaine, emplois aidés, présence des services publics : un effort de long terme.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.collectivites"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "niveau",
+            "duree_mois": 24
+          },
+          {
+            "cible": {
+              "kind": "tension"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "group",
+              "id": "etudiants_jeunes"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "cyberattaque_hopitaux",
@@ -743,7 +1120,106 @@
         "duree_mois": 2
       }
     ],
-    "justification": "Mouvements de 2024 et janvier 2026 ; très probables quand la satisfaction des agriculteurs est basse."
+    "justification": "Mouvements de 2024 et janvier 2026 ; très probables quand la satisfaction des agriculteurs est basse.",
+    "choix": [
+      {
+        "id": "negocier",
+        "label": "Ouvrir une négociation",
+        "description": "Réunion à Matignon, promesses de simplification : le mouvement s'essouffle lentement.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "group",
+              "id": "agriculteurs"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 4
+          }
+        ]
+      },
+      {
+        "id": "ceder",
+        "label": "Céder : aides d'urgence et pause des normes",
+        "description": "Un chèque et un moratoire environnemental : les tracteurs rentrent, les écologistes protestent.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.autres"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 12
+          },
+          {
+            "cible": {
+              "kind": "group",
+              "id": "agriculteurs"
+            },
+            "direction": 1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 8
+          },
+          {
+            "cible": {
+              "kind": "region"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 2
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      },
+      {
+        "id": "fermete",
+        "label": "Faire lever les blocages",
+        "description": "Les forces de l'ordre dégagent les axes : la circulation reprend, la colère reste.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "group",
+              "id": "agriculteurs"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 8
+          },
+          {
+            "cible": {
+              "kind": "tension"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 4
+          },
+          {
+            "cible": {
+              "kind": "stabilite"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "greve_transports",
@@ -797,7 +1273,95 @@
         "duree_mois": 2
       }
     ],
-    "justification": "Conflits longs en 1995, 2019-2020, 2023 ; liés à un climat social dégradé."
+    "justification": "Conflits longs en 1995, 2019-2020, 2023 ; liés à un climat social dégradé.",
+    "choix": [
+      {
+        "id": "tenir",
+        "label": "Tenir bon",
+        "description": "Le gouvernement attend l'essoufflement : chaque journée de grève pèse sur l'activité.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "indicator",
+              "id": "croissance_pib"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 2
+          },
+          {
+            "cible": {
+              "kind": "tension"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      },
+      {
+        "id": "ceder",
+        "label": "Céder sur les revendications",
+        "description": "Primes et garanties statutaires : les trains repartent, mais l'autorité du gouvernement en sort affaiblie.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "budget",
+              "id": "depenses.autres"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 24
+          },
+          {
+            "cible": {
+              "kind": "tension"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 3
+          },
+          {
+            "cible": {
+              "kind": "stabilite"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 4
+          }
+        ]
+      },
+      {
+        "id": "service_minimum",
+        "label": "Imposer un service minimum renforcé",
+        "description": "Réquisitions et service garanti aux heures de pointe : les usagers respirent, les syndicats durcissent le ton.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "tension"
+            },
+            "direction": 1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 4
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "blocage_universites",
@@ -857,8 +1421,8 @@
   },
   {
     "id": "scandale_ministre",
-    "titre": "Un ministre mis en cause démissionne",
-    "description": "Révélations de presse, enquête ouverte : le ministre quitte le gouvernement, l'opposition parle d'affaire d'État.",
+    "titre": "Un ministre mis en cause",
+    "description": "Révélations de presse, enquête ouverte : l'opposition exige sa démission et parle d'affaire d'État.",
     "categorie": "politique",
     "depuis": "2026-06",
     "proba_mensuelle": 0.024,
@@ -870,21 +1434,55 @@
           "kind": "popularite"
         },
         "direction": -1,
-        "magnitude": "moyenne",
-        "forme": "choc",
-        "duree_mois": 6
-      },
-      {
-        "cible": {
-          "kind": "stabilite"
-        },
-        "direction": -1,
         "magnitude": "faible",
         "forme": "choc",
         "duree_mois": 4
       }
     ],
-    "justification": "Démissions sur fond d'affaire plusieurs fois par quinquennat."
+    "justification": "Démissions sur fond d'affaire plusieurs fois par quinquennat.",
+    "choix": [
+      {
+        "id": "maintenir",
+        "label": "Maintenir le ministre",
+        "description": "Présomption d'innocence : le gouvernement fait bloc, la presse s'acharne.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": -1,
+            "magnitude": "moyenne",
+            "forme": "choc",
+            "duree_mois": 6
+          }
+        ]
+      },
+      {
+        "id": "limoger",
+        "label": "Le pousser à la démission",
+        "description": "Le ministre part dans la journée : l'affaire retombe, le gouvernement perd un poids lourd.",
+        "effets": [
+          {
+            "cible": {
+              "kind": "stabilite"
+            },
+            "direction": -1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          },
+          {
+            "cible": {
+              "kind": "popularite"
+            },
+            "direction": 1,
+            "magnitude": "faible",
+            "forme": "choc",
+            "duree_mois": 3
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "fronde_majorite",

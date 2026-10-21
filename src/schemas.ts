@@ -267,6 +267,14 @@ export const RandomEventTemplate = z.object({
   // Région touchée, tirée selon sa population ou sa tension : les effets de cible "region" sans id la visent.
   region: z.enum(['population', 'tension']).optional(),
   effets: GameEventSeed.shape.effets,
+  // Dilemme (ENGINE.md §5c) : le joueur choisit une réponse, dont les effets s'ajoutent à ceux de l'événement. Le premier choix
+  // est la réponse par défaut, appliquée si le mois s'achève sans décision.
+  choix: z.array(z.object({
+    id: z.string().regex(/^[a-z0-9_]+$/),
+    label: z.string(),
+    description: z.string(),
+    effets: GameEventSeed.shape.effets,
+  })).min(2).max(3).optional(),
   justification: z.string(),
 });
 export const RandomEvents = z.array(RandomEventTemplate);

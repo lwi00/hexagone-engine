@@ -1,6 +1,8 @@
 // Tick mensuel (ENGINE.md §1). Formules : descriptions de gamedata/coefficients.json ; normalisations : scripts/papersim.cjs.
 import type { Danger, DefeatCause, GameState, RegionCode, SocialGroup, TurnEvent, TurnReport } from './types.ts';
 import { monthIndex } from './types.ts';
+import type { z } from 'zod';
+import type { RandomEvents } from './schemas.ts';
 import { C, CENTRAGE, INIT, LEVERS, budget, centralFactor, events, groups, inst, load, politics, randomEvents, regions, save } from './init.ts';
 import type { Core, Fin } from './init.ts';
 import { billGroups, promulgate, qualitativeEffect, sumEffects } from './levers.ts';
@@ -62,7 +64,9 @@ function indexSmic(c: Core, t: number, janvier: boolean): number {
 }
 
 // Événements aléatoires (ENGINE.md §5b) : probabilité du mois, 0 hors période, hors saison ou pendant le délai entre deux tirages.
-type RandomEvent = (typeof randomEvents)[number];
+// Typé par le schéma : les champs facultatifs (choix) ne figurent pas forcément dans le JSON.
+const TEMPLATES = randomEvents as unknown as z.infer<typeof RandomEvents>;
+type RandomEvent = (typeof TEMPLATES)[number];
 function randomProba(s: GameState, e: RandomEvent, t: number): number {
   const [y, mo] = e.depuis.split('-').map(Number);
   const last = s.internals[`ev:${e.id}`];
@@ -126,6 +130,25 @@ function stepMacro(c: Core, t: number, inp: MacroIn) {
   };
 }
 
+// Premier mardi d'octobre (LOLF, art. 39 : date limite de dépôt du PLF). Jour de la semaine par la méthode de Sakamoto.
+export function premierMardiOctobre(y: number): number {
+  const dow = (y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + 6 + 1) % 7; // 1er octobre, 0 = dimanche
+  return 1 + ((2 - dow + 7) % 7);
+}
+
+// Réponse à un dilemme (ENGINE.md §5c) : effets du choix à partir du mois t, dilemme levé. Modifie s.
+export function applyChoice(s: GameState, choixId: string, t: number, parDefaut = false): TurnEvent[] {
+  const d = s.dilemme;
+  const c = d && TEMPLATES.find((e) => e.id === d.id)?.choix?.find((x) => x.id === choixId);
+  if (!d || !c) return [];
+  for (const f of c.effets) {
+    const cible = f.cible.kind === 'region' && !f.cible.id ? { kind: 'region' as const, id: d.region } : f.cible;
+    s.effects.push(qualitativeEffect(s, { kind: 'event', id: `${d.id}:${c.id}` }, cible as never, f.direction, f.magnitude as never, f.forme as 'niveau' | 'choc', t, 0, f.duree_mois));
+  }
+  delete s.dilemme;
+  return [{ kind: 'choix', eventId: d.id, titre: d.titre, label: c.label, parDefaut }];
+}
+
 // opts.aleatoire = false : sans événement aléatoire (prévisualisation, ENGINE.md §8).
 export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { state: GameState; report: TurnReport } {
   const s = structuredClone(prev);
@@ -133,6 +156,9 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   const out: TurnEvent[] = [];
   const avant = { ...s.national };
   const I = s.internals;
+
+  // 0. Dilemme resté sans réponse : réponse par défaut (premier choix), avant tout nouveau tirage.
+  if (s.dilemme) out.push(...applyChoice(s, s.dilemme.choix[0].id, t, true));
 
   // 1. Événements du mois
   for (const e of events) {
@@ -145,9 +171,17 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
     }
   }
 
+  // 1a. Calendrier budgétaire (ENGINE.md §5d) : rentrée budgétaire en septembre.
+  if (s.date.month === 9 && s.date.year < 2030) {
+    const y = s.date.year + 1;
+    out.push({ kind: 'event', id: `rentree_budgetaire_${y}`, type: 'echeance', titre: `Le projet de loi de finances pour ${y} doit être déposé`,
+      description: `Le PLF ${y} doit être déposé au Parlement au plus tard le mardi ${premierMardiOctobre(s.date.year)} octobre (LOLF, art. 39). `
+        + `Le Parlement dispose ensuite de 70 jours pour l'adopter (Constitution, art. 47) : vote de l'Assemblée en novembre, adoption définitive en décembre. Sans loi de finances au 31 décembre, l'État fonctionne sous loi spéciale.` });
+  }
+
   // 1b. Un événement aléatoire au plus : un tirage décide s'il y en a un et lequel (probabilités cumulées).
   if (opts.aleatoire !== false) {
-    const cands = randomEvents.map((e) => ({ e, p: randomProba(s, e, t) })).filter((c) => c.p > 0);
+    const cands = TEMPLATES.map((e) => ({ e, p: randomProba(s, e, t) })).filter((c) => c.p > 0);
     const tot = cands.reduce((a, c) => a + c.p, 0);
     let u: number;
     [u, s.rng] = rand(s.rng);
@@ -170,6 +204,9 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
         const cible = f.cible.kind === 'region' && !f.cible.id ? { kind: 'region' as const, id: code } : f.cible;
         s.effects.push(qualitativeEffect(s, { kind: 'event', id: pick.id }, cible as never, f.direction, f.magnitude as never, f.forme as 'niveau' | 'choc', t, 0, f.duree_mois));
       }
+      if (pick.choix) {
+        s.dilemme = { id: pick.id, titre, description: pick.description, region: code, choix: pick.choix.map(({ id, label, description }) => ({ id, label, description })) };
+      }
     }
   }
 
@@ -191,6 +228,19 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
     out.push({ kind: 'promulgation', billId: b.id });
   }
   if (dissoute) out.push(...elections(s, t)); // 2b. Législatives anticipées (ENGINE.md §11)
+
+  // 2c. 31 décembre sans loi de finances pour l'année suivante : loi spéciale (ENGINE.md §5d).
+  const lsId = `loi_speciale_${s.date.year + 1}`;
+  if (s.date.month === 12 && s.date.year < 2030 && !s.firedEvents.includes(lsId)
+    && !s.bills.some((b) => b.status === 'adoptee' && b.spec.loiDeFinances === s.date.year + 1)) {
+    const y = s.date.year + 1, id = lsId;
+    s.firedEvents.push(id);
+    out.push({ kind: 'event', id, type: 'exogene', titre: `Pas de budget pour ${y} : l'État passe sous loi spéciale`,
+      description: `Faute de loi de finances adoptée au 31 décembre, une loi spéciale autorise à lever l'impôt et à reconduire les crédits de ${y - 1}. Les marchés et les agences de notation s'inquiètent.` });
+    for (const [cible, dir, duree] of [[{ kind: 'stabilite' }, -1, 6], [{ kind: 'prime_risque' }, 1, 6], [{ kind: 'popularite' }, -1, 3]] as const) {
+      s.effects.push(qualitativeEffect(s, { kind: 'event', id }, cible as never, dir, 'faible', 'choc', t, 0, duree));
+    }
+  }
 
   // 3. Indexations automatiques (bougent reference, jamais delta)
   const x = load<Core>(I, 'x.'), rf = load<Core>(I, 'r.'), fin = load<Fin>(I, 'f.');

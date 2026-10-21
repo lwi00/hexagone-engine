@@ -55,6 +55,7 @@ export const BillSpec = z.object({
   prepMonths: z.number().int().min(0).max(24),
   rampMonths: z.number().int().min(0).max(60), // montée en charge des effets qualitatifs uniquement
   estimatedCost: z.number(), // Md€/an, estimation du LLM (affichée, non utilisée par le moteur)
+  loiDeFinances: z.number().int().optional(), // projet de loi de finances pour cette année (calendrier budgétaire, ENGINE.md §5d)
 });
 export type BillSpec = z.infer<typeof BillSpec>;
 
@@ -128,6 +129,13 @@ export type GameState = {
   history: { date: YearMonth; national: Indicators; intentions: Record<string, number> }[];
   defaite?: { cause: DefeatCause; date: YearMonth }; // fin de partie anticipée (ENGINE.md §10)
   institutions?: Institutions; // ENGINE.md §11 ; absent (sauvegarde antérieure) = INSTITUTIONS0
+  dilemme?: Dilemme; // ENGINE.md §5c : en attente d'un choix du joueur
+};
+export type Dilemme = {
+  id: string; // modèle de gamedata/events-random.json
+  titre: string; description: string; // titre avec la région touchée, le cas échéant
+  region?: RegionCode;
+  choix: { id: string; label: string; description: string }[];
 };
 
 // Fin de partie anticipée : crise de la dette (spread), crise de régime (stabilité), soulèvement (tension).
@@ -146,7 +154,8 @@ export type TurnEvent =
   | { kind: 'defaite'; cause: DefeatCause }
   | { kind: 'dissolution' }
   | { kind: 'legislatives'; avant: Sieges; apres: Sieges; issue: IssueLegislatives; coalition?: string } // soirée électorale
-  | { kind: 'nomination'; profil: ProfilPM; coalition?: string };
+  | { kind: 'nomination'; profil: ProfilPM; coalition?: string }
+  | { kind: 'choix'; eventId: string; titre: string; label: string; parDefaut: boolean }; // réponse à un dilemme (§5c)
 
 export type TurnReport = { date: YearMonth; events: TurnEvent[]; avant: Indicators; apres: Indicators };
 
@@ -198,6 +207,8 @@ export interface Engine {
   nominate(state: GameState, profil: Exclude<ProfilPM, 'cohabitation'>): { state: GameState; events: TurnEvent[] };
   // Monte-Carlo sur graines fixes : pur, déterministe, n'avance pas state.rng.
   forecastLegislatives(state: GameState): LegislativesForecast;
+  // Réponse au dilemme en attente (§5c) : ses effets partent ce mois-ci. Sans effet si aucun dilemme ou choix inconnu.
+  choose(state: GameState, choixId: string): { state: GameState; events: TurnEvent[] };
 }
 
 export const monthIndex = (d: YearMonth) => (d.year - 2026) * 12 + (d.month - 1);

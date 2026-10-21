@@ -65,6 +65,19 @@ Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hy
 - Jamais en prévisualisation (§8) : `endTurn(state, { aleatoire: false })`.
 - Fréquence (npm run balance) : ≈ 3,3 événements par an sans action ; davantage de crises quand la situation se dégrade (conditions).
 
+## 5c. Dilemmes
+
+- Un modèle d'événement aléatoire peut proposer 2 ou 3 `choix` (libellé, description, effets au format §5). Tiré au §5b, il applique d'abord ses propres `effets`, puis pose `state.dilemme` (titre avec la région, choix sans leurs effets).
+- `choose(state, choixId)` applique les effets du choix à partir du mois courant (les effets `region` sans id visent la région tirée), lève le dilemme et renvoie un `TurnEvent` `choix`.
+- Sans décision, le tick suivant applique le **premier** choix (réponse par défaut, `parDefaut: true`) avant tout nouveau tirage : au plus un dilemme en attente.
+- Prévisualisation (§8) : un dilemme en attente reçoit la réponse par défaut des deux côtés.
+
+## 5d. Calendrier budgétaire
+
+- Chaque septembre (2026 à 2029), une échéance rappelle que le PLF de l'année suivante doit être déposé au plus tard le premier mardi d'octobre (LOLF, art. 39) et que le Parlement a 70 jours pour l'adopter (Constitution, art. 47).
+- Un projet porte `spec.loiDeFinances = année` (écran budgétaire de l'interface). Déposé entre septembre et novembre, il est voté par l'Assemblée en novembre (vote solennel réel : mi-novembre), ce qui laisse décembre pour la navette ou le 49.3.
+- Au tick de décembre, après les votes : sans loi de finances **adoptée** pour l'année suivante, l'État passe sous **loi spéciale** (cas réels : 2025, 2026) : chocs faibles de stabilité (6 mois), de prime de risque (6 mois) et de popularité (3 mois).
+
 ## 6. Déterminisme
 
 `mulberry32` initialisé par `seed`, état dans `state.rng`. Aucun `Math.random` ni `Date` dans `src/`. Même état + mêmes actions ⇒ même résultat. Le moteur est pur : chaque fonction renvoie un nouvel état.

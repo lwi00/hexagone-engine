@@ -5,7 +5,7 @@ import { BUDGET_LINES, DERIVED_INDICATORS, INDICATORS, REGION_CODES, SOCIAL_GROU
 import { C, LEVERS, TAGS, inst, newGame } from './init.ts';
 import { dissolve, forecastLegislatives, nominate, pouvoir } from './institutions.ts';
 import { MAX_QUALITATIVE, promulgate } from './levers.ts';
-import { dangers, endTurn } from './tick.ts';
+import { applyChoice, dangers, endTurn } from './tick.ts';
 import { can493, forecastVote, isBudget, voteCensure } from './parliament.ts';
 
 function validateBill(state: GameState, spec: BillSpec): string[] {
@@ -133,8 +133,14 @@ function previewBill(state: GameState, spec: BillSpec, months: number): PreviewR
   };
 }
 
+function choose(state: GameState, choixId: string): { state: GameState; events: TurnEvent[] } {
+  const s = structuredClone(state);
+  const events = applyChoice(s, choixId, monthIndex(s.date));
+  return events.length ? { state: s, events } : { state, events: [] };
+}
+
 export const engine: Engine = {
-  newGame, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
+  newGame, choose, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
   endTurn: (state) => endTurn(state),
   isOver: (state) => monthIndex(state.date) >= 60 || !!state.defaite,
 };

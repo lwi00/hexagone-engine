@@ -9,7 +9,7 @@ const spec = (levers: BillSpec['levers'], extra: Partial<BillSpec> = {}): BillSp
 });
 const start = (mode: GameMode = 'decret', withEvents = false, seed = 1) => {
   const s = engine.newGame({ seed, mode });
-  if (!withEvents) s.firedEvents = events.map((e) => e.id);
+  if (!withEvents) s.firedEvents = [...events.map((e) => e.id), ...[2027, 2028, 2029, 2030].map((y) => `loi_speciale_${y}`)];
   return s;
 };
 const run = (s: GameState, n: number) => {
