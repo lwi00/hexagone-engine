@@ -52,7 +52,7 @@ describe('fin de partie anticipée (ENGINE.md §10)', () => {
     expect(s.internals['def:regime']).toBe(0);
   });
 
-  test('sans action, aucune défaite sur 10 graines', () => {
-    for (let seed = 1; seed <= 10; seed++) expect(play(seed, 60).s.defaite).toBeUndefined();
+  test('sans action, aucune défaite par seuil sur 10 graines (la présidentielle 2027 peut, elle, être perdue)', () => {
+    for (let seed = 1; seed <= 10; seed++) expect(play(seed, 60).s.defaite?.cause ?? 'presidentielle').toBe('presidentielle');
   });
 });

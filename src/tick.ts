@@ -8,6 +8,7 @@ import type { Core, Fin } from './init.ts';
 import { billGroups, promulgate, qualitativeEffect, sumEffects } from './levers.ts';
 import { rand, voteBill } from './parliament.ts';
 import { elections } from './institutions.ts';
+import { presidentielle } from './presidentielle.ts';
 
 const mean = (a: number[]) => a.reduce((x, y) => x + y, 0) / a.length;
 const clamp = (x: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, x));
@@ -401,6 +402,9 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
     depense_publique: INIT.dp + 100 * (totDep / pibM12 - INIT.depenses / budget.pib_reference_md),
     population: s.national.population, popularite, tension: tNat, stabilite,
   };
+
+  // 8a. Présidentielle 2027 (ENGINE.md §12), sur l'opinion de ce mois ; jamais en prévisualisation (tirages aléatoires).
+  if (opts.aleatoire !== false) out.push(...presidentielle(s, t));
 
   // 8b. Fin de partie anticipée : un seuil franchi defaite_mois_consecutifs mois de suite (alerte au premier mois).
   for (const d of DEFAITES) {

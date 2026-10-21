@@ -6,6 +6,7 @@ import { C, LEVERS, TAGS, inst, newGame } from './init.ts';
 import { dissolve, forecastLegislatives, nominate, pouvoir } from './institutions.ts';
 import { MAX_QUALITATIVE, promulgate } from './levers.ts';
 import { applyChoice, dangers, endTurn } from './tick.ts';
+import { forecastPresidentielle } from './presidentielle.ts';
 import { can493, forecastVote, isBudget, voteCensure } from './parliament.ts';
 
 function validateBill(state: GameState, spec: BillSpec): string[] {
@@ -140,7 +141,7 @@ function choose(state: GameState, choixId: string): { state: GameState; events: 
 }
 
 export const engine: Engine = {
-  newGame, choose, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
+  newGame, choose, forecastPresidentielle, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
   endTurn: (state) => endTurn(state),
   isOver: (state) => monthIndex(state.date) >= 60 || !!state.defaite,
 };

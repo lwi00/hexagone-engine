@@ -1190,5 +1190,53 @@
     "hypothese": true,
     "description": "En cohabitation, malus de s appliqué aux groupes en majorite à l'Assemblée sur chaque texte du Président (le Sénat n'est pas concerné).",
     "justification": "Le gouvernement issu de l'opposition ne porte les textes du Président qu'à contrecœur : le bonus net de la coalition tombe à +0,1, comme un soutien conditionnel, donc son vote suit les axes et un texte opposé à sa ligne échoue."
+  },
+  {
+    "id": "presidentielle_prime_popularite",
+    "value": 3,
+    "unit": "log du score par point de popularité 0-1",
+    "hypothese": true,
+    "description": "Présidentielle 2027 (ENGINE.md §12), premier tour : les intentions du candidat du camp présidentiel sont multipliées par exp(cette valeur × (popularité − popularité initiale)), popularité du mois.",
+    "justification": "Prime du sortant, comme legislatives_prime_popularite mais plus faible : au premier tour, le candidat est le Président lui-même. Calage (prévision à l'état initial, intentions figées) : popularité 0,10 → qualifié une fois sur deux, élu 5 % ; 0,18 (départ) → qualifié 93 %, élu 21 % ; 0,25 → élu 44 % ; 0,30 → 66 % ; 0,40 → 92 %. Ordre de grandeur historique : aucun sortant réélu sous 30 % de popularité un an avant (1981, 2002 cohabitation, 2012, 2022)."
+  },
+  {
+    "id": "presidentielle_incertitude",
+    "value": 0.12,
+    "unit": "écart-type log",
+    "hypothese": true,
+    "description": "Erreur de sondage du premier tour : chaque score est multiplié par exp(cette valeur × z), z gaussien tiré par candidat dans l'ordre des intentions de vote.",
+    "justification": "Écart moyen entre les derniers sondages et le résultat du premier tour : 1 à 3 points pour les principaux candidats (2017, 2022), soit environ 10 % du score. (Ordres de grandeur, sources à vérifier.)"
+  },
+  {
+    "id": "presidentielle_report_distance",
+    "value": 2,
+    "unit": "par unité de distance",
+    "hypothese": true,
+    "description": "Second tour : les voix d'un candidat éliminé se partagent entre les finalistes au prorata de exp(−cette valeur × d), d = distance euclidienne des positionnements (économie, sociétal, Europe) de politics.json.",
+    "justification": "Avec les positionnements CHES, un électeur LR se reporte surtout sur le camp présidentiel face au RN, un électeur de gauche radicale se partage davantage : ordres de grandeur des reports de 2017 et 2022 (Ipsos, sondages jour du vote). (Ordres de grandeur, sources à vérifier.)"
+  },
+  {
+    "id": "presidentielle_report_part",
+    "value": 0.7,
+    "unit": "part des voix",
+    "hypothese": true,
+    "description": "Part des voix des candidats éliminés qui se reporte sur l'un des deux finalistes (le reste : abstention, blancs et nuls).",
+    "justification": "Participation au second tour en 2022 : 72 % contre 74 % au premier, avec 8,6 % de blancs et nuls : environ 70 % des électeurs des éliminés choisissent un finaliste. (Ordres de grandeur, sources à vérifier.)"
+  },
+  {
+    "id": "presidentielle_barrage",
+    "value": 0.5,
+    "unit": "multiplicateur",
+    "hypothese": true,
+    "description": "Front républicain : le poids de report vers un finaliste d'un bloc « barrage » (RN et alliés) est multiplié par cette valeur, sauf pour les électeurs de ce même bloc.",
+    "justification": "Front républicain : en 2022, 42 % des électeurs Mélenchon ont voté Macron contre 17 % Le Pen (Ipsos), malgré une distance politique comparable. (Ordres de grandeur, sources à vérifier.)"
+  },
+  {
+    "id": "presidentielle_incertitude_t2",
+    "value": 2.5,
+    "unit": "points de %",
+    "hypothese": true,
+    "description": "Choc commun du second tour (campagne d'entre-deux-tours, débat) : écart-type en points du score du premier finaliste.",
+    "justification": "Écart entre les derniers sondages de second tour et le résultat : 2022 Macron 58,5 % pour 56-57 % annoncés ; 2017 66,1 % pour 62-63 %. (Ordres de grandeur, sources à vérifier.)"
   }
 ]

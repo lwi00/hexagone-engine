@@ -32,6 +32,11 @@ export type Pouvoir = Institutions & {
   peutDissoudre: boolean;
   dissolutionPossible: YearMonth; // premier mois où l'article 12 permet une dissolution
 };
+export type PresidentielleForecast = {
+  premierTour: { partyId: string; pct: number }[]; // moyennes
+  qualification: number; victoire: number; // probabilités pour le candidat du joueur
+  adversaires: { partyId: string; frequence: number }[]; // adversaire au second tour (fréquence parmi toutes les simulations)
+};
 export type LegislativesForecast = {
   blocs: { id: string; nom: string; sieges: number; bas: number; haut: number }[]; // moyenne, 10e et 90e centiles
   issues: Record<IssueLegislatives, number>; // fréquences, somme 1
@@ -139,7 +144,7 @@ export type Dilemme = {
 };
 
 // Fin de partie anticipée : crise de la dette (spread), crise de régime (stabilité), soulèvement (tension).
-export type DefeatCause = 'dette' | 'regime' | 'soulevement';
+export type DefeatCause = 'dette' | 'regime' | 'soulevement' | 'presidentielle'; // presidentielle : ENGINE.md §12
 export type Danger = { cause: DefeatCause; mois: number; limite: number; valeur: number; seuil: number }; // mois consécutifs au-delà du seuil, défaite à limite
 
 // Événement survenu pendant un tour, pour le narrateur et le fil d'actualités.
@@ -155,6 +160,7 @@ export type TurnEvent =
   | { kind: 'dissolution' }
   | { kind: 'legislatives'; avant: Sieges; apres: Sieges; issue: IssueLegislatives; coalition?: string } // soirée électorale
   | { kind: 'nomination'; profil: ProfilPM; coalition?: string }
+  | { kind: 'presidentielle'; tour: 1 | 2; resultats: { partyId: string; pct: number }[]; qualifies: [string, string]; joueur: string; elu?: string } // §12
   | { kind: 'choix'; eventId: string; titre: string; label: string; parDefaut: boolean }; // réponse à un dilemme (§5c)
 
 export type TurnReport = { date: YearMonth; events: TurnEvent[]; avant: Indicators; apres: Indicators };
@@ -207,6 +213,8 @@ export interface Engine {
   nominate(state: GameState, profil: Exclude<ProfilPM, 'cohabitation'>): { state: GameState; events: TurnEvent[] };
   // Monte-Carlo sur graines fixes : pur, déterministe, n'avance pas state.rng.
   forecastLegislatives(state: GameState): LegislativesForecast;
+  // Présidentielle 2027 (§12) : Monte-Carlo sur graines fixes, pur.
+  forecastPresidentielle(state: GameState): PresidentielleForecast;
   // Réponse au dilemme en attente (§5c) : ses effets partent ce mois-ci. Sans effet si aucun dilemme ou choix inconnu.
   choose(state: GameState, choixId: string): { state: GameState; events: TurnEvent[] };
 }
