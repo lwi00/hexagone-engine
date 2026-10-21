@@ -218,6 +218,7 @@ export interface Engine {
   forecastLegislatives(state: GameState): LegislativesForecast;
   // Présidentielle 2027 (§12) : Monte-Carlo sur graines fixes, pur.
   forecastPresidentielle(state: GameState): PresidentielleForecast;
+  canDeposit(state: GameState, spec: BillSpec): boolean; // un dépôt par mois, hors lois de finances
   // Réponse au dilemme en attente (§5c) : ses effets partent ce mois-ci. Sans effet si aucun dilemme ou choix inconnu.
   choose(state: GameState, choixId: string): { state: GameState; events: TurnEvent[] };
 }

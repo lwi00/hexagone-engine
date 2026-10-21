@@ -26,8 +26,9 @@ describe('moteur', () => {
     const play = () => {
       let s = start('democratie', true, 42);
       s = pass(s, spec([{ id: 'tva.taux_normal', delta: 1 }], { tags: ['fiscalite_hausse'], prepMonths: 2 }));
-      s = pass(s, spec([{ id: 'social.rsa_montant', delta: 30 }], { prepMonths: 5 }));
-      return run(s, 24);
+      s = run(s, 1); // un dépôt par mois
+      s = pass(s, spec([{ id: 'social.rsa_montant', delta: 30 }], { prepMonths: 4 }));
+      return run(s, 23);
     };
     const a = play(), b = play();
     expect(JSON.stringify(a)).toBe(JSON.stringify(b));
@@ -182,11 +183,12 @@ describe('moteur', () => {
   test('partie complète jusqu’à décembre 2030 sans NaN ni score hors bornes', () => {
     let s = start('democratie', true, 7);
     s = pass(s, spec([{ id: 'retraite.age_legal', delta: 1 }], { tags: ['retraites_durcissement'], prepMonths: 3 }));
-    s = pass(s, spec([{ id: 'depenses.education', delta: 8 }], { tags: ['services_publics', 'relance_depenses'], prepMonths: 6,
+    s = engine.endTurn(s).state; // un dépôt par mois
+    s = pass(s, spec([{ id: 'depenses.education', delta: 8 }], { tags: ['services_publics', 'relance_depenses'], prepMonths: 5,
       qualitative: [{ cible: { kind: 'group', id: 'etudiants_jeunes' }, direction: 1, intensite: 'moyenne', justification: 'x' }] }));
     const scores = (x: GameState) => [x.national.popularite, x.national.tension, x.national.stabilite,
       ...Object.values(x.groups).map((g) => g.satisfaction), ...Object.values(x.regions).map((r) => r.tension)];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 59; i++) {
       expect(engine.isOver(s)).toBe(false);
       s = engine.endTurn(s).state;
       const rejet = s.bills.find((b) => b.status === 'rejetee' && !b.usage493);
@@ -209,5 +211,23 @@ describe('moteur', () => {
     const a = run(s, 6), b = run(ancienne, 6);
     // seul le mois de chargement perd la correction du mois (petite) ; avant : +0,15 pt
     expect(Math.abs(b.national.chomage_bit - a.national.chomage_bit)).toBeLessThan(0.02);
+  });
+});
+
+describe('un dépôt par mois', () => {
+  const spec = (loiDeFinances?: number): BillSpec => ({
+    title: 't', summary: 's', articles: [], levers: [], qualitative: [], tags: ['fiscalite_hausse'],
+    prepMonths: 1, rampMonths: 0, estimatedCost: 1, ...(loiDeFinances && { loiDeFinances }),
+  });
+  test('second dépôt refusé le même mois, accepté le mois suivant ; lois de finances hors compte', () => {
+    let s = engine.newGame({ seed: 1, mode: 'democratie' });
+    for (const sp of [spec(), spec(), spec(2027)]) s = engine.addDraft(s, sp);
+    const [a, b, plf] = s.bills.map((x) => x.id);
+    s = engine.deposit(s, a);
+    expect(engine.deposit(s, b)).toBe(s);
+    s = engine.deposit(s, plf);
+    expect(s.bills.find((x) => x.id === plf)!.status).toBe('preparation');
+    s = engine.endTurn(s).state;
+    expect(engine.deposit(s, b).bills.find((x) => x.id === b)!.status).toBe('preparation');
   });
 });

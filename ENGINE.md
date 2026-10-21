@@ -6,6 +6,8 @@ Les règles ci-dessous tranchent les ambiguïtés relevées par la critique de l
 
 ## 1. Temps et ordre du tick
 
+Un seul projet déposé par mois (`canDeposit`, `deposit` refuse le second) ; les lois de finances (`spec.loiDeFinances`) n'entrent pas dans ce compte. Les brouillons restent illimités.
+
 Un tick = un mois. `endTurn` applique, dans cet ordre, en utilisant les valeurs du mois précédent pour les boucles (spread ↔ stabilité, satisfaction ↔ chômage) :
 
 1. **Événements** du mois (`events-2026.json`, date au mois près) : `exogene` → effets actifs ; `echeance` → simple `TurnEvent` (aucun effet).

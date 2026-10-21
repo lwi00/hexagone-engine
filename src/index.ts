@@ -46,10 +46,18 @@ function addDraft(state: GameState, spec: BillSpec): GameState {
   return s;
 }
 
+// Un dépôt par mois (ENGINE.md §1) ; les lois de finances n'entrent pas dans ce compte (calendrier budgétaire, §5d).
+const sameMonth = (a: YearMonth | undefined, b: YearMonth) => !!a && a.year === b.year && a.month === b.month;
+function canDeposit(state: GameState, spec: BillSpec): boolean {
+  return spec.loiDeFinances !== undefined
+    || !state.bills.some((x) => x.spec.loiDeFinances === undefined && sameMonth(x.deposeLe, state.date));
+}
+
 function deposit(state: GameState, billId: string): GameState {
   const s = structuredClone(state);
   const b = s.bills.find((x) => x.id === billId);
   if (!b || b.status !== 'brouillon' || inst(s).gouvernement.demissionnaire) return state; // gouvernement démissionnaire : ENGINE.md §11
+  if (!canDeposit(s, b.spec)) return state;
   const m = monthIndex(s.date) + b.spec.prepMonths;
   b.status = 'preparation';
   b.deposeLe = { ...s.date };
@@ -141,7 +149,7 @@ function choose(state: GameState, choixId: string): { state: GameState; events: 
 }
 
 export const engine: Engine = {
-  newGame, choose, forecastPresidentielle, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
+  newGame, choose, canDeposit, forecastPresidentielle, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
   endTurn: (state) => endTurn(state),
   isOver: (state) => monthIndex(state.date) >= 60 || !!state.defaite,
 };
