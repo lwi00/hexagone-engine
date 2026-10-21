@@ -61,9 +61,11 @@ const bonus = (r: Rapport) => ({
 })[r];
 
 // Score s d'un groupe : positif = penche pour la loi.
-function groupScore(state: GameState, data: Data, axes: Axes, acc: number, g: Groupe, malus = 0): number {
+// Accord sur le fond : position du modèle de décision (spec.positions, ENGINE.md §4b) si elle existe, sinon produit scalaire
+// des axes de la loi et du positionnement du groupe.
+function groupScore(state: GameState, data: Data, axes: Axes, acc: number, g: Groupe, malus = 0, fond?: number): number {
   const pos = data.get(g.groupId)?.positionnement ?? { economie: 0, societal: 0, europe: 0 };
-  const dot = axes.economie * pos.economie + axes.societal * pos.societal + axes.europe * pos.europe;
+  const dot = fond ?? axes.economie * pos.economie + axes.societal * pos.societal + axes.europe * pos.europe;
   return P.parlement_poids_axes * dot + bonus(g.rapport) + P.parlement_poids_popularite * (state.national.popularite - 0.3)
     + P.parlement_poids_accueil_populaire * acc - malus;
 }
@@ -91,7 +93,8 @@ function groupVote(sieges: number, s: number, discipline: number, rng: number) {
 function scores(state: GameState, bill: Bill, groupes: Groupe[], data: Data, malus: (g: Groupe) => number) {
   const axes = billAxes(bill);
   const acc = accueil(bill);
-  return groupes.map((g) => ({ g, s: groupScore(state, data, axes, acc, g, malus(g)), discipline: data.get(g.groupId)?.discipline ?? 0.9 }));
+  const chambre = data === AN ? 'assemblee' : 'senat';
+  return groupes.map((g) => ({ g, s: groupScore(state, data, axes, acc, g, malus(g), bill.spec.positions?.[`${chambre}_${g.groupId}`]), discipline: data.get(g.groupId)?.discipline ?? 0.9 }));
 }
 
 // Incertitude du vote : un choc commun (climat de la séance) et un choc par groupe (négociations, amendements) s'ajoutent au score.

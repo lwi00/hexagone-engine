@@ -60,6 +60,9 @@ export const BillSpec = z.object({
   prepMonths: z.number().int().min(0).max(24),
   rampMonths: z.number().int().min(0).max(60), // montée en charge des effets qualitatifs uniquement
   estimatedCost: z.number(), // Md€/an, estimation du LLM (affichée, non utilisée par le moteur)
+  // Accord sur le fond de chaque groupe parlementaire (clé « assemblee_<id> » ou « senat_<id> », de −1 à 1), donné par un
+  // modèle de décision (Jev) ; remplace le produit scalaire des axes dans le score de vote (ENGINE.md §4b).
+  positions: z.record(z.string(), z.number().min(-1).max(1)).optional(),
   loiDeFinances: z.number().int().optional(), // projet de loi de finances pour cette année (calendrier budgétaire, ENGINE.md §5d)
 });
 export type BillSpec = z.infer<typeof BillSpec>;

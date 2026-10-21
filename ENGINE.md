@@ -50,6 +50,11 @@ Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hy
 - **Malus de cohabitation** : en cohabitation, à l'Assemblée seulement, le score des groupes `majorite` perd `parlement_malus_cohabitation` sur chaque texte du Président (vote et prévision ; le Sénat n'est pas concerné).
 - Mode `decret` : adoption automatique au mois prévu, pas de vote.
 
+## 4b. Positions d'un modèle de décision (`spec.positions`)
+
+- Optionnel : `spec.positions["assemblee_<groupe>"]` ou `["senat_<groupe>"]`, de −1 (rejet sur le fond) à 1 (soutien), remplace pour ce groupe le produit scalaire axes · positionnement dans le score s (même poids `parlement_poids_axes`). Bonus de rapport au gouvernement, popularité, accueil populaire, cohabitation, dissidence et aléa restent ceux du §4. La censure lit les positions de l'Assemblée.
+- Fournies hors du moteur, à la rédaction du projet (Jev via l'API Decisions d'OpenRouter, côté application) : le moteur reste pur et déterministe à spec donnée. Sans positions (pas de modèle, échec de l'appel), l'heuristique s'applique.
+
 ## 5. Événements
 
 - Appliqués au tick de leur mois. Tout effet d'événement dure `duree_mois` : `niveau` = constant puis arrêt ; `choc` = décroissance linéaire. Amplitude = barème `bareme.<kind>.<magnitude>` × direction.
