@@ -1,0 +1,774 @@
+[
+  {
+    "id": "retraites",
+    "label": "Retraités",
+    "part_population_adulte": {
+      "value": 0.299,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://drees.solidarites-sante.gouv.fr/communique-de-presse-jeux-de-donnees/jeux-de-donnees/effectifs-de-retraites-et-montants-des",
+        "title": "DREES – Effectifs de retraités et montants des pensions versées : mise à disposition des données 2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence au 31/12/2024, extrapolées à fin 2025. Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Retraités de droit direct résidant en France au 31/12/2024 : 16,4 M (DREES, publié le 26/05/2026 ; 17,3 M y compris à l'étranger), en hausse de 0,7 % sur un an. Extrapolation à fin 2025 au même rythme : 16,4 × 1,007 = 16,515 M. Part = 16,515 / 55,229. Les retraités en cumul emploi-retraite sont aussi comptés dans l'emploi (léger double compte, absorbé par le résidu chômeurs/inactifs)."
+    },
+    "participation_electorale": {
+      "value": 0.682,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 18 ans ou plus, Insee figure 2 (âge). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Pas de ventilation « retraités » publiée : moyenne par âge (60-64 ans pondérés à 30 % comme part supposée de retraités, puis 65-69 … 90+ ans) pondérée par la pyramide Insee au 1/1/2026, soit 65,5 % avant recalage. Âges (avant recalage) : 65-69 ans 69,3 %, 70-74 ans 70,8 %, 75-79 ans 70,1 %, 80-84 ans 64,9 %, 85-89 ans 50,9 %, 90+ ans 32,8 %."
+    },
+    "description": "Retraités de droit direct résidant en France, quel que soit leur ancien métier (le groupe prime sur la PCS d'origine). Méthode générale : population adulte Insee au 1/1/2026 = 55,229 M (résidents de 18 ans ou plus, étrangers compris : ce n'est pas le corps électoral) ; groupes calculés en effectifs puis divisés par ce total ; chômeurs/inactifs = résidu pour que la somme vaille 1.",
+    "satisfaction_initiale": {
+      "value": 0.204,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : Retraité. Brut (moyenne 3 vagues) : 18.6 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 31.2
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 13.4
+        },
+        {
+          "party_id": "lr",
+          "pct": 10.8
+        },
+        {
+          "party_id": "ps",
+          "pct": 8.6
+        },
+        {
+          "party_id": "pp",
+          "pct": 8.6
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 6.5
+        },
+        {
+          "party_id": "modem",
+          "pct": 5.3
+        },
+        {
+          "party_id": "horizons",
+          "pct": 5.0
+        },
+        {
+          "party_id": "lfi",
+          "pct": 4.3
+        },
+        {
+          "party_id": "pcf",
+          "pct": 3.2
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 3.2
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Ligne Ipsos « Retraité ». Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 7 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "ouvriers_employes",
+    "label": "Salariés du privé (ouvriers, employés, professions intermédiaires)",
+    "part_population_adulte": {
+      "value": 0.2669,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8901327",
+        "title": "Insee Première n°2096 – Une photographie du marché du travail en 2025",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence : moyenne annuelle 2025 (enquête Emploi) et agents publics au 31/12/2024. Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Emploi 2025 (enquête Emploi, 15-89 ans) : actifs = 31,552 M (en emploi ou chômeurs ayant déjà travaillé) + 0,282 M (chômeurs n'ayant jamais travaillé) = 31,834 M ; chômeurs = 7,7 % × actifs = 2,451 M ; emploi E = 29,383 M. Salariés = 86,5 % de E = 25,416 M ; moins agents de la fonction publique (5,877 M au 31/12/2024, comptage administratif SIASP incluant militaires et contrats aidés, hors Mayotte : champ différent de l'enquête Emploi, qui couvre les logements ordinaires, ce qui biaise légèrement ce résidu vers le bas) ; moins cadres salariés du privé (4,799 M, voir groupe cadres, incertitude d'environ ±0,3 M) = 14,740 M. Inclut les apprentis et alternants et les salariés des entreprises publiques. Sources complémentaires : https://www.insee.fr/fr/statistiques/2381478 ; https://www.insee.fr/fr/statistiques/8732435"
+    },
+    "participation_electorale": {
+      "value": 0.632,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 25 ans ou plus, Insee figure 4 (PCS). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Moyenne pondérée par la structure de l'emploi 2025 (Insee Première n°2096), avant recalage 60,7 % : professions intermédiaires 64,7 % (poids 25,4), employés qualifiés 61,5 % (13,6), employés peu qualifiés 56,2 % (10,7), ouvriers qualifiés 58,8 % (12,0), ouvriers peu qualifiés 53,8 % (5,5). La PCS Insee est « actuelle ou antérieure » (inclut des retraités)."
+    },
+    "description": "Salariés du secteur privé (et des entreprises publiques) qui ne sont pas cadres : professions intermédiaires, employés, ouvriers, apprentis. Obtenu par différence : salariés totaux − fonction publique − cadres salariés du privé.",
+    "satisfaction_initiale": {
+      "value": 0.149,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : moyenne simple Profession intermédiaire / Employé / Ouvrier (ces lignes incluent aussi des salariés du public). Brut (moyenne 3 vagues) : 13.6 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 45.5
+        },
+        {
+          "party_id": "lfi",
+          "pct": 13.2
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 7.9
+        },
+        {
+          "party_id": "ps",
+          "pct": 6.2
+        },
+        {
+          "party_id": "pp",
+          "pct": 6.2
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 5.6
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 4.9
+        },
+        {
+          "party_id": "lr",
+          "pct": 4.5
+        },
+        {
+          "party_id": "pcf",
+          "pct": 2.3
+        },
+        {
+          "party_id": "modem",
+          "pct": 1.9
+        },
+        {
+          "party_id": "horizons",
+          "pct": 1.8
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Moyenne simple des lignes Ipsos « Profession intermédiaire », « Employé » et « Ouvrier » (elles incluent des salariés du public ; la ligne « salarié du privé » inclurait les cadres). Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 11 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "cadres",
+    "label": "Cadres du privé",
+    "part_population_adulte": {
+      "value": 0.0869,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8901327",
+        "title": "Insee Première n°2096 – Une photographie du marché du travail en 2025",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence : moyenne annuelle 2025 (enquête Emploi). Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Emploi 2025 (enquête Emploi, 15-89 ans) : actifs = 31,552 M (en emploi ou chômeurs ayant déjà travaillé) + 0,282 M (chômeurs n'ayant jamais travaillé) = 31,834 M ; chômeurs = 7,7 % × actifs = 2,451 M ; emploi E = 29,383 M. Cadres = 23,8 % de E = 6,993 M ; moins professions libérales (0,694 M, actifs = emploi + chômeurs ayant déjà travaillé, tableau Insee CSP 2025, reclassées en indépendants) ; moins cadres de la fonction publique estimés à 1,5 M (fourchette 1,3 à 1,8 M ; estimation de l'auteur, sans ventilation officielle public/privé par PCS : PCS 33 « Cadres administratifs et techniques de la fonction publique » 0,638 M (actifs = emploi + chômeurs ayant déjà travaillé) + environ 80 % des 1,020 M « professeurs et professions scientifiques supérieures » + médecins hospitaliers ; cohérent avec 38,4 % d'agents publics en catégorie A, dont une partie classée en professions intermédiaires) = 4,799 M. Le mélange de champs (actifs vs emploi) décale la part de moins de 0,001. Source complémentaire : https://www.insee.fr/fr/statistiques/2381478"
+    },
+    "participation_electorale": {
+      "value": 0.742,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 25 ans ou plus, Insee figure 4 (PCS). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Cadres et professions intellectuelles supérieures : vote systématique 49,9 %, intermittent 42,7 % → 71,3 % avant recalage."
+    },
+    "description": "Cadres et professions intellectuelles supérieures salariés du privé (ingénieurs, cadres d'entreprise, information/arts). Les cadres publics vont dans fonctionnaires, les professions libérales dans indépendants.",
+    "satisfaction_initiale": {
+      "value": 0.197,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : Cadre et prof. int. sup. (inclut des cadres publics). Brut (moyenne 3 vagues) : 18.0 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 22.2
+        },
+        {
+          "party_id": "lfi",
+          "pct": 13.3
+        },
+        {
+          "party_id": "ps",
+          "pct": 11.1
+        },
+        {
+          "party_id": "pp",
+          "pct": 11.1
+        },
+        {
+          "party_id": "lr",
+          "pct": 10.0
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 8.9
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 8.8
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 5.6
+        },
+        {
+          "party_id": "modem",
+          "pct": 3.5
+        },
+        {
+          "party_id": "horizons",
+          "pct": 3.3
+        },
+        {
+          "party_id": "pcf",
+          "pct": 2.2
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Ligne Ipsos « Cadre » (inclut des cadres publics). Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 10 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "fonctionnaires",
+    "label": "Agents de la fonction publique",
+    "part_population_adulte": {
+      "value": 0.1064,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8732435",
+        "title": "Insee Première n°2094 – L'emploi dans la fonction publique en 2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence au 31/12/2024 (non extrapolées). Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Agents des trois versants de la fonction publique au 31/12/2024 : 5 876 700 (postes principaux, contrats aidés inclus, France hors Mayotte), fonctionnaires, contractuels et militaires. Retirés des catégories salariées (cadres et non-cadres)."
+    },
+    "participation_electorale": {
+      "value": 0.663,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 25 ans ou plus, Insee figure 4 (PCS). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Pas de ventilation public/privé publiée : moyenne des participations PCS pondérée par les catégories hiérarchiques (Insee 2024 : A 38,4 % → moyenne cadres/prof. intermédiaires, B 22,1 % → prof. intermédiaires, C 37,4 % → moyenne employés qualifiés/peu qualifiés), soit 63,7 % avant recalage. Probablement sous-estimé (les agents publics sont plus diplômés et plus souvent inscrits dans leur commune)."
+    },
+    "description": "Agents des fonctions publiques d'État, territoriale et hospitalière, tous statuts (titulaires, contractuels, militaires), toutes catégories hiérarchiques A, B, C.",
+    "satisfaction_initiale": {
+      "value": 0.147,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : Salarié du secteur public. Brut (moyenne 3 vagues) : 13.4 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 38.6
+        },
+        {
+          "party_id": "lfi",
+          "pct": 13.6
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 9.1
+        },
+        {
+          "party_id": "ps",
+          "pct": 9.1
+        },
+        {
+          "party_id": "pp",
+          "pct": 9.1
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 5.1
+        },
+        {
+          "party_id": "lr",
+          "pct": 4.5
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 4.5
+        },
+        {
+          "party_id": "pcf",
+          "pct": 2.3
+        },
+        {
+          "party_id": "modem",
+          "pct": 2.0
+        },
+        {
+          "party_id": "horizons",
+          "pct": 1.9
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Ligne Ipsos « salarié du public ». Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 12 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "independants",
+    "label": "Indépendants et chefs d'entreprise",
+    "part_population_adulte": {
+      "value": 0.0649,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8901327",
+        "title": "Insee Première n°2096 – Une photographie du marché du travail en 2025",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence : moyenne annuelle 2025 (enquête Emploi). Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Emploi 2025 (enquête Emploi, 15-89 ans) : actifs = 31,552 M (en emploi ou chômeurs ayant déjà travaillé) + 0,282 M (chômeurs n'ayant jamais travaillé) = 31,834 M ; chômeurs = 7,7 % × actifs = 2,451 M ; emploi E = 29,383 M. Non-salariés = 13,5 % de E (micro-entrepreneurs inclus, 3,7 % de E) = 3,967 M ; moins agriculteurs exploitants (1,3 % de E) = 3,585 M. Inclut artisans, commerçants, chefs d'entreprise, professions libérales et micro-entrepreneurs d'autres PCS."
+    },
+    "participation_electorale": {
+      "value": 0.658,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 25 ans ou plus, Insee figure 4 (PCS). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Artisans, commerçants et chefs d'entreprise : vote systématique 39,5 %, intermittent 47,4 % → 63,2 % avant recalage (les professions libérales, classées cadres par l'Insee, ne sont pas isolées)."
+    },
+    "description": "Non-salariés hors agriculture : artisans, commerçants, chefs d'entreprise, professions libérales, micro-entrepreneurs.",
+    "satisfaction_initiale": {
+      "value": 0.194,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : moyenne simple Artisan ou commerçant / Dirigeant d'entreprise (sous-échantillons très petits et volatils : artisans 34/16/7 %, dirigeants 39/17/12 % en sept. v2/oct./nov.). Brut (moyenne 3 vagues) : 17.7 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 29.9
+        },
+        {
+          "party_id": "lfi",
+          "pct": 11.5
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 11.5
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 8.4
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 8.0
+        },
+        {
+          "party_id": "lr",
+          "pct": 8.0
+        },
+        {
+          "party_id": "ps",
+          "pct": 6.9
+        },
+        {
+          "party_id": "pp",
+          "pct": 6.9
+        },
+        {
+          "party_id": "modem",
+          "pct": 3.3
+        },
+        {
+          "party_id": "horizons",
+          "pct": 3.2
+        },
+        {
+          "party_id": "pcf",
+          "pct": 2.3
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Ligne Ipsos « À son compte » (inclut les agriculteurs, poids négligeable). Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 13 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "agriculteurs",
+    "label": "Agriculteurs exploitants",
+    "part_population_adulte": {
+      "value": 0.0069,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8901327",
+        "title": "Insee Première n°2096 – Une photographie du marché du travail en 2025",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence : moyenne annuelle 2025 (enquête Emploi). Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Emploi 2025 (enquête Emploi, 15-89 ans) : actifs = 31,552 M (en emploi ou chômeurs ayant déjà travaillé) + 0,282 M (chômeurs n'ayant jamais travaillé) = 31,834 M ; chômeurs = 7,7 % × actifs = 2,451 M ; emploi E = 29,383 M. Agriculteurs exploitants = 1,3 % de E = 0,382 M (tableau CSP 2025 : 0,387 M actifs, en emploi ou chômeurs ayant déjà travaillé). Les salariés agricoles sont dans ouvriers_employes, les anciens exploitants dans retraités."
+    },
+    "participation_electorale": {
+      "value": 0.674,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 25 ans ou plus, Insee figure 4 (PCS). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Agriculteurs exploitants : vote systématique 48,2 %, intermittent 33,2 % → 64,8 % avant recalage."
+    },
+    "description": "Exploitants agricoles en activité (PCS 1), non salariés.",
+    "satisfaction_initiale": {
+      "value": 0.136,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : aucune ligne agriculteurs chez Ifop : proxy = valeur brute des indépendants (17.7 %) × 0.7 (décote forfaitaire, non mesurée, pour la mobilisation agricole de fin 2025 contre l'accord UE-Mercosur et la gestion de la dermatose nodulaire ; sans décote la valeur serait une borne haute). Brut (moyenne 3 vagues) : 12.4 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 – intentions de vote des exploitants agricoles (avril 2024)",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 31.3
+        },
+        {
+          "party_id": "lr",
+          "pct": 17.1
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 11.0
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 9.9
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 9.4
+        },
+        {
+          "party_id": "lfi",
+          "pct": 5.3
+        },
+        {
+          "party_id": "ps",
+          "pct": 4.2
+        },
+        {
+          "party_id": "pp",
+          "pct": 4.2
+        },
+        {
+          "party_id": "modem",
+          "pct": 3.9
+        },
+        {
+          "party_id": "horizons",
+          "pct": 3.7
+        }
+      ],
+      "source": {
+        "url": "https://www.sciencespo.fr/cevipof/sites/sciencespo.fr.cevipof/files/Noteelectionseuropeennes_PHB&FP_agriculteurseteuropeennes_mai2024_V2.pdf",
+        "title": "Cevipof (P.-H. Bono, F. Purseigle) – Les agriculteurs et les européennes, note de recherche, mai 2024 (enquête CEVIPOF-AgroToulouse-REUSSIR, 1 258 exploitants, 8-29/04/2024), tableau 1",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Moyenne des colonnes du tableau 1 (40 ans et moins / 41-55 / 56 et plus) pondérée par les effectifs 191/568/499 ; le tableau ne reporte que les listes > 5 % (PCF, LO, DLF, Patriotes absents), la liste Chasseurs et ruralité (≈ 7,9 %, sans party_id) est retirée, puis renormalisation à 100 (listes conservées = 82.0 % brut). Recoupement texte de la note : RN 26,1 %, LR 14,1 %, Reconquête 7,4 %, Chasseurs et ruralité 7,7 %. La renormalisation redistribue au prorata les 18 points non affectés (dont PCF, LO, DLF, absents du tableau), ce qui gonfle les grandes listes plus que pour les autres groupes (7 à 13 % retirés) : RN 31,3 % ici contre 26,1 % dans le texte, LR 17,1 % contre 14,1 %, Reconquête 9,4 % contre 7,4 %. Aucune part forfaitaire n'est attribuée à pcf ou dlf, faute de mesure. Intention de vote (pas un vote réalisé), deux mois avant le scrutin. Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "etudiants_jeunes",
+    "label": "Étudiants",
+    "part_population_adulte": {
+      "value": 0.044,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits/",
+        "title": "SIES – Effectifs d'étudiants inscrits dans les établissements et les formations de l'enseignement supérieur (données non agrégeables), année 2025-26, niveau Pays",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Données de référence : année universitaire 2025-2026. Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Inscrits dans l'enseignement supérieur en 2025-2026, France, sans doubles comptes : 3 059 745 (somme de la variable effectif_atlas, qui neutralise les doubles inscriptions CPGE-université, sur les regroupements de formations au niveau « Pays » ; jeu de données SIES mis à jour le 12/10/2026, écoles paramédicales et sociales provisoires ; cohérent avec les 3 049 600 annoncés par la Note Flash SIES n°2026-17, dont le PDF renvoie désormais une erreur 404). Ce total inclut les apprentis du supérieur (172 091 apprentis en STS identifiés dans le jeu de données ; les apprentis d'université et d'écoles sont aussi des inscrits). Apprentis du supérieur au 31/12/2025 : 628 500 (SIES, Note Flash n°2026-24), chiffre NON VÉRIFIÉ sur une source ouverte (lu seulement dans des extraits de moteur de recherche). Retenu : 3,060 − 0,6285 = 2,431 M sous statut scolaire. Fourchette : 2,43 M (tous les apprentis retirés) à 2,89 M (seuls les apprentis de STS retirés), soit 4,4 % à 5,2 % des adultes. Les étudiants qui ont un petit job restent ici (léger double compte avec l'emploi) ; les lycéens de 18 ans ou plus sont dans le résidu."
+    },
+    "participation_electorale": {
+      "value": 0.52,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 18 ans ou plus, Insee figure 2 (âge). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Pas de ventilation « étudiants » : 18-24 ans, vote systématique 16,4 %, intermittent 59,8 % → 46,3 %, soit 48,2 % après recalage. Ajustement à la hausse, à dire d'expert, jusqu'à 52 % : les étudiants s'abstiennent moins que les autres jeunes (odds ratio d'abstention systématique de 0,61 contre 1 pour les actifs occupés, ip1928.xlsx, tableau complémentaire 2, ensemble des inscrits ; https://www.insee.fr/fr/statistiques/fichier/6658145/ip1928.xlsx). Plage plausible : 0,48 à 0,55."
+    },
+    "description": "Étudiants du supérieur sous statut scolaire (hors apprentis, comptés comme salariés).",
+    "satisfaction_initiale": {
+      "value": 0.237,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : 18-24 ans (pas de ligne étudiants ; sous-échantillon d'environ 100 à 200 personnes par vague, très volatil : 14 % en sept. v2, 18 % en oct., 29 % en nov. ; marge d'erreur d'environ ±6 points par vague à n≈200, environ ±3,5 points sur la moyenne des trois vagues). Brut (moyenne 3 vagues) : 21.6 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "lfi",
+          "pct": 35.9
+        },
+        {
+          "party_id": "rn",
+          "pct": 27.2
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 10.9
+        },
+        {
+          "party_id": "lr",
+          "pct": 6.5
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 4.9
+        },
+        {
+          "party_id": "pcf",
+          "pct": 3.3
+        },
+        {
+          "party_id": "ps",
+          "pct": 2.7
+        },
+        {
+          "party_id": "pp",
+          "pct": 2.7
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 2.2
+        },
+        {
+          "party_id": "modem",
+          "pct": 1.9
+        },
+        {
+          "party_id": "horizons",
+          "pct": 1.8
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Ligne Ipsos « 18-24 ans » (pas de ligne étudiants ; inclut les jeunes actifs). Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 8 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  },
+  {
+    "id": "chomeurs_inactifs",
+    "label": "Chômeurs et autres inactifs",
+    "part_population_adulte": {
+      "value": 0.1249,
+      "unit": "fraction de la population de 18 ans ou plus",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2381478",
+        "title": "Insee – Population selon le sexe, le statut d'activité et la catégorie socioprofessionnelle, données annuelles 2025 (enquête Emploi)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Résidu, données de référence fin 2024 à 2025 selon les groupes. Dénominateur : population de 18 ans ou plus au 1er janvier 2026 = 55,229 M (69 081 996 habitants (estimation de janvier 2026 ; macro.json et regions.json retiennent 69 066 941 après le recensement de Mayotte, écart de 15 055 habitants dont environ la moitié d'adultes, soit moins de 0,02 % du dénominateur, sans effet sur les parts arrondies) moins 13 852 666 de moins de 18 ans ; Insee, Bilan démographique 2025, tableau POP3 « Population au 1er janvier par sexe et âge détaillé », France, estimation provisoire arrêtée fin 2025 : https://www.insee.fr/fr/statistiques/fichier/8721185/3_Pop1janv_age.xlsx ; cohérent avec 53,554 M de 20 ans ou plus sur https://www.insee.fr/fr/statistiques/2381474, auxquels s'ajoutent 1,675 M de 18-19 ans). Champ : résidents adultes, étrangers compris (6,3 M d'étrangers en 2025, 9,1 % de la population, Insee https://www.insee.fr/fr/statistiques/3633212) : ce n'est pas le corps électoral, et le poids électoral des groupes à forte proportion d'étrangers (ouvriers/employés, chômeurs/inactifs) est donc surestimé. Résidu : 55,229 − (16,515 + 14,740 + 4,799 + 5,877 + 3,585 + 0,382 + 2,431) = 6,900 M. Recoupement : environ 2,45 M de chômeurs BIT (7,7 % des actifs en moyenne 2025, Insee Première n°2096 : https://www.insee.fr/fr/statistiques/8901327) et environ 4,4 M d'inactifs ni retraités ni étudiants (personnes au foyer, invalides, lycéens de 18 ans ou plus, personnes en collectivité), dans la fourchette plausible. Ce n'est pas une mesure directe : le résidu absorbe les doubles comptes (cumul emploi-retraite, étudiants en emploi) et les écarts de champ entre l'enquête Emploi (logements ordinaires, 15-89 ans) et la population totale de 18 ans ou plus."
+    },
+    "participation_electorale": {
+      "value": 0.53,
+      "unit": "fraction des inscrits (participation moyenne par tour)",
+      "date": "2022-06",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/6658145",
+        "title": "Insee Première n°1928 – Participation aux élections présidentielle et législatives de 2022 (enquête sur la participation électorale 2022, fichier ip1928.xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Champ : inscrits de 25 ans ou plus, Insee figure 4 (PCS). Participation = vote systématique + ½ vote intermittent aux 4 tours de 2022, puis recalée par le facteur 62,5 / 60,05 = 1,041 : la formule donne 60,05 % pour l'ensemble des inscrits (36,4 + 47,3/2), contre 62,5 % en moyenne sur les 4 tours dans l'enquête (encadré 1 : 77 %, 75 %, 50 %, 48 % ; champ différent des résultats officiels du ministère de l'Intérieur). Seuls les inscrits sont couverts, la non-inscription n'est pas prise en compte. Données de 2022, avant les législatives anticipées de 2024, plus mobilisatrices. Les chômeurs ayant déjà travaillé sont classés par l'Insee dans leur ancienne PCS. Moyenne à parts égales entre « n'ayant jamais travaillé » (vote systématique 27,0 %, intermittent 45,1 % → 49,6 %) et ouvriers/employés peu qualifiés (moyenne de 56,2 % et 53,8 %, soit 55,0 %) = 52,3 %, soit 54,4 % après recalage. Ramené à 53 % parce que les chômeurs s'abstiennent davantage (odds ratio d'abstention systématique 1,94 par rapport aux actifs occupés, ip1928.xlsx, tableau complémentaire 2, ensemble des inscrits ; 1,45 pour les inscrits de 25 ans ou plus)."
+    },
+    "description": "Chômeurs au sens du BIT et inactifs d'âge adulte qui ne sont ni retraités ni étudiants (au foyer, invalidité, autres). Calculé comme résidu pour garantir une somme des parts égale à 1.",
+    "satisfaction_initiale": {
+      "value": 0.18,
+      "unit": "score 0-1",
+      "date": "2025-11",
+      "source": {
+        "url": "https://www.ifop.com/wp-content/uploads/2025/11/121309-indices-de-popularite-novembre-2025.pdf",
+        "title": "Ifop pour Le Journal du Dimanche – Les indices de popularité, novembre 2025 (terrain 13-21/11/2025, 2 000 personnes ; profil des satisfaits/mécontents d'Emmanuel Macron, p. 6-7)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Score = part de satisfaits d'Emmanuel Macron comme président dans la catégorie Ifop équivalente, moyenne de trois vagues pondérée par la taille d'échantillon : septembre 2025 vague 2 (terrain 18-19/09/2025, 1 000 personnes, https://www.ifopgroup.com/wp-content/uploads/2025/09/121309-indices-de-popularite-septembre-2025-vague-2.pdf), octobre (terrain 15-24/10/2025, 2 000 personnes, https://www.ifop.com/wp-content/uploads/2025/10/121309-indices-de-popularite-octobre-2025.pdf) et novembre 2025 (source, 2 000 personnes), puis recalée. Catégorie : moyenne Chômeur / Autre inactif pondérée 2,45 M / 4,4 M (décomposition du résidu, voir part_population_adulte). Brut (moyenne 3 vagues) : 16.4 %. Recalage multiplicatif × 1.096 pour que la moyenne des 8 groupes pondérée par part_population_adulte (16.42 % brut) égale la popularité initiale du Président dans politics.json (18 %, Ipsos bva-La Tribune Dimanche, décembre 2025), le moteur calculant la popularité comme cette moyenne pondérée (SPEC 3). Ifop n'a pas publié de vague de décembre 2025 (liste des baromètres sur ifopgroup.com : novembre 2025 puis janvier 2026, cette dernière postérieure à t0 et non utilisée) ; le baromètre Ipsos de décembre ne publie pas de ventilation par catégorie. Mesures non directement comparables (« satisfaits » Ifop vs « opinions favorables » Ipsos). Valeurs par catégorie lues avec leur position dans le PDF (page « profil des satisfaits »), recoupées par 100 − % mécontents."
+    },
+    "vote": {
+      "scrutin": "européennes 2024 (9 juin), sondage jour du vote Ipsos",
+      "resultats": [
+        {
+          "party_id": "rn",
+          "pct": 37.1
+        },
+        {
+          "party_id": "lfi",
+          "pct": 20.2
+        },
+        {
+          "party_id": "reconquete",
+          "pct": 10.1
+        },
+        {
+          "party_id": "ecologistes",
+          "pct": 9.0
+        },
+        {
+          "party_id": "lr",
+          "pct": 5.6
+        },
+        {
+          "party_id": "ps",
+          "pct": 5.1
+        },
+        {
+          "party_id": "pp",
+          "pct": 5.1
+        },
+        {
+          "party_id": "renaissance",
+          "pct": 3.2
+        },
+        {
+          "party_id": "pcf",
+          "pct": 2.2
+        },
+        {
+          "party_id": "modem",
+          "pct": 1.3
+        },
+        {
+          "party_id": "horizons",
+          "pct": 1.2
+        }
+      ],
+      "source": {
+        "url": "https://www.ipsos.com/sites/default/files/ct/news/documents/2024-06/Ipsos-Sociologie-des-e%CC%81lectorats-10-juin-15h.pdf",
+        "title": "Ipsos pour France Télévisions, Radio France, France24/RFI, Public Sénat/LCP – Sociologie des électorats et profil des abstentionnistes, élections européennes du 9 juin 2024 (8 923 inscrits, terrain 6-7/06/2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Ligne Ipsos « Au chômage » seule : les inactifs ni retraités ni étudiants (≈ 4,4 M sur 6,85 M, soit environ 64 % du groupe) n'ont pas de ligne dans le sondage Ipsos. Le profil (RN 37 %, LFI 20 %) est donc celui des chômeurs, pas du groupe entier ; la correspondance diffère de satisfaction_initiale, qui pondère chômeurs et autres inactifs 2,45 / 4,4. Limite connue, faute de source par parti pour les autres inactifs. Méthode commune : % des exprimés par liste ; la colonne « une autre liste » est retirée puis les listes restantes sont renormalisées à 100 (LO, DLF, UDR, LIOT, radicaux absents faute de ligne). Liste PS-Place publique (Glucksmann) répartie 50/50 entre ps et pp (choix arbitraire, aucune source de ventilation) ; liste Renaissance-MoDem-Horizons-UDI (Hayer) répartie au prorata des sièges des groupes EPR/Dem/HOR à l'Assemblée au 01/01/2026 (91/36/34, politics.json), UDI non isolée ; liste Bardella entièrement en rn (UDR créée après le scrutin). « Autre liste » retirée pour ce groupe : 11 % des exprimés. Les européennes sont retenues plutôt que les législatives 2024 (Ipsos ne publie que des blocs NFP/Ensemble/LR/RN aux législatives) ; à 51,5 % de participation, le scrutin sous-représente les groupes peu votants. Usage : à t0, les intentions de vote nationales viennent de politics.intentions_vote ; groups.vote ne donne que la structure relative du vote par groupe. Agrégé (part × participation), il donne RN 35,2, LFI 11,8, Renaissance 8,1, PS 7,6, PP 7,6, LR 7,6, Horizons 3,0 : niveaux d'européennes 2024, non comparables aux intentions présidentielles 2027 (Philippe 17 %, Glucksmann 13,25 %), notamment à cause de la ventilation des listes Hayer et Glucksmann. Le moteur ne doit pas recaler les intentions nationales sur cet agrégat."
+    }
+  }
+]

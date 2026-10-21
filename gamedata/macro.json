@@ -1,0 +1,246 @@
+{
+  "indicators": {
+    "pib_nominal": {
+      "value": 2991.1,
+      "unit": "Md€",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8996855",
+        "title": "Insee Première n° 2105 - Les comptes de la Nation en 2025 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Grandeur annuelle 2025 (date « 2025-12 » = convention pour l'année 2025). PIB en valeur 2025, comptes nationaux annuels base 2020, publication du 29 mai 2026."
+    },
+    "croissance_pib": {
+      "value": 0.8,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8996855",
+        "title": "Insee Première n° 2105 - Les comptes de la Nation en 2025 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Grandeur annuelle 2025 (date « 2025-12 » = convention pour l'année 2025). Croissance du PIB en volume (prix de l'année précédente chaînés), après 1,5 % en 2024."
+    },
+    "chomage_bit": {
+      "value": 7.9,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8735266",
+        "title": "Insee, Informations rapides n° 34 - Au quatrième trimestre 2025, le taux de chômage atteint 7,9 % (10 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage au sens du BIT, T4 2025, CVS, France hors Mayotte (7,7 % en France métropolitaine, chiffre non recoupé). Environ 2,5 millions de chômeurs. Date = fin du T4 2025. Non révisé dans la publication du T1 2026 (13/05/2026), où le taux atteint 8,1 %."
+    },
+    "inflation": {
+      "value": 0.8,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8726809",
+        "title": "Insee, Informations rapides n° 7 - En décembre 2025, les prix à la consommation augmentent de 0,1 % sur un mois et de 0,8 % sur un an (15 janvier 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "IPC, glissement annuel, résultats définitifs de décembre 2025 (IPCH : 0,7 %)."
+    },
+    "deficit_public": {
+      "value": 5.1,
+      "unit": "% du PIB",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8997691",
+        "title": "Insee Première n° 2106 - Le compte des administrations publiques en 2025 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Grandeur annuelle 2025 (date « 2025-12 » = convention pour l'année 2025). Déficit au sens de Maastricht : 152,5 Md€, soit 5,1 % du PIB (5,8 % en 2024). Charge d'intérêts des APU 2025 : 64,7 Md€ (+11,2 %, hors correction Sifim). Chiffres de mai 2026 ; la notification Eurostat d'octobre 2026 (21/10/2026) peut les réviser."
+    },
+    "dette_publique": {
+      "value": 115.7,
+      "unit": "% du PIB",
+      "date": "2025-12-31",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8997691",
+        "title": "Insee Première n° 2106 - Le compte des administrations publiques en 2025 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dette brute au sens de Maastricht fin 2025 (115,6 % dans la première estimation de mars 2026, révisée à 115,7 % en mai 2026), après 112,6 % fin 2024. Dette nette fin 2025 : 108,5 % du PIB (3 245,5 Md€)."
+    },
+    "dette_publique_md": {
+      "value": 3460.5,
+      "unit": "Md€",
+      "date": "2025-12-31",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8997691",
+        "title": "Insee Première n° 2106 - Le compte des administrations publiques en 2025 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dette brute au sens de Maastricht des administrations publiques fin 2025."
+    },
+    "taux_oat_10": {
+      "value": 3.56,
+      "unit": "%",
+      "date": "2025-12-31",
+      "source": {
+        "url": "https://www.banque-france.fr/fr/statistiques/taux-et-cours/indices-obligataires-2025-12-31",
+        "title": "Banque de France - Indices obligataires - 2025-12-31",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Il s'agit du TEC 10 (taux de l'échéance constante 10 ans calculé par la Banque de France par interpolation entre les deux OAT encadrant la maturité 10 ans), et NON du rendement d'une OAT précise. TEC 10 au 31/12/2025 : 3,5600 %. Le rendement de l'OAT 10 ans de référence (benchmark) était d'environ 3,50 % selon BNP Paribas. Le spread est calculé sur cette même base TEC 10 (Bund = taux_oat_10 - spread ≈ 2,86 %)."
+    },
+    "spread_oat_bund": {
+      "value": 70,
+      "unit": "points de base",
+      "date": "2025-12-31",
+      "source": {
+        "url": "https://economic-research.bnpparibas.com/pdf/fr-FR/Revue-marches-19-janvier-2026-19/01/2026,53140",
+        "title": "BNP Paribas Economic Research - EcoWeek n° 26.03, Revue des marchés, 19 janvier 2026, p. 7 (sources LSEG, Bloomberg)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé pour être cohérent avec taux_oat_10 (TEC 10 Banque de France, 3,56 %) : Bund 10a fin 2025 ≈ 2,80 % (16/01/2026) + 6,2 pb (cumul annuel) ≈ 2,862 %, d'où écart ≈ 69,8 pb, arrondi à 70. Incertitude d'environ ±1 pb liée à l'arrondi des niveaux publiés. Source secondaire (banque commerciale). Écart OAT de référence - Bund sur la même source : ≈ 63,8 pb (OAT 3,46 % + 4,0 pb ≈ 3,500 %)."
+    },
+    "population": {
+      "value": 69.066,
+      "unit": "millions",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8687895",
+        "title": "Insee - Estimations de population au 1er janvier 2026 par département (La France et ses territoires, 24 septembre 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire au 1er janvier 2026, France y compris Mayotte : 69 066,0 milliers (métropole 66 792,8 milliers ; Mayotte 323,2 milliers d'après le recensement 2026). Remplace l'estimation du bilan démographique de janvier 2026 (69 082 milliers, Mayotte alors estimée à environ 329 000)."
+    },
+    "taux_pauvrete": {
+      "value": 15.4,
+      "unit": "%",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2408282",
+        "title": "Insee - Taux de pauvreté selon le seuil de pauvreté, données annuelles de 1975 à 2024 (9 juillet 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de pauvreté monétaire au seuil de 60 % du niveau de vie médian, millésime 2024 (ERFS), France métropolitaine, personnes en logement ordinaire. Stable par rapport à 2023 (15,4 %), plus haut niveau depuis 1996 selon l'Insee (Insee Première n° 2117)."
+    },
+    "prelevements_obligatoires": {
+      "value": 43.6,
+      "unit": "% du PIB",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8988841",
+        "title": "Insee - Finances publiques en 2025, comptes nationaux annuels base 2020 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Grandeur annuelle 2025 (date « 2025-12 » = convention pour l'année 2025). Taux de prélèvements obligatoires 2025 (42,7 % en 2024), hors cotisations sociales imputées et net des crédits d'impôt."
+    },
+    "depense_publique": {
+      "value": 57.3,
+      "unit": "% du PIB",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8988841",
+        "title": "Insee - Finances publiques en 2025, comptes nationaux annuels base 2020 (29 mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Grandeur annuelle 2025 (date « 2025-12 » = convention pour l'année 2025). Dépense publique totale 2025 : 1 714,2 Md€ (+2,5 %), 57,3 % du PIB après 57,0 % en 2024 (57,2 % dans la première estimation de mars 2026). Hors éléments imputés : 53,8 % du PIB."
+    }
+  },
+  "stabilite": {
+    "value": 0.38,
+    "unit": "score 0-1",
+    "date": "2026-01-01",
+    "source": {
+      "url": "https://www.assemblee-nationale.fr/dyn/17/scrutins/3058",
+      "title": "Assemblée nationale – Scrutin n° 3058 du 16 octobre 2025, motion de censure (LFI) contre le gouvernement Lecornu II : 271 voix pour, 289 requises",
+      "accessed": "2026-10-20"
+    },
+    "estimate": true,
+    "note": "Estimation (aucune mesure officielle de la stabilité politique). Méthode : moyenne non pondérée de 5 composantes notées 0..1. (1) Marge parlementaire 0,35 : gouvernement minoritaire, la motion LFI du 16/10/2025 a manqué la censure de 18 voix (scrutin 3058) ; non-censure du PS obtenue contre la suspension de la réforme des retraites (voir politics.json). (2) Rotation gouvernementale 0,20 : quatre gouvernements (trois Premiers ministres) en 15 mois (Barnier censuré le 4 décembre 2024, première censure réussie depuis 1962 ; Bayrou renversé sur un vote de confiance le 8 septembre 2025 ; Lecornu I démissionnaire le 6 octobre 2025 ; Lecornu II nommé le 12 octobre 2025). (3) Situation budgétaire 0,30 : pas de loi de finances au 1er janvier 2026, loi spéciale n° 2025-1316 du 26/12/2025 (voir budget.json, context). (4) Popularité de l'exécutif 0,235 : moyenne de la popularité du Président (0,18) et du Premier ministre (0,29), baromètre Ipsos bva décembre 2025 (politics.json). (5) Continuité institutionnelle 0,80 : institutions fonctionnelles, loi spéciale adoptée en un jour par les deux chambres, LFSS 2026 promulguée le 30/12/2025, pas de crise de régime ; dissolution juridiquement possible depuis juillet 2025 mais non utilisée. Moyenne = (0,35 + 0,20 + 0,30 + 0,235 + 0,80) / 5 = 0,377, arrondie à 0,38. Repère : la stabilité d'une majorité absolue stable serait de l'ordre de 0,8. Incertitude ±0,1. Le spread initial (70 pb) est calé avec cette valeur (coefficient spread_constante : seul l'écart à la stabilité initiale compte)."
+  },
+  "tension_nationale": {
+    "value": 0.45,
+    "unit": "score 0-1",
+    "date": "2026-01-01",
+    "source": {
+      "url": "https://maire-info.com/18-septembre-une-mobilisation-importante-mais-pas-de-raz-de-maree-article2-29999",
+      "title": "Maire-info – « 18 septembre : une mobilisation importante mais pas de raz-de-marée » (19 septembre 2025)",
+      "accessed": "2026-10-20"
+    },
+    "estimate": true,
+    "note": "Estimation (aucun indice officiel). Méthode : moyenne de 4 composantes 0..1. (1) Mobilisation sociale récente 0,55 : mouvement « Bloquons tout » du 10/09/2025, journée intersyndicale du 18/09/2025 (≈ 506 000 manifestants selon le ministère de l'Intérieur, 1 million selon la CGT), nouvelle journée le 2/10/2025, puis reflux après l'annonce de la suspension de la réforme des retraites (14/10/2025) : aucune grève reconductible nationale au 1er janvier 2026. (2) Chômage 0,45 : 7,9 % au T4 2025 et en hausse (indicators.chomage_bit). (3) Insatisfaction politique 0,75 : popularité du Président 0,18 (politics.json) ; on prend 1 - 0,18 ≈ 0,8 tempéré à 0,75. (4) Pouvoir d'achat 0,25 : inflation 0,8 % sur un an en décembre 2025 (indicators.inflation), faible pression sur les prix. Moyenne = (0,55 + 0,45 + 0,75 + 0,25) / 4 = 0,50, minorée à 0,45 pour tenir compte de l'absence de mouvement social en cours au 1er janvier 2026 (reflux après le 14/10/2025, aucune grève reconductible nationale), que la composante (1), fondée sur la mobilisation de septembre-octobre, surpondère. Incertitude ±0,1. À rapprocher de la moyenne pondérée des tension_initiale régionales (regions.json)."
+  },
+  "notations": [
+    {
+      "agence": "S&P",
+      "note": "A+",
+      "crans_sous_aaa": 4,
+      "perspective": "stable",
+      "date": "2025-10-17",
+      "source": {
+        "url": "https://www.clubpatrimoine.com/contenus/standard-poors-maintient-note-dette-tricolore",
+        "title": "Club Patrimoine – Standard & Poor's maintient la note de la dette tricolore (1er décembre 2025) : A+ perspective stable maintenue le 28/11/2025 sans action formelle, après l'abaissement d'un cran du 17/10/2025",
+        "accessed": "2026-10-20"
+      }
+    },
+    {
+      "agence": "Moody's",
+      "note": "Aa3",
+      "crans_sous_aaa": 3,
+      "perspective": "negative",
+      "date": "2025-10-24",
+      "source": {
+        "url": "https://www.tradingsat.com/actualites/marches-financiers/marche-moody-s-revoit-a-la-baisse-ses-perspectives-sur-la-note-de-la-france-1149168.html",
+        "title": "Tradingsat (Reuters) – Moody's revoit à la baisse ses perspectives sur la note de la France (24 octobre 2025) : Aa3 maintenue, perspective passée de stable à négative",
+        "accessed": "2026-10-20"
+      }
+    },
+    {
+      "agence": "Fitch",
+      "note": "A+",
+      "crans_sous_aaa": 4,
+      "perspective": "stable",
+      "date": "2025-09-12",
+      "source": {
+        "url": "https://capitalfm.africa/fitch-downgrades-frances-credit-rating-to-a/",
+        "title": "Capital FM (AFP) – Fitch downgrades France's credit rating to A+ (13 septembre 2025) : abaissement de AA- à A+ le 12/09/2025, perspective stable",
+        "accessed": "2026-10-20"
+      }
+    },
+    {
+      "agence": "DBRS",
+      "note": "AA",
+      "crans_sous_aaa": 2,
+      "perspective": "stable",
+      "date": "2025-09-19",
+      "source": {
+        "url": "https://econostrum.info/dette-morningstar-dbrs-abaisse-note-france/",
+        "title": "Econostrum – Après Fitch, l'agence de notation Morningstar DBRS abaisse la note souveraine de la France (20 septembre 2025) : AA (high) à AA le 19/09/2025, perspective stable",
+        "accessed": "2026-10-20"
+      }
+    },
+    {
+      "agence": "Scope",
+      "note": "AA-",
+      "crans_sous_aaa": 3,
+      "perspective": "negative",
+      "date": "2025-09-26",
+      "source": {
+        "url": "https://scoperatings.com/ratings-and-research/rating/EN/179349",
+        "title": "Scope Ratings – France : note AA- confirmée, perspective passée de stable à négative (26 septembre 2025)",
+        "accessed": "2026-10-20"
+      }
+    }
+  ]
+}

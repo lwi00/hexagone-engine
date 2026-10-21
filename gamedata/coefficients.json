@@ -1,0 +1,1194 @@
+[
+  {
+    "id": "croissance_potentielle",
+    "value": 1.2,
+    "unit": "% par an (volume)",
+    "description": "Croissance du PIB potentiel en volume (2025-2028). Indice de volume Y (log) : ln Y(t+1) = ln Y(t) + g*/1200 + ΔD_dem(t) + ΔO(t) + ΔGr(t), où g* = 1,2 (en %/an), D_dem = effet de demande des multiplicateurs (en fraction du niveau de PIB, voir multiplicateur_*), O = somme des effets d'offre sur le NIVEAU du PIB (leviers, événements, barème bareme.croissance.*, en fraction), Gr = effet des grèves sur le niveau (greves_effet_croissance) ; Δx(t) = x(t+1) - x(t). croissance_pib affichée = 100 × (Y(t)/Y(t-12) - 1) ; croissance annualisée du mois g_m(t) = 1200 × (ln Y(t+1) - ln Y(t)). PIB nominal = Y × indice des prix du PIB (deflateur_pib_tendance).",
+    "hypothese": false,
+    "justification": "Trajectoire du PSMT 2025-2029 (octobre 2024), reprise au Tableau 7 du document de travail DG Trésor : « PIB potentiel volume (taux de croissance) 1,2 1,2 1,2 1,2 1,0 » pour 2025 à 2029. Millésime de référence : PSMT d'octobre 2024 (le document ne cite pas le PLF 2026, dont le potentiel n'a pas été vérifié). C'est la tendance de départ du moteur : les prévisions 2026 (OFCE, consensus) ne doivent pas servir de tendance, sinon l'impulsion budgétaire 2026 serait comptée deux fois.",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "croissance_potentielle_long_terme",
+    "value": 1,
+    "unit": "% par an (volume)",
+    "description": "Croissance potentielle vers laquelle la tendance converge (vieillissement de la population active) : transition linéaire depuis croissance_potentielle entre juillet 2028 et juillet 2029 (ENGINE.md §7c).",
+    "hypothese": false,
+    "justification": "Même tableau DG Trésor (PSMT 2025-2029) : potentiel ramené à 1,0 % en 2029. Le moteur peut interpoler linéairement entre 1,2 % (2028) et 1,0 % (2029).",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "deflateur_pib_tendance",
+    "value": 1.6,
+    "unit": "% par an",
+    "description": "Croissance tendancielle du déflateur du PIB (%/an). Indice des prix du PIB : ln Pd(t+1) = ln Pd(t) + (1,6 + (π(t) - π(0)))/1200, π(t) = inflation affichée (glissement annuel de l'IPC, %), π(0) = inflation initiale de macro.json (0,8 %). C'est la tendance de 1,6 %/an corrigée de l'écart de l'inflation simulée à son niveau initial (même écart en points) : pas de saut au premier mois. Ordre de grandeur (calcul simplifié, sans action du joueur) : dette fin 2026 ≈ 3 612 Md€ pour un PIB nominal 2026 ≈ 3 070 Md€, soit ≈ 117,6 % du PIB. Sert au PIB nominal (base des recettes, ratios dette/PIB et déficit/PIB).",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 7 (trajectoire du PSMT 2025-2029, octobre 2024) : « Déflateur du PIB (taux de croissance) 1,7 1,6 1,6 1,6 1,6 » pour 2025 à 2029 ; valeur 2026-2029 retenue. Le moteur peut la faire dériver avec l'inflation simulée.",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "okun_coefficient",
+    "value": 0.45,
+    "unit": "point de chômage par point d'écart de croissance (annuel, écart lissé)",
+    "description": "Loi d'Okun en différence sur l'écart de croissance LISSÉ : u_dyn(t+1) = u_dyn(t) - 0,45 × (ḡ(t) - g*)/12 + chomage_rappel_structurel × (u* - u_dyn(t)), où ḡ = moyenne mobile sur 6 mois de la croissance annualisée du mois g_m (voir croissance_potentielle). Chômage affiché u = u_dyn + Σ effets actifs sur chomage_bit (leviers, événements, barème bareme.chomage.*, en points, décalage additif ; forme niveau = durable, choc = retiré après duree_mois). Initialisation : u_dyn(0) = chômage de macro.json. Le lissage reproduit le retard de 2 à 4 trimestres de l'emploi sur le PIB. Historique de ḡ au départ : les 6 valeurs de g_m antérieures au 1er janvier 2026 sont fixées à croissance_potentielle (et non à la croissance observée 2025), pour que le chômage ne dérive pas au premier mois sans action du joueur.",
+    "hypothese": true,
+    "justification": "Hypothèse calée sur un ordre de grandeur, aucun coefficient d'Okun publié n'ayant été consulté. Le modèle Mésange (Tableau 2, variante « investissement public +1 % du PIB ») donne un rapport de NIVEAUX (baisse du chômage / écart de PIB au compte central) de 0,37/1,28 ≈ 0,29 à 1 an et 0,78/1,29 ≈ 0,60 à 2 ans : ce rapport croît avec l'horizon parce que l'emploi réagit avec retard. 0,45 est un compromis appliqué à un écart de croissance lissé, pas une estimation. Variante possible (forme en écart) : u - u* = -0,6 × écart de production (ratio Mésange à 2 ans). Ne pas cumuler les deux formes.",
+    "source": {
+      "url": "https://www.insee.fr/fr/statistiques/8181884",
+      "title": "Insee, Document de travail n° 2024-07 (Bourgeois, Favetto) — Construction d'intervalles de confiance et relecture du passé avec le modèle Mésange",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "chomage_structurel",
+    "value": 7.5,
+    "unit": "% de la population active",
+    "description": "Chômage d'équilibre (NAIRU) vers lequel le chômage revient en l'absence d'écart de croissance ; sert aussi de référence à la courbe de Phillips.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu : aucune estimation officielle du chômage structurel n'a pu être consultée (quota de recherche web épuisé). Valeur posée un peu sous le chômage observé au T4 2025 (7,9 %, gamedata/macro.json), pour une économie légèrement sous son potentiel. Les réformes structurelles la modifient (chomage_effet_reforme_structurelle)."
+  },
+  {
+    "id": "chomage_rappel_structurel",
+    "value": 0.02,
+    "unit": "fraction par mois",
+    "description": "Force de rappel du chômage dynamique vers chomage_structurel : terme + 0,02 × (u* - u_dyn) dans l'équation d'Okun (voir okun_coefficient). Demi-vie ≈ 3 ans (forte persistance du chômage en France). Les effets additifs des leviers ne sont pas rappelés (ils portent sur u, pas sur u_dyn).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, sans source consultée. Empêche le chômage de dériver indéfiniment après un écart de croissance persistant tout en conservant une hystérèse de plusieurs années."
+  },
+  {
+    "id": "multiplicateur_depenses_court_terme",
+    "value": 0.75,
+    "unit": "% de PIB (niveau) par point de PIB de variation de dépense (1re année)",
+    "description": "Multiplicateur de court terme des ÉCONOMIES de dépense publique courante (État, collectivités, sécurité sociale). Effet sur le NIVEAU du PIB, à appliquer à la VARIATION de l'impulsion (pas au niveau de dépense supplémentaire chaque mois). Son application aux hausses de dépenses générales est une extrapolation. RÈGLE COMMUNE AUX MULTIPLICATEURS : ils sont la SEULE voie de l'effet de demande (keynésien) sur le PIB ; les effets 'indicator:croissance_pib' des leviers et événements ne décrivent que l'effet d'offre/structurel (sinon double compte). Ils s'appliquent à l'impulsion DISCRÉTIONNAIRE seulement : écart des lignes budgétaires à leur compte central (ligne_centrale(t) = ligne du 1er janvier 2026 × [Y_tendanciel(t) × Pd(t)] / [Y(0) × Pd(0)], PIB nominal POTENTIEL, voir semi_elasticite_solde_public ; la même ligne centrale, corrigée des élasticités conjoncturelles, sert de référence à l'impulsion) causé par les leviers, lois, effets 'budget' des événements et barème bareme.budget.*. Sont exclus : la charge d'intérêts (depenses.interets_dette), les variations automatiques des recettes et dépenses liées à la conjoncture (élasticités) et les indexations automatiques (sinon boucle croissance → recettes → croissance). Impulsion en fraction du PIB : I(t) = [m_ciblées × (Δdepenses.aides_sociales + Δdepenses.defense) + m_dépenses × Σ autres Δdepenses (hors intérêts) - m_prélèvements × Σ Δrecettes] / PIB nominal annuel(t) (Δ en Md€/an, signe : + = plus de dépenses / plus de recettes). Effet de demande sur le niveau du PIB : D_dem(t+1) = D_dem(t) + multiplicateur_vitesse_ajustement × (I(t) - D_dem(t)). Phase 1 : multiplicateurs de court terme seulement (l'érosion de moyen terme, multiplicateur_depenses_moyen_terme, est réservée pour plus tard).",
+    "hypothese": false,
+    "justification": "OFCE (avril 2026) : les économies structurelles sur l'État, les collectivités et la sécurité sociale prévues par la LFI 2026 « ont des multiplicateurs à court terme relativement élevés (compris entre 0,7 et 0,8) ». Milieu de fourchette. Pour les hausses ciblées (défense, prime d'activité), voir multiplicateur_depenses_ciblees.",
+    "source": {
+      "url": "https://www.ofce.fr/prev/prev2603/france/fipu.html",
+      "title": "OFCE, prévisions avril 2026 — Le déficit public devrait diminuer en 2026 et 2027",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "multiplicateur_depenses_ciblees",
+    "value": 1,
+    "unit": "% de PIB (niveau) par point de PIB de variation de dépense (1re année)",
+    "description": "Multiplicateur de court terme des dépenses à fort contenu en demande intérieure (défense, prime d'activité, transferts aux ménages modestes). Effet sur le niveau du PIB, à appliquer à la variation de l'impulsion. RÈGLE COMMUNE AUX MULTIPLICATEURS : ils sont la SEULE voie de l'effet de demande (keynésien) sur le PIB ; les effets 'indicator:croissance_pib' des leviers et événements ne décrivent que l'effet d'offre/structurel (sinon double compte). Ils s'appliquent à l'impulsion DISCRÉTIONNAIRE seulement : écart des lignes budgétaires à leur compte central (ligne_centrale(t) = ligne du 1er janvier 2026 × [Y_tendanciel(t) × Pd(t)] / [Y(0) × Pd(0)], PIB nominal POTENTIEL, voir semi_elasticite_solde_public ; la même ligne centrale, corrigée des élasticités conjoncturelles, sert de référence à l'impulsion) causé par les leviers, lois, effets 'budget' des événements et barème bareme.budget.*. Sont exclus : la charge d'intérêts (depenses.interets_dette), les variations automatiques des recettes et dépenses liées à la conjoncture (élasticités) et les indexations automatiques (sinon boucle croissance → recettes → croissance). Impulsion en fraction du PIB : I(t) = [m_ciblées × (Δdepenses.aides_sociales + Δdepenses.defense) + m_dépenses × Σ autres Δdepenses (hors intérêts) - m_prélèvements × Σ Δrecettes] / PIB nominal annuel(t) (Δ en Md€/an, signe : + = plus de dépenses / plus de recettes). Effet de demande sur le niveau du PIB : D_dem(t+1) = D_dem(t) + multiplicateur_vitesse_ajustement × (I(t) - D_dem(t)). Phase 1 : multiplicateurs de court terme seulement (l'érosion de moyen terme, multiplicateur_depenses_moyen_terme, est réservée pour plus tard).",
+    "hypothese": false,
+    "justification": "OFCE (avril 2026) : les hausses de dépenses de défense et de prime d'activité (0,2 pt de PIB) ont « des multiplicateurs élevés (proche de 1) ».",
+    "source": {
+      "url": "https://www.ofce.fr/prev/prev2603/france/fipu.html",
+      "title": "OFCE, prévisions avril 2026 — Le déficit public devrait diminuer en 2026 et 2027",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "multiplicateur_prelevements_court_terme",
+    "value": 0.33,
+    "unit": "% de PIB (niveau) par point de PIB de variation des prélèvements (1re année)",
+    "description": "Multiplicateur de court terme d'une hausse (ou baisse) des prélèvements obligatoires, en valeur absolue (une hausse réduit le PIB). Effet sur le niveau du PIB, à appliquer à la variation de l'impulsion. Valeur unique pour tous les prélèvements (grossier : une baisse d'impôt ciblée sur les ménages modestes a un multiplicateur plus élevé qu'une hausse d'IS). RÈGLE COMMUNE AUX MULTIPLICATEURS : ils sont la SEULE voie de l'effet de demande (keynésien) sur le PIB ; les effets 'indicator:croissance_pib' des leviers et événements ne décrivent que l'effet d'offre/structurel (sinon double compte). Ils s'appliquent à l'impulsion DISCRÉTIONNAIRE seulement : écart des lignes budgétaires à leur compte central (ligne_centrale(t) = ligne du 1er janvier 2026 × [Y_tendanciel(t) × Pd(t)] / [Y(0) × Pd(0)], PIB nominal POTENTIEL, voir semi_elasticite_solde_public ; la même ligne centrale, corrigée des élasticités conjoncturelles, sert de référence à l'impulsion) causé par les leviers, lois, effets 'budget' des événements et barème bareme.budget.*. Sont exclus : la charge d'intérêts (depenses.interets_dette), les variations automatiques des recettes et dépenses liées à la conjoncture (élasticités) et les indexations automatiques (sinon boucle croissance → recettes → croissance). Impulsion en fraction du PIB : I(t) = [m_ciblées × (Δdepenses.aides_sociales + Δdepenses.defense) + m_dépenses × Σ autres Δdepenses (hors intérêts) - m_prélèvements × Σ Δrecettes] / PIB nominal annuel(t) (Δ en Md€/an, signe : + = plus de dépenses / plus de recettes). Effet de demande sur le niveau du PIB : D_dem(t+1) = D_dem(t) + multiplicateur_vitesse_ajustement × (I(t) - D_dem(t)). Phase 1 : multiplicateurs de court terme seulement (l'érosion de moyen terme, multiplicateur_depenses_moyen_terme, est réservée pour plus tard).",
+    "hypothese": false,
+    "justification": "Estimation. OFCE (avril 2026) : « la hausse du taux de prélèvements obligatoires de 0,3 point de PIB conduirait à réduire la croissance de 0,1 point en 2026 », soit 0,1/0,3 ≈ 0,33. Les deux chiffres étant arrondis, l'incertitude est d'environ ±0,15 (fourchette 0,2 à 0,5).",
+    "source": {
+      "url": "https://www.ofce.fr/prev/prev2603/france/fipu.html",
+      "title": "OFCE, prévisions avril 2026 — Le déficit public devrait diminuer en 2026 et 2027",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "multiplicateur_investissement_public_1an",
+    "value": 1.28,
+    "unit": "% de PIB (niveau) par point de PIB d'investissement public (1 an)",
+    "description": "Effet sur le PIB en volume, à un an, d'une hausse permanente de l'investissement public de 1 % du PIB, non financée. Effet sur le niveau du PIB par rapport au compte central, à appliquer à la variation de l'impulsion. Non utilisé en phase 1 (pas de ligne budgétaire 'investissement' distincte) : conservé pour une ventilation future. Ne pas cumuler avec multiplicateur_depenses_court_terme.",
+    "hypothese": false,
+    "justification": "Modèle Mésange (Insee / DG Trésor), Tableau 2 : PIB en volume +1,28 % à 1 an (IC 95 % [1,26 ; 1,67]), +1,29 % à 2 ans.",
+    "source": {
+      "url": "https://www.insee.fr/fr/statistiques/8181884",
+      "title": "Insee, Document de travail n° 2024-07 (Bourgeois, Favetto) — Construction d'intervalles de confiance et relecture du passé avec le modèle Mésange",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "multiplicateur_investissement_public_5ans",
+    "value": 0.8,
+    "unit": "% de PIB (niveau) par point de PIB d'investissement public (5 ans)",
+    "description": "Effet sur le PIB à 5 ans de la même hausse permanente d'investissement public (érosion par les prix et la compétitivité). Effet sur le niveau du PIB par rapport au compte central, à appliquer à la variation de l'impulsion.",
+    "hypothese": false,
+    "justification": "Modèle Mésange, Tableau 2 : PIB +0,8 % à 5 ans (IC 95 % [0,56 ; 0,85]) et +0,47 % à 10 ans.",
+    "source": {
+      "url": "https://www.insee.fr/fr/statistiques/8181884",
+      "title": "Insee, Document de travail n° 2024-07 (Bourgeois, Favetto) — Construction d'intervalles de confiance et relecture du passé avec le modèle Mésange",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "multiplicateur_depenses_moyen_terme",
+    "value": 0.47,
+    "unit": "% de PIB (niveau) par point de PIB de variation de dépense (horizon 5 ans)",
+    "description": "Multiplicateur de moyen terme de la dépense publique courante, utilisé pour faire décroître l'effet d'une impulsion budgétaire.",
+    "hypothese": true,
+    "justification": "Calcul de l'auteur, chiffre absent des sources : multiplicateur OFCE de court terme (0,75) × rapport Mésange 5 ans / 1 an pour un choc d'investissement public permanent (0,8/1,28 = 0,625) ≈ 0,47. La coïncidence avec le multiplicateur Mésange à 10 ans (0,47) est fortuite. Transposer à la dépense courante le profil d'un choc d'investissement (qui comporte des effets d'offre) est une approximation. Profil mensuel : effet plein pendant 12 mois, puis décroissance d'environ 1 % par mois (0,625^(1/48) ≈ 0,990) jusqu'à 5 ans.",
+    "source": {
+      "url": "https://www.insee.fr/fr/statistiques/8181884",
+      "title": "Insee, Document de travail n° 2024-07 (Bourgeois, Favetto) — Construction d'intervalles de confiance et relecture du passé avec le modèle Mésange",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "impact_politique_budgetaire_2026",
+    "value": -0.5,
+    "unit": "point de croissance du PIB en 2026",
+    "description": "Effet de la politique budgétaire 2026 (LFI 2026) sur la croissance 2026. Comme la tendance de départ est la croissance potentielle (1,2 %) et que le compte central budgétaire EST la LFI 2026 (impulsion discrétionnaire nulle au départ), cet effet est injecté comme un effet exogène sur le niveau du PIB : O_lfi(t) = -0,5 % × min(1, mois écoulés depuis janvier 2026 / 12), atteint en décembre 2026 puis conservé (forme niveau, rampe 12 mois). Ne pas l'ajouter si une prévision 2026 sert de tendance.",
+    "hypothese": false,
+    "justification": "OFCE (avril 2026) : « la croissance française serait abaissée de 0,5 point de PIB en 2026 en raison des effets de la politique budgétaire », pour un effort structurel de 0,5 pt de PIB.",
+    "source": {
+      "url": "https://www.ofce.fr/prev/prev2603/france/fipu.html",
+      "title": "OFCE, prévisions avril 2026 — Le déficit public devrait diminuer en 2026 et 2027",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "cible_inflation_bce",
+    "value": 2,
+    "unit": "% (glissement annuel, IPCH zone euro)",
+    "description": "Cible d'inflation de la BCE, ancre de long terme de l'inflation dans le moteur.",
+    "hypothese": false,
+    "justification": "Communiqué BCE du 30 juin 2025 : « Le Conseil des gouverneurs confirme l'objectif d'inflation symétrique de 2 % à moyen terme ».",
+    "source": {
+      "url": "https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.pr250630~aabf988af8.fr.html",
+      "title": "BCE, communiqué du 30 juin 2025 — Le Conseil des gouverneurs de la BCE actualise sa stratégie de politique monétaire",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "inertie_inflation",
+    "value": 0.92,
+    "unit": "coefficient mensuel (sans unité)",
+    "description": "Persistance mensuelle de l'inflation sous-jacente (glissement annuel, %) : π_s(t+1) = π_ancre(t) + 0,92 × (π_s(t) - π_ancre(t)), avec π_ancre = cible_inflation_bce + pente_phillips × (u* - u). Indice des prix à la consommation : ln P(t+1) = ln P(t) + π_s(t)/1200 + Δ(Σ effets sur le NIVEAU des prix), où les effets 'indicator:inflation' des leviers et événements (barème bareme.inflation.*) sont des écarts de niveau de l'indice en % (forme niveau : hausse ponctuelle et durable du niveau, visible 12 mois dans le glissement ; choc : retirée après duree_mois). Inflation affichée = 100 × (P(t)/P(t-12) - 1). Avant 12 mois de simulation, P(t-12) est reconstitué avec le glissement initial de macro.json. Initialisation : π_s(0) = inflation de macro.json. Demi-vie ≈ 8 mois. Pas d'effet de second tour sur π_s (simplification).",
+    "hypothese": true,
+    "justification": "Hypothèse. Les courbes de Phillips estimées par la Banque de France pour la France expliquent l'inflation sous-jacente par son passé (persistance), le chômage et les prix d'import, mais aucun coefficient chiffré n'a pu être consulté. 0,92 par mois reproduit un retour vers la cible en environ 1 à 2 ans après un choc, ordre de grandeur de l'épisode 2022-2024."
+  },
+  {
+    "id": "pente_phillips",
+    "value": 0.2,
+    "unit": "point d'inflation par point de chômage sous chomage_structurel",
+    "description": "Courbe de Phillips : l'ancre de l'inflation devient π_ancre = 2 % + 0,2 × (u* - u). Une relance qui fait passer le chômage sous son niveau structurel a donc un coût inflationniste.",
+    "hypothese": true,
+    "justification": "Hypothèse. Les courbes de Phillips estimées par la Banque de France relient l'inflation sous-jacente au chômage, mais aucun coefficient chiffré n'a été consulté (quota de recherche épuisé). Pente volontairement faible, conforme au constat général d'une courbe aplatie."
+  },
+  {
+    "id": "passthrough_petrole_total",
+    "value": 0.33,
+    "unit": "% de hausse du niveau des prix à la consommation par hausse de 10 € du baril",
+    "description": "Effet total (direct et indirect, hors effets de second tour salariaux) d'une hausse de 10 € du prix du baril de pétrole sur le niveau des prix à la consommation en France. Profil mensuel (hypothèse) : effet direct 0,25 immédiat, effet indirect ≈ 0,08 étalé sur 6 à 12 mois.",
+    "hypothese": false,
+    "justification": "Banque de France (15 octobre 2026) : « une hausse de 10 euros du prix du baril accroîtrait aujourd'hui les prix à la consommation de 0,3 à 0,4 % en France » (0,6 % en 2016). Décomposition publiée pour 2025 : effet direct 0,25 pt, effet indirect 0,06 à 0,11 pt, total 0,31 à 0,36 pt ; milieu 0,335 arrondi à 0,33. L'article ne donne pas d'horizon de transmission : la répartition dans le temps est une hypothèse. Publication postérieure au début du jeu, acceptable pour un coefficient structurel.",
+    "source": {
+      "url": "https://www.banque-france.fr/fr/publications-et-statistiques/publications/pourquoi-une-hausse-du-prix-du-petrole-alimente-t-elle-moins-linflation-quen-2016",
+      "title": "Banque de France, billet de blog n° 465 (15 octobre 2026, Châtelais, Kalantzis, Ulgazi) — Pourquoi une hausse du prix du pétrole alimente-t-elle moins l'inflation qu'en 2016 ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "semi_elasticite_solde_public",
+    "value": 0.57,
+    "unit": "point de PIB de solde par point d'écart de production",
+    "description": "Sensibilité du solde public à l'écart de production (composante conjoncturelle = 0,57 × écart de production). ALTERNATIVE aux élasticités par prélèvement (elasticite_ir_csg, _is, _cotisations, _tva_autres_po, _depenses_chomage) : le moteur utilise soit cette valeur agrégée, soit les élasticités détaillées, jamais les deux (sinon le solde conjoncturel est compté deux fois). Choix pour la phase 1 : utiliser les élasticités DÉTAILLÉES appliquées aux lignes : ligne(t) = ligne_centrale(t) × (1 + ε × écart_PIB(t)/100) + Δ_disc(t), écart_PIB = 100 × (Y(t)/Y_tendanciel(t) - 1) avec Y_tendanciel = Y(0) × (1+g*)^(t/12) (écart initial supposé nul). Le compte central est indexé sur le PIB nominal POTENTIEL : ligne_centrale(t) = ligne(0) × [Y_tendanciel(t) × Pd(t)] / [Y(0) × Pd(0)] (Pd = déflateur, deflateur_pib_tendance). L'indexer sur le PIB nominal effectif compterait l'écart de production deux fois (élasticité effective 1 + ε) et rendrait les dépenses procycliques. Recettes : ε par poste ci-dessous. Dépenses : ε = 0 (pas de stabilisateur automatique hors chômage), sauf la part chômage des aides_sociales. Δ_disc = écarts discrétionnaires (leviers, lois, effets 'budget' des événements, barème bareme.budget.*) : c'est la seule base de l'impulsion des multiplicateurs (voir multiplicateur_depenses_court_terme). La charge d'intérêts n'a pas de compte central : elle est calculée par r(t) × dette(t) (taux_apparent_dette). TVA, TICPE, autres → elasticite_tva_autres_po ; ir, csg → elasticite_ir_csg ; is → elasticite_is ; cotisations_sociales → elasticite_cotisations ; part chômage des aides_sociales (≈ 27 %, COFOG 10.5 / aides_sociales) → elasticite_depenses_chomage. Ces variations sont automatiques : aucun multiplicateur ne leur est appliqué.",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 1 : semi-élasticité apparente retenue dans la LPFP 2023-2027 = 0,57 (la Commission européenne retient 0,63 pour la France). Elle agrège les élasticités par prélèvement du même tableau. Avec un multiplicateur de 1,28, une relance s'autofinance à environ 0,57 × 1,28 ≈ 73 % la première année : à compenser par la courbe de Phillips (pente_phillips) et le spread non linéaire.",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "elasticite_ir_csg",
+    "value": 1.86,
+    "unit": "élasticité à l'écart de production",
+    "description": "Élasticité de l'impôt sur le revenu, de la CSG et de la CRDS à l'écart de production. À utiliser à la place de semi_elasticite_solde_public, pas en plus.",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 1 : « Impôt sur le revenu, CSG et CRDS 1,86 » (poids moyen 7,5 % du PIB).",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "elasticite_is",
+    "value": 2.76,
+    "unit": "élasticité à l'écart de production",
+    "description": "Élasticité de l'impôt sur les sociétés à l'écart de production. À utiliser à la place de semi_elasticite_solde_public, pas en plus.",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 1 : « Impôt sur les sociétés 2,76 » (poids moyen 1,9 % du PIB).",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "elasticite_cotisations",
+    "value": 0.63,
+    "unit": "élasticité à l'écart de production",
+    "description": "Élasticité des cotisations sociales à l'écart de production. À utiliser à la place de semi_elasticite_solde_public, pas en plus.",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 1 : « Cotisations sociales 0,63 » (poids moyen 16,2 % du PIB).",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "elasticite_tva_autres_po",
+    "value": 1,
+    "unit": "élasticité à l'écart de production",
+    "description": "Élasticité de la TVA et des autres prélèvements obligatoires (TICPE…) à l'écart de production. Élasticité unitaire au PIB nominal en tendance. À utiliser à la place de semi_elasticite_solde_public, pas en plus.",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 1 : « Autres prélèvements obligatoires (dont TVA) 1,00 » (poids moyen 18,0 % du PIB). Le document note que l'élasticité effective des PO au PIB varie fortement d'une année à l'autre (1,6 en 2022, 0,4 en 2023, 0,6 en 2024).",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "elasticite_depenses_chomage",
+    "value": -3.23,
+    "unit": "élasticité à l'écart de production",
+    "description": "Élasticité des dépenses d'indemnisation du chômage à l'écart de production (elles baissent quand l'activité dépasse son potentiel). À utiliser à la place de semi_elasticite_solde_public, pas en plus. Exprimée par rapport à l'écart de production ; si le moteur dispose du taux de chômage, il peut lui substituer une indexation directe des dépenses d'indemnisation sur le nombre de chômeurs.",
+    "hypothese": false,
+    "justification": "DG Trésor, Tableau 1 : dépenses de chômage, élasticité 3,23 en valeur absolue (poids moyen 1,4 % du PIB), contribution de 0,05 à la semi-élasticité. Le signe négatif est rétabli ici : ces dépenses sont contracycliques.",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/5d7252bb-a6bc-47e2-9979-ea75482ed81d/files/2995bfdc-213c-4b80-a423-1511d5ebf0e3",
+      "title": "DG Trésor, Documents de travail n° 2025/2 (août 2025) — Relecture structurelle du déficit : quels indicateurs pour piloter les finances publiques ?",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "spread_sensibilite_deficit",
+    "value": 5,
+    "unit": "points de base par point de PIB de déficit",
+    "description": "Élargissement marginal de l'écart de taux à 10 ans quand le déficit public augmente de 1 point de PIB (composante linéaire, voir spread_constante et spread_non_lineaire_dette). Déficit = moyenne glissante sur 12 mois du solde APU simulé, en % du PIB nominal annuel.",
+    "hypothese": false,
+    "justification": "Banque de France WP 494 (panel de 22 pays de l'OCDE, 1999-2013, effets fixes) : une hausse de 1 point de PIB du solde budgétaire est associée à un resserrement de 5 pb de l'écart. La variable expliquée est l'écart taux à 10 ans - swap, pas OAT-Bund : l'application à l'écart OAT-Bund est une approximation. Valeur basse de la littérature : la sensibilité aux choix budgétaires passe aussi par le terme non linéaire.",
+    "source": {
+      "url": "https://publications.banque-france.fr/sites/default/files/medias/documents/working-paper_494_2014.pdf",
+      "title": "Banque de France, Working Paper n° 494 (Bortoli, Harreau, Pouvelle, 2014) — Determinants of OECD countries' sovereign yields: safe havens, purgatory, and the damned",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "spread_sensibilite_dette",
+    "value": 2,
+    "unit": "points de base par point de dette/PIB",
+    "description": "Hausse marginale de long terme du taux souverain quand la dette publique augmente de 1 point de PIB (composante linéaire).",
+    "hypothese": false,
+    "justification": "Estimation de Poghosyan (2012) citée dans le BdF WP 494 : à long terme, les taux souverains augmentent d'environ 2 pb pour 1 point de dette/PIB supplémentaire (et, signe contre-intuitif, d'environ 45 pb pour 1 point de croissance potentielle EN PLUS). Poghosyan explique des taux RÉELS à long terme, pas un écart ; dans le modèle propre au WP 494, la dette « joue un rôle moindre ». Transposition à l'écart OAT-Bund approximative.",
+    "source": {
+      "url": "https://publications.banque-france.fr/sites/default/files/medias/documents/working-paper_494_2014.pdf",
+      "title": "Banque de France, Working Paper n° 494 (Bortoli, Harreau, Pouvelle, 2014) — Determinants of OECD countries' sovereign yields: safe havens, purgatory, and the damned",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "spread_degradation_note",
+    "value": 11,
+    "unit": "points de base par cran de dégradation",
+    "description": "Élargissement de l'écart de taux après la dégradation d'un cran par une des trois grandes agences de notation.",
+    "hypothese": false,
+    "justification": "Banque de France WP 494, Tableau 3 col. 4 : une dégradation d'un cran par l'une des trois agences est associée à un élargissement de 11 pb de l'écart.",
+    "source": {
+      "url": "https://publications.banque-france.fr/sites/default/files/medias/documents/working-paper_494_2014.pdf",
+      "title": "Banque de France, Working Paper n° 494 (Bortoli, Harreau, Pouvelle, 2014) — Determinants of OECD countries' sovereign yields: safe havens, purgatory, and the damned",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "spread_sensibilite_stabilite",
+    "value": 150,
+    "unit": "points de base entre stabilité maximale (1) et nulle (0)",
+    "description": "Prime de risque politique : terme + 150 × (stabilité_initiale - stabilité) dans l'équation du spread (voir spread_constante), stabilité sur 0..1. Calée sur l'écart à l'état initial (pas sur 1 - stabilité) pour que le spread de départ soit reproduit sans saut.",
+    "hypothese": true,
+    "justification": "Hypothèse calée avec npm run balance : la crise politique de 2024-2025 (stabilité en baisse) a porté l'écart OAT-Bund d'environ 50 à 80 pb, puis à 124 pb fin septembre 2026 ; avec 40 pb l'écart simulé restait à 90 pb. Les crises de financement passent par spread_non_lineaire_dette."
+  },
+  {
+    "id": "spread_constante",
+    "value": 70,
+    "unit": "points de base",
+    "description": "Équation de l'écart OAT-Bund 10 ans (pb), recalculée chaque mois : spread = 70 + 5 × (déficit - 5,1) + 2 × (dette - 115,7) + 40 × (S0 - S) + 0,3 × max(0, dette - 130)² + 11 × Σ crans de dégradation depuis le 1er janvier 2026 (effets kind 'notation', barème bareme.notation.* ; poids 1 pour S&P, Moody's et Fitch, spread_poids_agence_secondaire pour DBRS et Scope) + Σ primes de risque actives (effets kind 'prime_risque', pb). Déficit et dette en % du PIB (déficit : moyenne glissante 12 mois), S = stabilité 0..1, S0 = stabilité initiale (macro.json). Taux OAT 10 ans de marché = taux_reference_bund_initial + spread/100. Plancher : spread ≥ 0. Initialisation de la moyenne glissante du déficit : les 12 mois antérieurs au 1er janvier 2026 valent le déficit 2025 de macro.json (5,1 %), de sorte que le terme déficit vaut 0 à t0 et ne converge que progressivement vers le déficit 2026 simulé (≈ 4,9-5,0 %).",
+    "hypothese": false,
+    "justification": "Estimation : calage sur l'écart OAT-Bund de 70 pb au 31/12/2025 (gamedata/macro.json, spread_oat_bund), avec déficit 2025 = 5,1 % et dette fin 2025 = 115,7 % du PIB (Insee, mai 2026). Sans constante, 2 pb × 115,7 donnerait à lui seul 231 pb.",
+    "source": {
+      "url": "https://www.insee.fr/fr/statistiques/8997691",
+      "title": "Insee Première n° 2106 (29 mai 2026) — Le compte des administrations publiques en 2025",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "spread_non_lineaire_dette",
+    "value": 0.3,
+    "unit": "points de base par (point de dette/PIB au-delà de 130 %)²",
+    "description": "Terme non linéaire : spread additionnel = 0,3 × max(0, dette/PIB - 130)². À 150 % : +120 pb ; à 160 % : +270 pb. Rend possible la spirale de dette (scénario « banqueroute », SPEC 3.3).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, sans estimation publiée consultée. Seuil de 130 % fixé à environ 15 points au-dessus de la dette de départ (115,7 %), pour qu'une dérive budgétaire prolongée sur un mandat déclenche une hausse auto-entretenue des taux."
+  },
+  {
+    "id": "taux_apparent_dette",
+    "value": 2.01,
+    "unit": "% par an",
+    "description": "Taux apparent initial r(0) de la dette des APU au 1er janvier 2026 (%/an). intérêts_mois(t) = r(t)/100 × dette(t) / 12, ligne depenses.interets_dette(t) = 12 × intérêts_mois(t). r(0) est calé pour que la somme des 12 intérêts mensuels simulés en 2026 (sans action du joueur) égale la charge 2026 du budget, pas pour que le premier mois l'égale. Dynamique : voir part_dette_refinancee_mois.",
+    "hypothese": false,
+    "justification": "Calcul de calage (estimation) : cible = depenses.interets_dette de gamedata/budget.json = 73,6 Md€ (RESF PLF 2026 : 2,4 % du PIB × pib_reference_md 3 066,3 Md€). Simulation de 12 mois : dette(0) = 3 460,5 Md€ (macro.json, Insee), déficit hors intérêts ≈ 77,4 Md€/an (151,0 - 73,6, budget.json), refinancement 0,0054 du stock par mois (part_dette_refinancee_mois) plus le déficit nouveau au taux de marché 3,56 % (taux_reference_bund_initial + spread 70 pb). r(0) = 2,00 → 73,2 Md€ ; 2,02 → 73,9 Md€ ; retenu 2,01 → ≈ 73,6 Md€, r atteignant ≈ 2,17 % en décembre 2026. Caler r(0) sur charge 2026 / dette fin 2025 (2,13 %) compterait deux fois la hausse de 2026 (déjà dans la prévision du RESF, puis refaite par le refinancement du moteur) : ≈ +4 Md€ de charge. Conséquence : la ligne d'intérêts du premier mois (≈ 69,6 Md€ en rythme annuel) est sous la valeur du budget ; c'est le total 2026 qui est calé. Repère : taux apparent 2025 réalisé = 64,7 / 3 383,3 (dette moyenne) ≈ 1,91 % (Insee, comptes 2025, base 2020). Si budget.json, la dette initiale ou les taux changent, refaire ce calage.",
+    "source": {
+      "url": "https://www.insee.fr/fr/statistiques/8997691",
+      "title": "Insee Première n° 2106 (29 mai 2026) — Le compte des administrations publiques en 2025",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "taux_reference_bund_initial",
+    "value": 2.86,
+    "unit": "%",
+    "description": "Taux sans risque de référence (Bund 10 ans) au 1er janvier 2026 : taux OAT 10 ans de marché i_m = Bund + spread/100. Constant par défaut (pas de modélisation de la BCE), modifiable seulement par des événements.",
+    "hypothese": false,
+    "justification": "Estimation : TEC 10 Banque de France au 31/12/2025 (3,56 %) moins l'écart OAT-Bund de 70 pb (gamedata/macro.json), soit ≈ 2,86 %. Le maintien constant est une hypothèse de jeu (pas de modélisation de la BCE).",
+    "source": {
+      "url": "https://www.banque-france.fr/fr/statistiques/taux-et-cours/indices-obligataires-2025-12-31",
+      "title": "Banque de France - Indices obligataires - 2025-12-31",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "duree_vie_moyenne_dette",
+    "value": 8.5,
+    "unit": "années",
+    "description": "Durée de vie moyenne de la dette négociable de l'État au 31 décembre 2025 : 8 ans et 184 jours (8,50 ans). Information ; le moteur utilise part_dette_refinancee_mois.",
+    "hypothese": true,
+    "justification": "Bulletin mensuel AFT n° 434 (juillet 2026) : « 8 ans et 184 jours » au 31/12/2025, encours de dette négociable 2 737 Md€. Lecture par deux extraits de moteur de recherche concordants (20/10/2026) ; le PDF renvoie une erreur 403 aux robots et n'a pas pu être lu directement. Cohérent avec la série des bulletins 2025 (8 ans et 172 jours fin 2024, 8 ans et 153 à 184 jours fin 2021-2023). Même chiffre attendu dans le communiqué AFT du 7 juillet 2026 sur le rapport annuel 2025 (https://www.aft.gouv.fr/en/publications/communiques-presse/07-july-2026-agence-france-tresor-publishes-its-2025-annual-report), lui aussi en erreur 403 au fetch. hypothese = true tant qu'une source n'a pas été lue directement. Le Sénat cite un encours de 2 757 Md€ à fin septembre 2025 (ratio d'amortissement 175,8 / 2 757 = 6,38 %, équivalent). Ordre de grandeur sûr ; à confirmer à la main.",
+    "source": {
+      "url": "https://www.aft.gouv.fr/files/medias-aft/7_Publications/7.2_BM/434_Bulletin%20mensuel%20juillet%202026.pdf",
+      "title": "Agence France Trésor — Bulletin mensuel n° 434, juillet 2026",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "greves_effet_croissance",
+    "value": -0.1,
+    "unit": "% du niveau de PIB du trimestre par mois de mobilisation forte",
+    "description": "Perte de niveau de PIB trimestriel par mois de grèves nationales majeures (≈ -0,1 pt de croissance trimestrielle pour un épisode d'environ un mois, soit ≈ -0,3 % de la production du mois). Moteur : intensité du mois I(t) = 1 si tension nationale ≥ seuil_tension_greve_generale, sinon Σ_r part_PIB_r × clamp((T_r - seuil_r)/(seuil_tension_greve_generale - seuil_tension_greves), 0, 1), avec seuil_r = max(seuil_tension_greves, T0_r + 0,15) et T0_r = tension_initiale (regions.json) ; 0,15 = seuil_tension_greves − tension_nationale initiale (0,6 − 0,45) : chaque région doit monter d'autant au-dessus de son niveau initial qu'une région métropolitaine moyenne, pour qu'un choc national de tension (appliqué à toutes les régions) ne déclenche pas de grève outre-mer plus tôt qu'en métropole (une marge de 0,05 était inférieure à bareme.tension.moyenne = 0,05). Au 1er janvier 2026, seule Mayotte (0,76) dépasse 0,6 ; Guyane 0,58, Guadeloupe et Martinique 0,56 ; la tension nationale initiale (0,45) est loin de seuil_tension_greve_generale. À t0, I = 0 : point fixe. Terme de niveau Gr(t) = -(3 × |greves_effet_croissance|/100) × I(t) - Perm(t), avec Perm(t+1) = Perm(t) + (1 - rattrapage(t)) × (3 × |greves_effet_croissance|/100) × I(t), rattrapage(t) = greves_rattrapage au 1er mois d'un épisode (I(t-1) = 0), greves_rattrapage_prolonge les mois suivants (I(t-1) > 0). Avec les valeurs actuelles : perte de 0,3 % × I de la production du mois de grève, récupérée le mois suivant en totalité (épisode court) ou à moitié (épisode prolongé). Perm n'est pas plafonné : il ne croît que pendant des mois de grève, que seule une hausse de tension (décisions du joueur, événements) peut provoquer ; 12 mois de grève générale coûtent ≈ 1,65 % de PIB durable.",
+    "hypothese": false,
+    "justification": "Banque de France (2023) : les mouvements sociaux de mars-avril 2023 « auraient amputé la croissance du PIB d'environ -0,1 pp au 1er trimestre » ; cohérent avec l'Insee (-0,1 pp pour les grèves du 2e trimestre 2018).",
+    "source": {
+      "url": "https://www.banque-france.fr/system/files/2023-12/billet-blog-331_FR.pdf",
+      "title": "Banque de France, billet de blog n° 331 (21/09/2023) — Mesurer l'effet des mouvements sociaux sur l'activité",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "greves_rattrapage",
+    "value": 1,
+    "unit": "fraction de la perte récupérée au trimestre suivant",
+    "description": "Part de la perte d'activité due aux grèves récupérée le mois suivant, au 1er mois d'un épisode (voir greves_effet_croissance). Les mois suivants d'un épisode prolongé utilisent greves_rattrapage_prolonge.",
+    "hypothese": false,
+    "justification": "Banque de France (2023) : la perte de -0,1 pp au T1 2023 a été « suivie d'un effet de rattrapage d'environ +0,1 pp au 2e trimestre ». Rattrapage complet pour un épisode court ; la réduction à 0,5 pour un mouvement prolongé est une hypothèse, pour que des grèves récurrentes pèsent sur le niveau du PIB.",
+    "source": {
+      "url": "https://www.banque-france.fr/system/files/2023-12/billet-blog-331_FR.pdf",
+      "title": "Banque de France, billet de blog n° 331 (21/09/2023) — Mesurer l'effet des mouvements sociaux sur l'activité",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "greves_rattrapage_prolonge",
+    "value": 0.5,
+    "unit": "fraction de la perte récupérée le mois suivant",
+    "description": "Part de la perte d'activité récupérée pour chaque mois de grève au-delà du premier d'un épisode (I(t-1) > 0), voir greves_effet_croissance. Le reste (1 - 0,5) devient une perte durable de niveau (Perm).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu : la Banque de France (2023) n'observe qu'un rattrapage complet après un épisode court (greves_rattrapage) ; la dégressivité pour un mouvement prolongé n'est pas estimée. Elle sert à ce que des grèves récurrentes pèsent sur le niveau du PIB."
+  },
+  {
+    "id": "satisfaction_amortissement",
+    "value": 0.1,
+    "unit": "fraction par mois",
+    "description": "Vitesse d'ajustement de la satisfaction lente d'un groupe g : sl_g(t+1) = sl_g(t) + 0,10 × (s_cible_g(t) - sl_g(t)). Satisfaction affichée s_g = clamp(sl_g + w_ev × Σ effets 'choc' actifs sur le groupe, 0, 1). Cible (score 0-1, recalculée chaque mois, bornée à [0,02 ; 0,98]) : s_cible_g = s0_g + w_pa × PA_g + w_emploi × (u_ref - u) + w_lois × L_g + w_ev × E_g, où s0_g = satisfaction_initiale (groups.json), PA_g = pouvoir d'achat réel du groupe en % depuis le 1er janvier 2026 (voir satisfaction_poids_pouvoir_achat), u = chômage national (%), u_ref = chômage de la trajectoire de référence « fil de l'eau » (sans décision du joueur ni événement, voir satisfaction_poids_pouvoir_achat), L_g = Σ des effets 'niveau' des lois et leviers appliqués sur le groupe (kind 'group', en points de score, y compris groupes_touches converti par bareme.satisfaction.*), E_g = Σ des effets 'niveau' d'événements sur le groupe. À t0 la cible vaut s0_g, et elle y reste sans action du joueur ni événement (PA_g = 0 et u = u_ref sur la trajectoire de référence) : l'état initial est un point fixe. Demi-vie ≈ 6,6 mois.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. Les fonctions de popularité françaises (Lewis-Beck 1980 ; Auberger 2011) montrent une forte persistance mensuelle, mais aucun coefficient n'a pu être consulté. 0,10 donne une mémoire de 6 à 12 mois, cohérente avec l'érosion observée des chocs d'opinion."
+  },
+  {
+    "id": "popularite_inertie",
+    "value": 0.6,
+    "unit": "coefficient mensuel",
+    "description": "Persistance mensuelle de la popularité présidentielle (score 0-1) : pl(t+1) = 0,6 × pl(t) + 0,4 × pop_cible(t), popularité affichée = clamp(pl + Σ effets 'popularite' actifs, 0, 1) (effets en points de score, barème bareme.popularite.* ; forme choc = retirée après duree_mois, niveau = durable). pop_cible = pop0 + Σ_g ω_g × (s_g - s0_g), ω_g = part_population_adulte_g × participation_electorale_g / Σ (même pondération que le vote), pop0 = popularité initiale (politics.json). Calage : à t0 pop_cible = pop0. Demi-vie ≈ 1,4 mois (la satisfaction est déjà lissée).",
+    "hypothese": true,
+    "justification": "Hypothèse. Les fonctions de popularité estimées incluent la popularité retardée avec un coefficient élevé, mais sur une popularité non décomposée ; ici la persistance est déjà portée par satisfaction_amortissement, d'où une valeur plus faible pour éviter un double lissage."
+  },
+  {
+    "id": "popularite_poids_lois_impopulaires",
+    "value": 0.8,
+    "unit": "sans unité (multiplie des points de score 0-1)",
+    "description": "Sanction des lois impopulaires dans la popularité : pop_cible -= w × Λ, Λ = Σ_lois Σ_g ω_g × max(0, -direction_g) × bareme.satisfaction.<intensité_g> pour chaque loi promulguée depuis moins de tension_lois_duree_mois (même terme que tension_poids_lois_impopulaires, pondéré par ω_g au lieu de la composition régionale). Les réactions d'une loi sont d'abord agrégées par groupe (billGroups). Ne passe pas par la satisfaction (pas d'effet sur le vote ni le pouvoir d'achat).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu calée avec npm run balance sur la réforme des retraites de 2023 : popularité présidentielle en baisse d'environ 6 à 8 points entre janvier et avril 2023 (baromètres Ifop-JDD)."
+  },
+  {
+    "id": "seuil_tension_greves",
+    "value": 0.6,
+    "unit": "score 0-1",
+    "description": "Seuil de tension régionale T_r (score 0-1) au-delà duquel la région est en grèves et manifestations récurrentes (voir greves_effet_croissance pour l'intensité). Les régions dont la tension initiale dépasse déjà ce seuil (DOM) ont un seuil effectif max(0,6 ; T0_r + 0,15), voir greves_effet_croissance : l'état initial ne déclenche pas de grève.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. Aucun seuil empirique n'existe ; calibré pour que les épisodes de mobilisation restent ponctuels en situation initiale."
+  },
+  {
+    "id": "seuil_tension_greve_generale",
+    "value": 0.8,
+    "unit": "score 0-1",
+    "description": "Seuil de tension NATIONALE (score 0-1) au-delà duquel la mobilisation est générale (intensité de grève I = 1, voir greves_effet_croissance). Sert aussi de seuil de saturation de l'intensité régionale.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, combinée avec greves_effet_croissance (sourcé) pour l'effet économique."
+  },
+  {
+    "id": "chomage_effet_reforme_structurelle",
+    "value": -0.1,
+    "unit": "point de chômage par an pour une réforme d'intensité « forte »",
+    "description": "Effet de moyen terme d'une réforme structurelle du marché du travail (assurance chômage, formation, retraite) sur le chômage structurel, montée en charge sur 3 ans. Si un levier sourcé porte déjà cet effet, ne pas l'ajouter (un seul canal par mesure).",
+    "hypothese": true,
+    "justification": "Hypothèse. Aucune évaluation chiffrée officielle n'a pu être consultée ; la littérature décrit des effets lents et incertains (le recul de l'âge de départ peut même augmenter le chômage à court terme). Valeur prudente, plafonnée par le barème qualitatif ; les leviers sourcés (gamedata/levers.json) priment."
+  },
+  {
+    "id": "part_dette_refinancee_mois",
+    "value": 0.0054,
+    "unit": "fraction du stock de dette par mois",
+    "description": "Part du stock de dette renouvelée chaque mois au taux de marché. Avec D = dette (Md€), R = part × D(t), ΔD = D(t+1) - D(t) (= déficit du mois) et i_m = taux OAT 10 ans de marché (Bund + spread/100) : r(t+1) = [r(t) × (D(t) - R - max(0, -ΔD)) + i_m(t) × (R + max(0, ΔD))] / D(t+1). Le déficit nouveau est financé au taux de marché, un excédent rembourse de la dette ancienne. r reste une moyenne pondérée de r(t) et i_m : pas d'explosion possible hors du spread lui-même.",
+    "hypothese": false,
+    "justification": "Estimation, deux méthodes. (1) Observation : amortissements de dette d'État à moyen et long terme prévus en 2026 = 175,8 Md€ (Sénat, rapport sur le PLF 2026, mission « Engagements financiers de l'État ») / encours de dette négociable fin 2025 = 2 737 Md€ (AFT, bulletin n° 434) = 6,4 %/an, soit 0,0054 par mois. (2) À partir de la durée de vie moyenne (duree_vie_moyenne_dette = 8,5 ans) : profil d'échéances uniforme → 1/(2 × 8,5 × 12) = 0,0049 ; la formule 1/(12 × 8,5) = 0,0098 suggérée par la critique de la phase 0 suppose que toute la dette est remboursée en une durée de vie moyenne, ce qui double le rythme observé. On retient la valeur observée (1), compatible avec (2). Les BTF (titres courts, ≈ 5 % de l'encours) se renouvellent plus vite mais à des taux courts liés à la BCE, pas au taux à 10 ans : ignorés. Mélange de périmètres assumé (dette négociable de l'État appliquée à la dette APU). Remplace vitesse_transmission_taux (supprimé, il faisait double emploi).",
+    "source": {
+      "url": "https://www.senat.fr/rap/l25-139-312/l25-139-3122.html",
+      "title": "Sénat — Rapport général sur le PLF 2026, Engagements financiers de l'État (besoin et ressources de financement 2026)",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "smic_seuil_revalorisation_inflation",
+    "value": 2,
+    "unit": "% de hausse de l'indice des prix depuis la dernière revalorisation du SMIC",
+    "description": "Indexation automatique du SMIC (indice S, base 1 au 1er janvier 2026) : (a) en cours d'année, si P(t)/P(dernière revalorisation) - 1 ≥ 2 %, alors S est relevé dans la même proportion le 1er jour du 2e mois suivant (l'indice du mois m est publié en m+1, effet au 1er de m+2) ; (b) au 1er janvier, S ×= P(novembre)/P_ref, où P_ref = indice de prix ayant servi à la dernière revalorisation, automatique (a) ou annuelle (b), plus un éventuel coup de pouce fixé par le levier SMIC (jamais de baisse : facteur ≥ 1). P_ref est réinitialisé à chaque relèvement (a) ou (b), pour ne pas compter deux fois l'inflation d'une année où (a) s'est déclenché. Initialisation : P_ref(0) = P(novembre 2025), indice de la revalorisation du 1er janvier 2026. Simplifications : P = IPC national simulé (au lieu de l'indice hors tabac des ménages du premier quintile) ; la moitié du gain de pouvoir d'achat du salaire horaire des ouvriers et employés, prévue au 1er janvier, est ignorée. Avec une inflation de 1 à 2 %, (a) ne se déclenche pas en 2026.",
+    "hypothese": false,
+    "justification": "Règle légale (Code du travail, art. L. 3231-4 et L. 3231-5), décrite par l'Insee : le SMIC est relevé « dans la même proportion » quand l'indice atteint « un niveau supérieur d'au moins 2 % » à celui de la dernière fixation, avec effet le premier jour du mois suivant la publication de l'indice ; revalorisation annuelle au 1er janvier. Exemple : déclenchements des 1er mai (+2,65 %) et 1er août 2022 (+2,01 %), puis +1,81 % seulement au 1er janvier 2023 (hausse des prix depuis août 2022, alors que l'inflation sur un an était de 6,2 % en novembre 2022) : la revalorisation de janvier porte sur la hausse depuis la dernière revalorisation (chiffres du vérificateur, info.gouv.fr « Revalorisation du SMIC au 1er janvier 2023 », non relu directement : erreur 403 au fetch le 20/10/2026).",
+    "source": {
+      "url": "https://www.insee.fr/fr/metadonnees/definition/c1006",
+      "title": "Insee — Définition : Salaire minimum interprofessionnel de croissance (SMIC)",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "pensions_indexation_inflation",
+    "value": 1,
+    "unit": "fraction de l'inflation moyenne annuelle répercutée au 1er janvier",
+    "description": "Revalorisation des pensions de base (indice Pen, base 1 au 1er janvier 2026) chaque 1er janvier à partir de 2027 : Pen ×= max(1, 1 + 1,0 × (moyenne des 12 derniers indices mensuels de prix connus en novembre / moyenne des 12 précédents - 1)), sauf décision contraire du joueur via le levier de revalorisation des pensions (qui fixe alors le coefficient de l'année). Simplification : IPC national au lieu de l'IPC hors tabac ; même règle pour les prestations sociales indexées (indice Prest, revalorisé au 1er avril dans la réalité, au 1er janvier ici). La revalorisation du 1er janvier 2026 elle-même est un fait budgétaire (budget.json / levers.json), pas recalculée.",
+    "hypothese": false,
+    "justification": "Code de la sécurité sociale, art. L. 161-25 : revalorisation annuelle selon l'évolution de la moyenne annuelle des prix à la consommation hors tabac des douze derniers indices mensuels (circulaire Cnav 2024-39 : coefficient 1,022 au 1er janvier 2025). Le plancher à 1 (pas de baisse nominale) est rapporté par la presse spécialisée, non lu dans le texte de l'article. Ne couvre pas les retraites complémentaires (Agirc-Arrco), revalorisées par les partenaires sociaux.",
+    "source": {
+      "url": "https://legislation.lassuranceretraite.fr/Pdf/circulaire_cnav_2024_39_23122024.pdf",
+      "title": "Cnav — Circulaire n° 2024-39 du 23 décembre 2024, revalorisation à compter du 1er janvier 2025",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "satisfaction_poids_pouvoir_achat",
+    "value": 0.015,
+    "unit": "points de score 0-1 par % de pouvoir d'achat réel",
+    "description": "Poids w_pa du pouvoir d'achat dans s_cible_g (voir satisfaction_amortissement). PA_g = 100 × (Rev_g(t)/Rev_g_ref(t)) / (P(t)/P_ref(t)) - 100 : pouvoir d'achat réel RELATIF à la trajectoire de référence « fil de l'eau » (Rev_g_ref, P_ref), simulée en parallèle par le moteur avec les mêmes règles (indexations légales du SMIC, des pensions et prestations, rattrapage de W, gel du point d'indice, effets exogènes du compte central comme impact_politique_budgetaire_2026) mais SANS décision du joueur ni événement. Sans cette référence, la mesure depuis le 1er janvier 2026 (pic de pouvoir d'achat des revenus indexés une fois par an) ferait baisser mécaniquement la satisfaction d'environ 0,018 au cours de 2026 et créerait une dent de scie annuelle. P = IPC simulé, Rev_g = indice de revenu nominal du groupe (base 1 au 1er janvier 2026) : retraites = Pen ; ouvriers_employes = 0,5 × S + 0,5 × W ; cadres = W ; fonctionnaires = indice du point de la fonction publique (levier, gelé par défaut) ; independants et agriculteurs = PIB nominal par habitant / sa valeur initiale ; etudiants_jeunes = 0,5 × Prest + 0,5 × S ; chomeurs_inactifs = Prest. W = salaire moyen nominal : ln W(t+1) = ln W(t) + π̄12(t)/1200, π̄12 = moyenne des glissements annuels d'inflation des 12 derniers mois (rattrapage des prix avec environ 6 mois de retard, sans gain réel tendanciel : celui-ci est dans s0_g). S = SMIC, Pen = pensions, Prest = prestations (voir smic_seuil_revalorisation_inflation et pensions_indexation_inflation). Les leviers fiscaux qui touchent le revenu disponible d'un groupe passent par leurs effets 'group' (L_g), pas par Rev_g. Exemple : -1 % de pouvoir d'achat → -0,015 de cible.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, sans estimation consultée. Ordre de grandeur : une perte de 2 à 3 % de pouvoir d'achat (épisode 2022-2023) abaisse la cible de 0,03 à 0,045, comparable à une loi d'intensité « moyenne » (bareme.satisfaction.moyenne)."
+  },
+  {
+    "id": "satisfaction_poids_emploi",
+    "value": 0.03,
+    "unit": "points de score 0-1 par point de chômage",
+    "description": "Poids w_emploi dans s_cible_g : terme w_emploi × (u_ref - u), u = taux de chômage BIT national (%), u_ref = chômage de la trajectoire de référence « fil de l'eau » (voir satisfaction_amortissement). +1 point de chômage → -0,03 de cible pour chaque groupe (identique pour tous les groupes en phase 1).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, sans estimation consultée. Un point de chômage supplémentaire pèse deux fois plus qu'un point de pouvoir d'achat perdu (il touche aussi la crainte du chômage des actifs occupés)."
+  },
+  {
+    "id": "satisfaction_poids_lois",
+    "value": 1,
+    "unit": "sans unité (multiplie des points de score 0-1)",
+    "description": "Poids w_lois des lois et leviers dans s_cible_g : w_lois × L_g, L_g = Σ des effets kind 'group' des leviers modifiés (élasticité × variation, en points de score) et des groupes_touches des lois (direction × bareme.satisfaction.<intensité>), pour les mesures appliquées (après delai_mois, avec rampe_mois). Effet 'niveau' : dure tant que la mesure est en vigueur.",
+    "hypothese": true,
+    "justification": "Hypothèse : facteur unitaire, les intensités étant déjà calibrées par le barème. Bouton de réglage global de la réactivité des groupes aux lois."
+  },
+  {
+    "id": "satisfaction_poids_evenements",
+    "value": 1,
+    "unit": "sans unité (multiplie des points de score 0-1)",
+    "description": "Poids w_ev des événements : effets kind 'group' des événements (direction × bareme.satisfaction.<magnitude>). Forme 'choc' : ajoutés DIRECTEMENT à la satisfaction affichée pendant duree_mois (pas à la cible, sinon l'amortissement de 0,10/mois les écraserait), puis retirés. Forme 'niveau' : ajoutés à la cible (terme E_g).",
+    "hypothese": true,
+    "justification": "Hypothèse : facteur unitaire. Le choix choc = additif direct reproduit les réactions vives et brèves de l'opinion à un événement."
+  },
+  {
+    "id": "vote_inertie",
+    "value": 0.75,
+    "unit": "coefficient mensuel (sans unité)",
+    "description": "Intentions de vote v_p (%, somme 100) : v_p(t+1) = 0,75 × v_p(t) + 0,25 × v*_p(t). Correspondance préalable des partis de groups.json vers ceux du sondage (politics.intentions_vote) : renaissance et modem → horizons (liste Hayer, candidat Philippe), ps → pp (liste Glucksmann) ; les autres partis gardent leur identifiant. Les V_gp sont additionnés après correspondance, avant le glissement (vote_sensibilite_satisfaction, appliqué avec les partis du bloc B après correspondance). Cible avec calage MULTIPLICATIF sur le sondage : v*_p = v0_p × (Σ_g ω_g × V*_gp) / (Σ_g ω_g × V_gp), ω_g = part_population_adulte × participation_electorale normalisés, V_gp = vote initial du groupe, V*_gp = vote après glissement ; ratio = 1 pour un parti du sondage absent de groups.json (dlf, lo) ; puis normalisation à 100. Un parti sans intention de vote dans le sondage (v0 = 0) reste à 0 : pas de parti fantôme, pas de part négative. À t0, v* = v0 : point fixe. Demi-vie ≈ 2,4 mois.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. La satisfaction étant déjà lissée (satisfaction_amortissement), l'inertie des intentions de vote reste courte : les sondages réagissent en quelques semaines."
+  },
+  {
+    "id": "vote_sensibilite_satisfaction",
+    "value": 1,
+    "unit": "variation relative de la part du bloc gouvernemental par point de score 0-1 de satisfaction",
+    "description": "Glissement dans chaque groupe g : soit B = partis du bloc gouvernemental (partis des groupes parlementaires dont rapport_gouvernement = 'majorite', plus le parti du Président), d_g = s_g - s0_g. Pour p ∈ B : V*_gp = V_gp × max(0, 1 + 1,0 × d_g). La part perdue (ou gagnée) Δ_g = Σ_{p∈B} (V_gp - V*_gp) est répartie entre les partis hors B au prorata de leur part dans le groupe : V*_gq = V_gq × (1 + Δ_g / Σ_{q∉B} V_gq). Une baisse de satisfaction de 0,10 réduit donc de 10 % (relatifs) la part du bloc dans ce groupe. Somme conservée.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. Vote économique (sanction du sortant), sans coefficient publié consulté. Le report selon la proximité idéologique (positionnement) est laissé au modèle de décision de la phase 1."
+  },
+  {
+    "id": "tension_inertie",
+    "value": 0.7,
+    "unit": "coefficient mensuel (sans unité)",
+    "description": "Tension régionale T_r (score 0-1) : Tl_r(t+1) = 0,7 × Tl_r(t) + 0,3 × T*_r(t) ; T_r = clamp(Tl_r + Σ effets actifs 'region' r et 'tension' (nationale, appliqués à toutes les régions), 0, 1). Cible : T*_r = T0_r + w_ch × (u_r - u_r(0)) + w_ins × Σ_g c_rg × (s0_g - s_g) + w_lois × Λ_r, T0_r = tension_initiale (regions.json), u_r = u_r(0) + (u - u_ref) × u_r(0)/u(0) (écart du chômage national à la trajectoire de référence « fil de l'eau », réparti au prorata du chômage régional initial ; voir satisfaction_amortissement), c_rg = composition_sociale (parts, somme 1 : les groupes surreprésentés pèsent plus), Λ_r = voir tension_poids_lois_impopulaires. Tension nationale = Σ_r pop_r × T_r / Σ pop_r + k, k = tension_nationale(0) - moyenne pondérée des T_r(0) (calage). À t0 : point fixe. Demi-vie ≈ 2 mois.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, sans estimation publiée."
+  },
+  {
+    "id": "tension_poids_chomage",
+    "value": 0.03,
+    "unit": "points de score 0-1 par point de chômage régional",
+    "description": "Poids w_ch dans T*_r : +1 point de chômage régional → +0,03 de tension cible.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. Ordre de grandeur : une hausse de 2 points du chômage (récession) ajoute 0,06, soit un événement d'intensité « faible » à « moyenne »."
+  },
+  {
+    "id": "tension_poids_insatisfaction",
+    "value": 1,
+    "unit": "points de score de tension par point de score de satisfaction perdu",
+    "description": "Poids w_ins dans T*_r : w_ins × Σ_g c_rg × (s0_g - s_g). Une baisse de satisfaction de 0,10 de tous les groupes ajoute 0,10 de tension ; une hausse de satisfaction la réduit (terme signé).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu : facteur unitaire entre les deux échelles 0-1."
+  },
+  {
+    "id": "tension_poids_lois_impopulaires",
+    "value": 1,
+    "unit": "sans unité (multiplie des points de score 0-1)",
+    "description": "Poids w_lois dans T*_r : Λ_r = Σ_lois Σ_g c_rg × max(0, -direction_g) × bareme.satisfaction.<intensité_g>, pour chaque loi promulguée depuis moins de tension_lois_duree_mois (groupes_touches des leviers et reactions_groupes des tags, agrégés par groupe : une entrée par groupe et par loi, voir popularite_poids_lois_impopulaires). Les effets durables passent par la satisfaction (terme w_ins).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. Représente la mobilisation immédiate contre une loi, au-delà de l'insatisfaction durable (exemple : réforme des retraites de 2023)."
+  },
+  {
+    "id": "tension_lois_duree_mois",
+    "value": 6,
+    "unit": "mois",
+    "description": "Durée pendant laquelle une loi impopulaire nourrit le terme Λ_r de la tension après sa promulgation (forme choc).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu : la mobilisation de 2023 contre la réforme des retraites a duré environ 5 mois (janvier à juin) ; arrondi à 6."
+  },
+  {
+    "id": "stabilite_inertie",
+    "value": 0.8,
+    "unit": "coefficient mensuel (sans unité)",
+    "description": "Stabilité S (score 0-1) : Sl(t+1) = 0,8 × Sl(t) + 0,2 × S*(t) ; S = clamp(Sl + Σ effets 'stabilite' actifs, 0, 1). Cible : S* = S0 - w_T × (T_nat - T_nat(0)) + w_pop × (pop - pop0) - w_spread × (spread - spread(0)) + w_coh × clamp(coh - coh(0), −stabilite_cohesion_perte_max, stabilite_cohesion_gain_max), S0 = stabilite de macro.json, T_nat = tension nationale, pop = popularité, spread en pb. Cohésion : coh = min(1, Σ_groupes AN sièges × discipline × poids / 289), poids = 1 si rapport_gouvernement = 'majorite', 0,5 si 'soutien_conditionnel', 0 sinon (289 = majorité absolue). À t0 : point fixe. Demi-vie ≈ 3 mois.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu. Boucle stabilité ↔ spread : gain 40 pb × 0,001 = 0,04 < 1, donc amortie."
+  },
+  {
+    "id": "stabilite_poids_tension",
+    "value": 0.4,
+    "unit": "points de score de stabilité par point de score de tension nationale",
+    "description": "Poids w_T dans S* : +0,10 de tension nationale → -0,04 de stabilité cible.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu."
+  },
+  {
+    "id": "stabilite_poids_popularite",
+    "value": 0.4,
+    "unit": "points de score de stabilité par point de score de popularité",
+    "description": "Poids w_pop dans S* : -0,10 de popularité présidentielle → -0,04 de stabilité cible.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu."
+  },
+  {
+    "id": "stabilite_poids_spread",
+    "value": 0.001,
+    "unit": "points de score de stabilité par point de base d'écart OAT-Bund",
+    "description": "Poids w_spread dans S* : +100 pb d'écart OAT-Bund → -0,10 de stabilité cible (tension sur le financement de l'État).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu ; boucle avec spread_sensibilite_stabilite de gain 0,04, non explosive."
+  },
+  {
+    "id": "stabilite_poids_cohesion_majorite",
+    "value": 0.5,
+    "unit": "points de score de stabilité par point de cohésion 0-1",
+    "description": "Poids w_coh dans S* : la perte d'un groupe de soutien conditionnel de 69 sièges (discipline 0,93) réduit coh de ≈ 0,11 et la stabilité cible de ≈ 0,055. La cohésion change quand un groupe change de rapport au gouvernement (décisions et événements de la phase 1) ; une censure adoptée est un choc 'stabilite' séparé.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu."
+  },
+  {
+    "id": "stabilite_cohesion_perte_max",
+    "value": 0.1,
+    "unit": "point de cohésion 0-1",
+    "hypothese": true,
+    "description": "Borne basse de l'écart de cohésion (coh − coh(0)) dans la cible de stabilité (formule de stabilite_inertie) : l'écart est ramené dans [−cette valeur, stabilite_cohesion_gain_max] avant d'être multiplié par stabilite_poids_cohesion_majorite.",
+    "justification": "stabilite_poids_cohesion_majorite est calé sur la perte d'un groupe (≈ −0,11 de cohésion). Une Assemblée sans majorité après une dissolution ou un gouvernement technicien font tomber la cohésion de 0,2 à 0,35 : sans borne, la stabilité passait mécaniquement sous le seuil de défaite, sans parade possible avant la dissolution suivante. La perte d'assise reste ainsi pénalisée comme celle d'un groupe, le reste passe par les chocs de censure et de campagne."
+  },
+  {
+    "id": "stabilite_cohesion_gain_max",
+    "value": 0.02,
+    "unit": "point de cohésion 0-1",
+    "hypothese": true,
+    "description": "Borne haute de l'écart de cohésion (coh − coh(0)) dans la cible de stabilité (voir stabilite_cohesion_perte_max).",
+    "justification": "Le soutien conditionnel compte pour moitié quelle que soit l'hostilité du groupe (RN sous un gouvernement d'ouverture à droite, coalition de cohabitation) : une nomination, gratuite, ne doit pas rendre le pays plus stable qu'avant la censure. Gain plafonné à environ un cinquième de la perte d'un groupe (+0,01 de stabilité cible)."
+  },
+  {
+    "id": "multiplicateur_vitesse_ajustement",
+    "value": 0.25,
+    "unit": "fraction par mois",
+    "description": "Vitesse de convergence de l'effet de demande D_dem vers m × impulsion (voir multiplicateur_depenses_court_terme) : D_dem(t+1) = D_dem(t) + 0,25 × (I(t) - D_dem(t)). ≈ 97 % de l'effet atteint en 12 mois, cohérent avec des multiplicateurs « à un an ».",
+    "hypothese": true,
+    "justification": "Hypothèse : profil de diffusion, les multiplicateurs sourcés étant donnés à l'horizon d'un an."
+  },
+  {
+    "id": "bareme.croissance.faible",
+    "value": 0.1,
+    "unit": "% du niveau du PIB en volume",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type croissance : effet = direction × 0.1 (% du niveau du PIB en volume). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Effet sur le NIVEAU du PIB (terme O dans ln Y, voir croissance_potentielle), pas sur le taux de croissance : forme niveau = écart durable, choc = écart retiré après duree_mois (perte puis rattrapage). Une valeur de 0,25 pendant 6 mois coûte ≈ 0,25 pt de croissance trimestrielle à l'entrée puis se récupère. Effet d'offre seulement.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : grèves de mars-avril 2023 ≈ -0,1 pt de PIB trimestriel (Banque de France) → « faible » ; « forte » (0,5 %) ≈ choc énergétique ou crise sanitaire régionale."
+  },
+  {
+    "id": "bareme.croissance.moyenne",
+    "value": 0.25,
+    "unit": "% du niveau du PIB en volume",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type croissance : effet = direction × 0.25 (% du niveau du PIB en volume). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Effet sur le NIVEAU du PIB (terme O dans ln Y, voir croissance_potentielle), pas sur le taux de croissance : forme niveau = écart durable, choc = écart retiré après duree_mois (perte puis rattrapage). Une valeur de 0,25 pendant 6 mois coûte ≈ 0,25 pt de croissance trimestrielle à l'entrée puis se récupère. Effet d'offre seulement.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : grèves de mars-avril 2023 ≈ -0,1 pt de PIB trimestriel (Banque de France) → « faible » ; « forte » (0,5 %) ≈ choc énergétique ou crise sanitaire régionale."
+  },
+  {
+    "id": "bareme.croissance.forte",
+    "value": 0.5,
+    "unit": "% du niveau du PIB en volume",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type croissance : effet = direction × 0.5 (% du niveau du PIB en volume). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Effet sur le NIVEAU du PIB (terme O dans ln Y, voir croissance_potentielle), pas sur le taux de croissance : forme niveau = écart durable, choc = écart retiré après duree_mois (perte puis rattrapage). Une valeur de 0,25 pendant 6 mois coûte ≈ 0,25 pt de croissance trimestrielle à l'entrée puis se récupère. Effet d'offre seulement.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : grèves de mars-avril 2023 ≈ -0,1 pt de PIB trimestriel (Banque de France) → « faible » ; « forte » (0,5 %) ≈ choc énergétique ou crise sanitaire régionale."
+  },
+  {
+    "id": "bareme.chomage.faible",
+    "value": 0.05,
+    "unit": "points de % de taux de chômage BIT",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type chomage : effet = direction × 0.05 (points de % de taux de chômage BIT). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Décalage additif du taux de chômage affiché u (voir okun_coefficient), présent chaque mois tant que l'effet est actif.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur : 0,1 point de chômage ≈ 31 000 chômeurs ; « forte » (0,3) ≈ une réforme majeure du marché du travail ou une vague de plans sociaux."
+  },
+  {
+    "id": "bareme.chomage.moyenne",
+    "value": 0.15,
+    "unit": "points de % de taux de chômage BIT",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type chomage : effet = direction × 0.15 (points de % de taux de chômage BIT). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Décalage additif du taux de chômage affiché u (voir okun_coefficient), présent chaque mois tant que l'effet est actif.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur : 0,1 point de chômage ≈ 31 000 chômeurs ; « forte » (0,3) ≈ une réforme majeure du marché du travail ou une vague de plans sociaux."
+  },
+  {
+    "id": "bareme.chomage.forte",
+    "value": 0.3,
+    "unit": "points de % de taux de chômage BIT",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type chomage : effet = direction × 0.3 (points de % de taux de chômage BIT). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Décalage additif du taux de chômage affiché u (voir okun_coefficient), présent chaque mois tant que l'effet est actif.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur : 0,1 point de chômage ≈ 31 000 chômeurs ; « forte » (0,3) ≈ une réforme majeure du marché du travail ou une vague de plans sociaux."
+  },
+  {
+    "id": "bareme.inflation.faible",
+    "value": 0.15,
+    "unit": "% du niveau de l'indice des prix à la consommation",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type inflation : effet = direction × 0.15 (% du niveau de l'indice des prix à la consommation). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Écart de NIVEAU de l'indice des prix (voir inertie_inflation) : visible dans le glissement annuel pendant 12 mois (niveau) ou tant que dure le choc.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repère : +10 € sur le baril ≈ +0,33 % du niveau des prix (passthrough_petrole_total) ; « moyenne » (0,4) ≈ +12 €, « forte » (1,2) ≈ +35 €. Calé avec npm run balance sur l'IPC 2026 (2,4 % en août, 3,1 % en septembre)."
+  },
+  {
+    "id": "bareme.inflation.moyenne",
+    "value": 0.4,
+    "unit": "% du niveau de l'indice des prix à la consommation",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type inflation : effet = direction × 0.4 (% du niveau de l'indice des prix à la consommation). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Écart de NIVEAU de l'indice des prix (voir inertie_inflation) : visible dans le glissement annuel pendant 12 mois (niveau) ou tant que dure le choc.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repère : +10 € sur le baril ≈ +0,33 % du niveau des prix (passthrough_petrole_total) ; « moyenne » (0,4) ≈ +12 €, « forte » (1,2) ≈ +35 €. Calé avec npm run balance sur l'IPC 2026 (2,4 % en août, 3,1 % en septembre)."
+  },
+  {
+    "id": "bareme.inflation.forte",
+    "value": 1.2,
+    "unit": "% du niveau de l'indice des prix à la consommation",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type inflation : effet = direction × 1.2 (% du niveau de l'indice des prix à la consommation). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Écart de NIVEAU de l'indice des prix (voir inertie_inflation) : visible dans le glissement annuel pendant 12 mois (niveau) ou tant que dure le choc.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repère : +10 € sur le baril ≈ +0,33 % du niveau des prix (passthrough_petrole_total) ; « moyenne » (0,4) ≈ +12 €, « forte » (1,2) ≈ +35 €. Calé avec npm run balance sur l'IPC 2026 (2,4 % en août, 3,1 % en septembre)."
+  },
+  {
+    "id": "bareme.pauvrete.faible",
+    "value": 0.1,
+    "unit": "points de % de taux de pauvreté monétaire",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type pauvrete : effet = direction × 0.1 (points de % de taux de pauvreté monétaire). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Décalage additif du taux de pauvreté (le moteur ne le modélise pas autrement en phase 1).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur : 0,1 point ≈ 65 000 personnes ; « forte » ≈ suppression d'une prestation ciblée de plusieurs Md€."
+  },
+  {
+    "id": "bareme.pauvrete.moyenne",
+    "value": 0.3,
+    "unit": "points de % de taux de pauvreté monétaire",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type pauvrete : effet = direction × 0.3 (points de % de taux de pauvreté monétaire). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Décalage additif du taux de pauvreté (le moteur ne le modélise pas autrement en phase 1).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur : 0,1 point ≈ 65 000 personnes ; « forte » ≈ suppression d'une prestation ciblée de plusieurs Md€."
+  },
+  {
+    "id": "bareme.pauvrete.forte",
+    "value": 0.6,
+    "unit": "points de % de taux de pauvreté monétaire",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type pauvrete : effet = direction × 0.6 (points de % de taux de pauvreté monétaire). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Décalage additif du taux de pauvreté (le moteur ne le modélise pas autrement en phase 1).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur : 0,1 point ≈ 65 000 personnes ; « forte » ≈ suppression d'une prestation ciblée de plusieurs Md€."
+  },
+  {
+    "id": "bareme.satisfaction.faible",
+    "value": 0.02,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type satisfaction : effet = direction × 0.02 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Effet sur la satisfaction d'un groupe : forme niveau → cible (L_g ou E_g), forme choc → ajouté directement pendant duree_mois (voir satisfaction_poids_evenements).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repère interne : « moyenne » ≈ 3 % de pouvoir d'achat perdu (satisfaction_poids_pouvoir_achat) ; « forte » = réforme frontale (retraites pour les retraités)."
+  },
+  {
+    "id": "bareme.satisfaction.moyenne",
+    "value": 0.05,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type satisfaction : effet = direction × 0.05 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Effet sur la satisfaction d'un groupe : forme niveau → cible (L_g ou E_g), forme choc → ajouté directement pendant duree_mois (voir satisfaction_poids_evenements).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repère interne : « moyenne » ≈ 3 % de pouvoir d'achat perdu (satisfaction_poids_pouvoir_achat) ; « forte » = réforme frontale (retraites pour les retraités)."
+  },
+  {
+    "id": "bareme.satisfaction.forte",
+    "value": 0.1,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type satisfaction : effet = direction × 0.1 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Effet sur la satisfaction d'un groupe : forme niveau → cible (L_g ou E_g), forme choc → ajouté directement pendant duree_mois (voir satisfaction_poids_evenements).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repère interne : « moyenne » ≈ 3 % de pouvoir d'achat perdu (satisfaction_poids_pouvoir_achat) ; « forte » = réforme frontale (retraites pour les retraités)."
+  },
+  {
+    "id": "bareme.popularite.faible",
+    "value": 0.01,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type popularite : effet = direction × 0.01 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la popularité affichée chaque mois tant que l'effet est actif (voir popularite_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur des variations mensuelles des baromètres (1 à 6 points) ; un 49.3 contesté ≈ « moyenne »."
+  },
+  {
+    "id": "bareme.popularite.moyenne",
+    "value": 0.03,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type popularite : effet = direction × 0.03 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la popularité affichée chaque mois tant que l'effet est actif (voir popularite_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur des variations mensuelles des baromètres (1 à 6 points) ; un 49.3 contesté ≈ « moyenne »."
+  },
+  {
+    "id": "bareme.popularite.forte",
+    "value": 0.06,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type popularite : effet = direction × 0.06 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la popularité affichée chaque mois tant que l'effet est actif (voir popularite_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Ordre de grandeur des variations mensuelles des baromètres (1 à 6 points) ; un 49.3 contesté ≈ « moyenne »."
+  },
+  {
+    "id": "bareme.tension.faible",
+    "value": 0.02,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type tension : effet = direction × 0.02 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la tension (régionale pour kind 'region', à toutes les régions pour kind 'tension') chaque mois tant que l'effet est actif (voir tension_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Calibré par rapport aux seuils : depuis une tension typique de 0,4 à 0,5, un choc « forte » rapproche du seuil de grèves (0,6)."
+  },
+  {
+    "id": "bareme.tension.moyenne",
+    "value": 0.05,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type tension : effet = direction × 0.05 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la tension (régionale pour kind 'region', à toutes les régions pour kind 'tension') chaque mois tant que l'effet est actif (voir tension_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Calibré par rapport aux seuils : depuis une tension typique de 0,4 à 0,5, un choc « forte » rapproche du seuil de grèves (0,6)."
+  },
+  {
+    "id": "bareme.tension.forte",
+    "value": 0.1,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type tension : effet = direction × 0.1 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la tension (régionale pour kind 'region', à toutes les régions pour kind 'tension') chaque mois tant que l'effet est actif (voir tension_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Calibré par rapport aux seuils : depuis une tension typique de 0,4 à 0,5, un choc « forte » rapproche du seuil de grèves (0,6)."
+  },
+  {
+    "id": "bareme.stabilite.faible",
+    "value": 0.02,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type stabilite : effet = direction × 0.02 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la stabilité chaque mois tant que l'effet est actif (voir stabilite_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). « forte » (0,10) ≈ chute d'un gouvernement ; via spread_sensibilite_stabilite, elle ajoute 4 pb au spread."
+  },
+  {
+    "id": "bareme.stabilite.moyenne",
+    "value": 0.05,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type stabilite : effet = direction × 0.05 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la stabilité chaque mois tant que l'effet est actif (voir stabilite_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). « forte » (0,10) ≈ chute d'un gouvernement ; via spread_sensibilite_stabilite, elle ajoute 4 pb au spread."
+  },
+  {
+    "id": "bareme.stabilite.forte",
+    "value": 0.1,
+    "unit": "points de score 0-1",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type stabilite : effet = direction × 0.1 (points de score 0-1). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à la stabilité chaque mois tant que l'effet est actif (voir stabilite_inertie).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). « forte » (0,10) ≈ chute d'un gouvernement ; via spread_sensibilite_stabilite, elle ajoute 4 pb au spread."
+  },
+  {
+    "id": "bareme.budget.faible",
+    "value": 1,
+    "unit": "Md€/an",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type budget : effet = direction × 1 (Md€/an). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Variation d'une ligne budgétaire (recettes.* ou depenses.*), en Md€/an, tant que l'effet est actif. Discrétionnaire : passe par les multiplicateurs.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : 1 Md€ ≈ une mesure ciblée ; 5 Md€ ≈ une hausse annuelle de la défense ; 15 Md€ ≈ 0,5 point de PIB, un plan d'économies majeur."
+  },
+  {
+    "id": "bareme.budget.moyenne",
+    "value": 5,
+    "unit": "Md€/an",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type budget : effet = direction × 5 (Md€/an). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Variation d'une ligne budgétaire (recettes.* ou depenses.*), en Md€/an, tant que l'effet est actif. Discrétionnaire : passe par les multiplicateurs.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : 1 Md€ ≈ une mesure ciblée ; 5 Md€ ≈ une hausse annuelle de la défense ; 15 Md€ ≈ 0,5 point de PIB, un plan d'économies majeur."
+  },
+  {
+    "id": "bareme.budget.forte",
+    "value": 15,
+    "unit": "Md€/an",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type budget : effet = direction × 15 (Md€/an). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Variation d'une ligne budgétaire (recettes.* ou depenses.*), en Md€/an, tant que l'effet est actif. Discrétionnaire : passe par les multiplicateurs.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : 1 Md€ ≈ une mesure ciblée ; 5 Md€ ≈ une hausse annuelle de la défense ; 15 Md€ ≈ 0,5 point de PIB, un plan d'économies majeur."
+  },
+  {
+    "id": "bareme.prime_risque.faible",
+    "value": 5,
+    "unit": "points de base ajoutés au spread",
+    "description": "Barème qualitatif, intensité « faible » pour une cible de type prime_risque : effet = direction × 5 (points de base ajoutés au spread). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à l'écart OAT-Bund tant que l'effet est actif (voir spread_constante).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : dégradation d'un cran ≈ 11 pb (spread_degradation_note) ≈ entre « faible » et « moyenne » ; « forte » (40) ≈ crise politique aiguë sur les marchés."
+  },
+  {
+    "id": "bareme.prime_risque.moyenne",
+    "value": 15,
+    "unit": "points de base ajoutés au spread",
+    "description": "Barème qualitatif, intensité « moyenne » pour une cible de type prime_risque : effet = direction × 15 (points de base ajoutés au spread). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à l'écart OAT-Bund tant que l'effet est actif (voir spread_constante).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : dégradation d'un cran ≈ 11 pb (spread_degradation_note) ≈ entre « faible » et « moyenne » ; « forte » (40) ≈ crise politique aiguë sur les marchés."
+  },
+  {
+    "id": "bareme.prime_risque.forte",
+    "value": 40,
+    "unit": "points de base ajoutés au spread",
+    "description": "Barème qualitatif, intensité « forte » pour une cible de type prime_risque : effet = direction × 40 (points de base ajoutés au spread). Valeur présente CHAQUE MOIS où l'effet est actif (pas un cumul mensuel). Ajouté à l'écart OAT-Bund tant que l'effet est actif (voir spread_constante).",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu (SPEC 3.2 : barème fixe qui borne les effets qualitatifs). Repères : dégradation d'un cran ≈ 11 pb (spread_degradation_note) ≈ entre « faible » et « moyenne » ; « forte » (40) ≈ crise politique aiguë sur les marchés."
+  },
+  {
+    "id": "bareme.notation.faible",
+    "value": 1,
+    "unit": "crans de notation (+1 = dégradation d'un cran)",
+    "description": "Barème qualitatif pour les effets kind \"notation\" des événements (cible id = nom de l'agence) : magnitude faible = 1 cran(s). Chaque cran entre dans le terme 11 × Σ crans de spread_constante, pondéré par spread_poids_agence_secondaire pour DBRS et Scope. Effet forme niveau : la note reste dégradée jusqu'à une nouvelle action de l'agence.",
+    "hypothese": true,
+    "justification": "Convention de jeu proposée par le lot events (faible = 1 cran, cas de la dégradation Scope du 18/09/2026 AA- → A+). Les actions d'agences sur un souverain noté A/AA dépassent rarement 1 cran ; 2 et 3 crans servent aux scénarios de crise. Absent de BAREME_KINDS dans schemas.ts : coefficient supplémentaire, à ajouter à REQUIRED_COEFFICIENTS si le schéma évolue."
+  },
+  {
+    "id": "bareme.notation.moyenne",
+    "value": 2,
+    "unit": "crans de notation (+1 = dégradation d'un cran)",
+    "description": "Barème qualitatif pour les effets kind \"notation\" des événements (cible id = nom de l'agence) : magnitude moyenne = 2 cran(s). Chaque cran entre dans le terme 11 × Σ crans de spread_constante, pondéré par spread_poids_agence_secondaire pour DBRS et Scope. Effet forme niveau : la note reste dégradée jusqu'à une nouvelle action de l'agence.",
+    "hypothese": true,
+    "justification": "Convention de jeu proposée par le lot events (faible = 1 cran, cas de la dégradation Scope du 18/09/2026 AA- → A+). Les actions d'agences sur un souverain noté A/AA dépassent rarement 1 cran ; 2 et 3 crans servent aux scénarios de crise. Absent de BAREME_KINDS dans schemas.ts : coefficient supplémentaire, à ajouter à REQUIRED_COEFFICIENTS si le schéma évolue."
+  },
+  {
+    "id": "bareme.notation.forte",
+    "value": 3,
+    "unit": "crans de notation (+1 = dégradation d'un cran)",
+    "description": "Barème qualitatif pour les effets kind \"notation\" des événements (cible id = nom de l'agence) : magnitude forte = 3 cran(s). Chaque cran entre dans le terme 11 × Σ crans de spread_constante, pondéré par spread_poids_agence_secondaire pour DBRS et Scope. Effet forme niveau : la note reste dégradée jusqu'à une nouvelle action de l'agence.",
+    "hypothese": true,
+    "justification": "Convention de jeu proposée par le lot events (faible = 1 cran, cas de la dégradation Scope du 18/09/2026 AA- → A+). Les actions d'agences sur un souverain noté A/AA dépassent rarement 1 cran ; 2 et 3 crans servent aux scénarios de crise. Absent de BAREME_KINDS dans schemas.ts : coefficient supplémentaire, à ajouter à REQUIRED_COEFFICIENTS si le schéma évolue."
+  },
+  {
+    "id": "spread_poids_agence_secondaire",
+    "value": 0.5,
+    "unit": "fraction (sans unité)",
+    "description": "Pondération du terme spread_degradation_note pour une action de DBRS ou de Scope (agences hors des trois grandes) : un cran Scope ajoute 0,5 × 11 = 5,5 pb au spread. S&P, Moody's et Fitch : poids 1.",
+    "hypothese": true,
+    "justification": "Hypothèse : spread_degradation_note (11 pb par cran, BdF WP 494) est estimé sur les trois grandes agences seulement ; le lot events proposait 0,25 à 0,5 pour Scope, agence secondaire dont les actions sont moins suivies par les investisseurs. Milieu haut retenu, aucune estimation publiée consultée. Les changements de perspective (ex. DBRS 18/09/2026) passent par une prime_risque, pas par ce terme."
+  },
+  {
+    "id": "parlement_poids_axes",
+    "value": 1.5,
+    "unit": "sans unité",
+    "description": "Poids de l'accord idéologique dans le score s d'un groupe : s = poids_axes × (axes · positionnement) + bonus(rapport) + poids_popularite × (popularité − 0,3). Axes de la loi = moyenne des axes de ses tags.",
+    "hypothese": true,
+    "justification": "Un produit scalaire typique vaut ±0,3 à ±1 ; ×1,5 le rend dominant face aux bonus, pour qu'une loi très marquée soit rejetée par le camp opposé quel que soit son rapport au gouvernement."
+  },
+  {
+    "id": "parlement_bonus_majorite",
+    "value": 0.4,
+    "unit": "score",
+    "description": "Bonus de s pour un groupe du socle gouvernemental (rapport « majorite »).",
+    "hypothese": true,
+    "justification": "Discipline de soutien : le socle vote les textes du gouvernement sauf désaccord idéologique net (produit scalaire < −0,27)."
+  },
+  {
+    "id": "parlement_bonus_soutien_conditionnel",
+    "value": 0.1,
+    "unit": "score",
+    "description": "Bonus de s pour un groupe en soutien conditionnel (PS, DR, LIOT, NI en 2026).",
+    "hypothese": true,
+    "justification": "Groupes pivots du gouvernement minoritaire : légère préférence pour le texte, l'issue dépend du contenu."
+  },
+  {
+    "id": "parlement_bonus_opposition",
+    "value": -0.1,
+    "unit": "score",
+    "description": "Bonus (négatif) de s pour un groupe d'opposition.",
+    "hypothese": true,
+    "justification": "L'opposition penche contre mais s'abstient largement sur un texte neutre. Calage au 1er janvier 2026 (popularité 0,18) : soutien à l'agriculture adopté ≈ 286-194, austérité rejetée ≈ 183-294, immigration/sécurité adoptée contre la gauche, redistribution rejetée par la droite."
+  },
+  {
+    "id": "parlement_poids_popularite",
+    "value": 0.5,
+    "unit": "score par point de popularité",
+    "description": "Poids de l'écart de popularité du Président à 0,3 dans s.",
+    "hypothese": true,
+    "justification": "À la popularité initiale (0,18) le terme vaut −0,06 : un Président impopulaire pèse sans tout bloquer ; à 0,5 il apporte +0,1."
+  },
+  {
+    "id": "parlement_poids_accueil_populaire",
+    "value": 0.3,
+    "unit": "score par unité d'accueil",
+    "description": "Poids de l'accueil populaire de la loi dans s (ENGINE.md §3 : tags.reactions_groupes sert au vote). Accueil d'un tag = Σ direction × intensité (faible 1, moyenne 2, forte 3) × part de population adulte du groupe social ; accueil de la loi = moyenne sur ses tags.",
+    "hypothese": true,
+    "justification": "Les députés suivent l'électorat : une loi d'austérité (accueil ≈ −1,1) ou une hausse d'impôts (≈ −1,4) perd ≈ 0,3 à 0,4 de score, ce qui la rend difficile à faire passer pour un gouvernement minoritaire."
+  },
+  {
+    "id": "parlement_pente",
+    "value": 5,
+    "unit": "sans unité",
+    "description": "Pente k de la sigmoïde : σ(k·s) répartit pour/contre.",
+    "hypothese": true,
+    "justification": "s = 0,3 donne ≈ 82 % des exprimés en faveur ; des groupes disciplinés votent en bloc dès que le désaccord est net."
+  },
+  {
+    "id": "parlement_abstention_base",
+    "value": 0.6,
+    "unit": "fraction",
+    "description": "Abstention d'un groupe indifférent : abstention = base × 4σ(1−σ) (maximale à s = 0, nulle si le groupe est tranché).",
+    "hypothese": true,
+    "justification": "Les textes peu clivants laissent beaucoup d'abstentions et de non-votants à l'Assemblée."
+  },
+  {
+    "id": "parlement_incertitude_groupe",
+    "value": 0.15,
+    "unit": "écart-type, en points de score de groupe",
+    "description": "Choc gaussien propre à chaque groupe, ajouté à son score au moment du vote (négociations, amendements, consignes de dernière minute). Tiré du générateur de la partie ; la prévision (forecastVote) en fait un Monte-Carlo sur graines fixes.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, calée avec npm run balance : une loi disputée doit avoir une issue incertaine (ni 0 ni 100 %), une loi consensuelle ou rejetée par tous reste quasi certaine."
+  },
+  {
+    "id": "parlement_incertitude_commune",
+    "value": 0.15,
+    "unit": "écart-type, en points de score de groupe",
+    "description": "Choc gaussien commun à tous les groupes d'une chambre pour un vote (climat politique de la séance), ajouté au score avec parlement_incertitude_groupe.",
+    "hypothese": true,
+    "justification": "Hypothèse de jeu, calée avec npm run balance."
+  },
+  {
+    "id": "censure_seuil",
+    "value": 289,
+    "unit": "voix",
+    "description": "Voix nécessaires pour adopter une motion de censure (majorité absolue des 577 membres, art. 49 C).",
+    "hypothese": true,
+    "justification": "Valeur constitutionnelle (sièges théoriques, vacances comprises)."
+  },
+  {
+    "id": "censure_choc_stabilite",
+    "value": -0.15,
+    "unit": "score 0-1",
+    "description": "Choc de stabilité quand une censure est adoptée (appliqué par le moteur, kind stabilite).",
+    "hypothese": true,
+    "justification": "Ordre de grandeur de la chute du gouvernement Barnier (décembre 2024) : hausse du spread et forte incertitude politique."
+  },
+  {
+    "id": "censure_malus_493",
+    "value": 0.05,
+    "unit": "score",
+    "description": "Malus de s appliqué aux groupes hors majorité lors d'une motion de censure : l'usage du 49.3 les irrite.",
+    "hypothese": true,
+    "justification": "Le 49.3 durcit les oppositions sans les souder automatiquement : au calage, une loi d'austérité passée en force est censurée (≈ 299 voix), un texte budgétaire équilibré ne l'est pas (≈ 160)."
+  },
+  {
+    "id": "parlement_limite_493",
+    "value": 1,
+    "unit": "usages par année civile",
+    "description": "Nombre de 49.3 autorisés par année civile hors textes budgétaires (révision de 2008).",
+    "hypothese": true,
+    "justification": "Art. 49 al. 3 C : illimité pour les lois de finances et de financement de la sécurité sociale, un texte par session sinon (simplifié en année civile)."
+  },
+  {
+    "id": "censure_duree_choc_mois",
+    "value": 6,
+    "unit": "mois",
+    "description": "Durée du choc de stabilité censure_choc_stabilite après une censure adoptée (forme choc : décroissance linéaire jusqu'à zéro sur cette durée).",
+    "hypothese": true,
+    "justification": "Ordre de grandeur de la période d'incertitude après la censure du gouvernement Barnier (décembre 2024) : nouveau gouvernement et loi spéciale, puis budget adopté en février 2025, soit environ un semestre de spread et de climat dégradés."
+  },
+  {
+    "id": "part_chomage_aides_sociales",
+    "value": 0.27,
+    "unit": "fraction de depenses.aides_sociales",
+    "description": "Part de la ligne depenses.aides_sociales qui suit le chômage : seule cette part reçoit l'élasticité elasticite_depenses_chomage à l'écart de production (voir semi_elasticite_solde_public). aides_sociales(t) = ligne_centrale(t) × (1 + part × elasticite_depenses_chomage × écart_PIB(t)/100) + Δ_disc(t).",
+    "hypothese": true,
+    "justification": "Ratio approximatif de la fonction COFOG 10.5 (chômage) au total de la ligne aides_sociales de budget.json ; non recalculé depuis les comptes nationaux, d'où hypothese."
+  },
+  {
+    "id": "greve_generale_region",
+    "value": 11,
+    "unit": "code région INSEE",
+    "description": "Région à laquelle le moteur rattache l'événement « grève générale » (TurnEvent greve, generale: true) quand la tension nationale dépasse seuil_tension_greve_generale. Convention d'affichage seulement : la grève générale touche le PIB national (greves_effet_croissance), pas cette région en particulier.",
+    "hypothese": true,
+    "justification": "Convention : Île-de-France (11), région de la capitale où se concentrent les manifestations nationales."
+  },
+  {
+    "id": "defaite_mois_consecutifs",
+    "value": 3,
+    "unit": "mois",
+    "hypothese": true,
+    "description": "Fin de partie anticipée (ENGINE.md §10) : une condition de défaite (spread, stabilité ou tension au-delà de son seuil) doit tenir ce nombre de mois consécutifs. Le premier mois déclenche une alerte.",
+    "justification": "Laisse au joueur deux mois pour réagir après l'alerte ; un seul mois extrême (choc d'événement) ne suffit pas."
+  },
+  {
+    "id": "defaite_spread_seuil",
+    "value": 400,
+    "unit": "pb",
+    "hypothese": true,
+    "description": "Crise de la dette : écart OAT-Bund à 10 ans au-delà duquel l'État est réputé perdre l'accès normal aux marchés (appel au MES et au FMI).",
+    "justification": "Ordre de grandeur des crises de la zone euro : Italie ≈ 550 pb en novembre 2011 (chute du gouvernement), Espagne ≈ 640 pb en juillet 2012 (aide aux banques), Grèce > 900 pb en 2010 (programme d'aide). 400 pb, tenus trois mois, pour un pays de la taille de la France."
+  },
+  {
+    "id": "defaite_stabilite_seuil",
+    "value": 0.18,
+    "unit": "score 0-1",
+    "hypothese": true,
+    "description": "Crise de régime : stabilité sous ce seuil, le Président démissionne (blocage institutionnel complet).",
+    "justification": "Mesuré sur 50 graines (npm run balance) : sans action, la stabilité tenue 3 mois ne descend pas sous 0,29 ; une réforme des retraites ou une austérité de 20 Md€ la portent vers 0,25, une austérité brutale vers 0,22. Le seuil n'est atteint qu'en cumulant mesures impopulaires, censures et crises."
+  },
+  {
+    "id": "defaite_tension_seuil",
+    "value": 0.7,
+    "unit": "score 0-1",
+    "hypothese": true,
+    "description": "Soulèvement : tension nationale au-dessus de ce seuil, le pays devient ingouvernable (la grève générale commence à seuil_tension_greve_generale).",
+    "justification": "Mesuré sur 50 graines : sans action, la tension tenue 3 mois plafonne vers 0,52 ; une austérité brutale la porte jusqu'à 0,69 dans les tirages défavorables. Il faut cumuler plusieurs réformes très impopulaires ou des crises sociales pour franchir 0,70."
+  },
+  {
+    "id": "spread_non_lineaire_deficit",
+    "value": 4,
+    "unit": "pb par point² de PIB",
+    "hypothese": true,
+    "description": "Terme non linéaire du spread lié au déficit : spread additionnel = 4 × max(0, déficit − 6)². À 8 % : +16 pb ; à 10 % : +64 pb ; à 12 % : +144 pb. Les marchés tolèrent un déficit élevé mais pas une dérive.",
+    "justification": "Sans ce terme, même +300 Md€/an de dépenses ne portait le spread qu'à ≈ 245 pb en 2030, ce qui n'est pas crédible. Inactif tant que le déficit reste sous 6 % (calage 2026 inchangé)."
+  },
+  {
+    "id": "legislatives_exposant",
+    "value": 2,
+    "unit": "sans unité",
+    "hypothese": true,
+    "description": "Législatives anticipées (ENGINE.md §11), sièges par bloc. Voix v_b = somme des intentions des partis du bloc ; score w_b = (v_b × (barrage ? legislatives_barrage : 1))^k × exp(legislatives_incertitude × z_b), z_b gaussien tiré dans l'ordre des blocs, multiplié pour le camp présidentiel par la prime de legislatives_prime_popularite ; part_b = λ × S_b / ΣS + (1 − λ) × w_b / Σw, avec S_b les sièges sortants du bloc et λ = legislatives_ancrage_local ; sièges du bloc = plus forts restes de N × part_b, N = 577 − sièges des groupes hors blocs (inchangés) ; puis répartition entre les groupes du bloc au prorata de leurs sièges initiaux (plus forts restes). k = cet exposant.",
+    "justification": "Loi du cube atténuée : au scrutin majoritaire à deux tours, la part de sièges croît plus vite que la part de voix. Avec k = 2, le RN et ses alliés obtiennent environ 250 sièges pour 41,5 % des intentions du bloc au 1er janvier 2026, ordre de grandeur des projections de fin 2025. Avec k = 3, les majorités absolues seraient trop fréquentes au regard de 2022 et 2024 (aucune majorité absolue)."
+  },
+  {
+    "id": "legislatives_barrage",
+    "value": 0.75,
+    "unit": "multiplicateur de voix",
+    "hypothese": true,
+    "description": "Multiplicateur des voix des blocs marqués barrage (RN et alliés) dans le score de legislatives_exposant : front républicain au second tour.",
+    "justification": "En 2024, le RN et ses alliés (environ 33 % au 1er tour) n'ont obtenu qu'environ 25 % des sièges. Avec k = 2, un facteur 0,75 sur les voix donne 0,56 sur le score."
+  },
+  {
+    "id": "legislatives_ancrage_local",
+    "value": 0.2,
+    "unit": "fraction",
+    "hypothese": true,
+    "description": "Poids λ des sièges sortants du bloc dans sa part de sièges (formule de legislatives_exposant).",
+    "justification": "Des sortants implantés sont réélus contre la tendance nationale : l'Assemblée évolue moins brutalement que les intentions de vote."
+  },
+  {
+    "id": "legislatives_incertitude",
+    "value": 0.15,
+    "unit": "écart-type (log)",
+    "hypothese": true,
+    "description": "Écart-type du choc log-normal tiré pour chaque bloc sur son score (formule de legislatives_exposant).",
+    "justification": "Écart usuel entre projections et résultats : en 2024, le RN, donné en tête des projections en sièges, finit troisième."
+  },
+  {
+    "id": "legislatives_effet_popularite",
+    "value": 0.3,
+    "unit": "score par fraction des 577 sièges",
+    "hypothese": true,
+    "description": "Choc de popularité au résultat des législatives = cette valeur × (sièges après − sièges avant du camp présidentiel) / 577, forme choc sur dissolution_duree_choc_mois.",
+    "justification": "Une dissolution perdue est une sanction personnelle du Président : −62 sièges (ordre de grandeur de 2024) donnent ≈ −0,03 de popularité ; une victoire nette la relève d'autant."
+  },
+  {
+    "id": "legislatives_prime_popularite",
+    "value": 5,
+    "unit": "log du score par point de popularité 0-1",
+    "hypothese": true,
+    "description": "Prime de popularité du camp présidentiel aux législatives : le score w du bloc majorite_presidentielle[0] (formule de legislatives_exposant) est multiplié par exp(cette valeur × (popularité − popularité initiale)), popularité du mois précédent.",
+    "justification": "Les intentions de présidentielle (horizons) ne réagissent qu'à peine à la satisfaction : sans prime, même un Président très populaire perdait des sièges à chaque dissolution. Calage (prévision à l'état initial, intentions ajustées) : popularité 0,30 → centre ≈ 160 sièges (les 161 sortants, une chance sur deux d'en gagner) ; 0,44 → majorité présidentielle ≈ 40 % ; 0,10 → centre ≈ 75 et cohabitation ≈ 55 %. Ordres de grandeur historiques : dissolutions gagnées par un Président populaire (1981, 1988), perdues dans l'impopularité (1997, 2024)."
+  },
+  {
+    "id": "dissolution_choc_stabilite",
+    "value": -0.08,
+    "unit": "score 0-1",
+    "hypothese": true,
+    "description": "Choc de stabilité au moment de la dissolution (campagne), kind stabilite, forme choc sur dissolution_duree_choc_mois.",
+    "justification": "Campagne éclair et incertitude institutionnelle : environ la moitié du choc d'une censure (censure_choc_stabilite = −0,15)."
+  },
+  {
+    "id": "dissolution_duree_choc_mois",
+    "value": 6,
+    "unit": "mois",
+    "hypothese": true,
+    "description": "Durée des chocs de campagne (dissolution_choc_stabilite) et de résultat (legislatives_effet_popularite), forme choc : décroissance linéaire jusqu'à zéro.",
+    "justification": "Alignée sur censure_duree_choc_mois : environ un semestre d'incertitude après une crise institutionnelle."
+  },
+  {
+    "id": "dissolution_delai_mois",
+    "value": 12,
+    "unit": "mois",
+    "hypothese": false,
+    "description": "Délai minimal entre deux législatives avant une nouvelle dissolution : possible à partir du mois des dernières législatives + ce délai.",
+    "justification": "Constitution, art. 12 al. 4 : « Il ne peut être procédé à une nouvelle dissolution dans l'année qui suit ces élections. » Convention du jeu : décompte au mois près.",
+    "source": {
+      "url": "https://www.conseil-constitutionnel.fr/le-bloc-de-constitutionnalite/texte-integral-de-la-constitution-du-4-octobre-1958-en-vigueur",
+      "title": "Conseil constitutionnel – Texte intégral de la Constitution du 4 octobre 1958 en vigueur (article 12)",
+      "accessed": "2026-10-20"
+    }
+  },
+  {
+    "id": "parlement_malus_cohabitation",
+    "value": 0.3,
+    "unit": "score",
+    "hypothese": true,
+    "description": "En cohabitation, malus de s appliqué aux groupes en majorite à l'Assemblée sur chaque texte du Président (le Sénat n'est pas concerné).",
+    "justification": "Le gouvernement issu de l'opposition ne porte les textes du Président qu'à contrecœur : le bonus net de la coalition tombe à +0,1, comme un soutien conditionnel, donc son vote suit les axes et un texte opposé à sa ligne échoue."
+  }
+]

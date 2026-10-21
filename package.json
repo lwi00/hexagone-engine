@@ -1,0 +1,31 @@
+{
+  "name": "@hexagone/engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Moteur de simulation d'Hexagone : tick mensuel déterministe, Parlement, institutions, données sourcées de la France au 1er janvier 2026.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    "./gamedata/*": "./gamedata/*",
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "validate": "tsx scripts/validate-data.ts",
+    "smoke": "tsx scripts/smoke.ts",
+    "balance": "tsx scripts/balance.ts"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

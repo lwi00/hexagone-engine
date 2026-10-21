@@ -1,0 +1,985 @@
+[
+  {
+    "id": "recession_zone_euro",
+    "titre": "L'Allemagne entre en récession, la zone euro ralentit",
+    "description": "Deux trimestres de recul du PIB allemand : les exportations françaises fléchissent, l'investissement attend.",
+    "categorie": "international",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.012,
+    "delai_min_mois": 36,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 12
+      }
+    ],
+    "justification": "Une récession dans la zone euro tous les 6 à 8 ans en moyenne (2008, 2012, 2020) ; probabilité ≈ 0,6 %/mois."
+  },
+  {
+    "id": "flambee_energie",
+    "titre": "Nouvelle flambée des prix de l'énergie",
+    "description": "Tensions sur l'offre mondiale : le baril et le gaz grimpent, les factures des ménages et des entreprises suivent.",
+    "categorie": "economie",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.016,
+    "delai_min_mois": 18,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 12
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 12
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6
+      }
+    ],
+    "justification": "Chocs pétroliers ou gaziers marqués : 2008, 2011, 2022, 2026 ; environ un tous les 8 à 10 ans."
+  },
+  {
+    "id": "detente_petrole",
+    "titre": "Les cours du pétrole s'effondrent",
+    "description": "Surproduction et demande mondiale atone : le prix du carburant baisse nettement à la pompe.",
+    "categorie": "economie",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.016,
+    "delai_min_mois": 18,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 12
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 12
+      }
+    ],
+    "justification": "Baisses brutales du baril : 2014-2015, 2020 ; symétrique de la flambée."
+  },
+  {
+    "id": "crise_bancaire",
+    "titre": "Faillite d'une banque européenne, tempête sur les marchés",
+    "description": "Une grande banque est mise en résolution ; les investisseurs fuient les actifs jugés risqués, dont les dettes souveraines fragiles.",
+    "categorie": "economie",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.006,
+    "delai_min_mois": 48,
+    "conditions": [
+      {
+        "variable": "spread_oat_bund",
+        "op": ">",
+        "seuil": 150,
+        "multiplicateur": 2
+      }
+    ],
+    "effets": [
+      {
+        "cible": {
+          "kind": "prime_risque"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 12
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 12
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6
+      }
+    ],
+    "justification": "Crises bancaires systémiques rares (2008, 2011-2012, Credit Suisse 2023) ; plus probables quand les spreads sont déjà tendus."
+  },
+  {
+    "id": "defiance_dette",
+    "titre": "Les marchés doutent de la dette française",
+    "description": "Adjudications difficiles, ventes massives d'OAT : la presse financière s'interroge ouvertement sur la trajectoire budgétaire.",
+    "categorie": "economie",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.004,
+    "delai_min_mois": 9,
+    "conditions": [
+      {
+        "variable": "deficit_public",
+        "op": ">",
+        "seuil": 6,
+        "multiplicateur": 5
+      },
+      {
+        "variable": "spread_oat_bund",
+        "op": ">",
+        "seuil": 180,
+        "multiplicateur": 4
+      },
+      {
+        "variable": "stabilite",
+        "op": "<",
+        "seuil": 0.25,
+        "multiplicateur": 2
+      },
+      {
+        "variable": "dette_publique",
+        "op": ">",
+        "seuil": 130,
+        "multiplicateur": 2
+      }
+    ],
+    "effets": [
+      {
+        "cible": {
+          "kind": "prime_risque"
+        },
+        "direction": 1,
+        "magnitude": "forte",
+        "forme": "niveau",
+        "duree_mois": 18
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6
+      }
+    ],
+    "justification": "Rare tant que la trajectoire est crédible ; devient probable quand déficit, spread et instabilité se cumulent (Italie 2011, Royaume-Uni 2022)."
+  },
+  {
+    "id": "degradation_note",
+    "titre": "Une grande agence dégrade la note de la France",
+    "description": "L'agence abaisse la note souveraine d'un cran et pointe l'absence de trajectoire crédible de réduction du déficit.",
+    "categorie": "economie",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.006,
+    "delai_min_mois": 12,
+    "conditions": [
+      {
+        "variable": "deficit_public",
+        "op": ">",
+        "seuil": 5.5,
+        "multiplicateur": 3
+      },
+      {
+        "variable": "dette_publique",
+        "op": ">",
+        "seuil": 125,
+        "multiplicateur": 2
+      },
+      {
+        "variable": "stabilite",
+        "op": "<",
+        "seuil": 0.25,
+        "multiplicateur": 2
+      }
+    ],
+    "effets": [
+      {
+        "cible": {
+          "kind": "notation",
+          "id": "Fitch"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "niveau",
+        "duree_mois": 60
+      }
+    ],
+    "justification": "Trois dégradations en 2024-2026 par les grandes agences pour un déficit autour de 5 % ; plus fréquentes quand le déficit et la dette dérivent."
+  },
+  {
+    "id": "relevement_note",
+    "titre": "Une agence relève la perspective de la France",
+    "description": "Saluant la baisse du déficit, l'agence relève la note souveraine d'un cran.",
+    "categorie": "economie",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.001,
+    "delai_min_mois": 24,
+    "conditions": [
+      {
+        "variable": "deficit_public",
+        "op": "<",
+        "seuil": 4,
+        "multiplicateur": 10
+      },
+      {
+        "variable": "deficit_public",
+        "op": "<",
+        "seuil": 3,
+        "multiplicateur": 3
+      }
+    ],
+    "effets": [
+      {
+        "cible": {
+          "kind": "notation",
+          "id": "Fitch"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "niveau",
+        "duree_mois": 60
+      }
+    ],
+    "justification": "Relèvements rares, conditionnés à une consolidation visible."
+  },
+  {
+    "id": "investissement_etranger",
+    "titre": "Un grand projet industriel s'installe en France",
+    "description": "Un groupe étranger annonce une usine de plusieurs milliers d'emplois ; la région concernée se réjouit.",
+    "categorie": "economie",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.02,
+    "delai_min_mois": 12,
+    "conditions": [
+      {
+        "variable": "stabilite",
+        "op": ">",
+        "seuil": 0.4,
+        "multiplicateur": 2
+      },
+      {
+        "variable": "stabilite",
+        "op": "<",
+        "seuil": 0.2,
+        "multiplicateur": 0.3
+      }
+    ],
+    "region": "population",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "niveau",
+        "duree_mois": 24
+      },
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6
+      }
+    ],
+    "justification": "Annonces récurrentes (sommets d'attractivité annuels) ; plus probables dans un pays stable."
+  },
+  {
+    "id": "fermeture_usine",
+    "titre": "Fermeture d'un grand site industriel",
+    "description": "Plusieurs milliers d'emplois directs et indirects menacés ; les salariés occupent l'usine.",
+    "categorie": "social",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.024,
+    "delai_min_mois": 6,
+    "conditions": [
+      {
+        "variable": "croissance_pib",
+        "op": "<",
+        "seuil": 0.5,
+        "multiplicateur": 2
+      }
+    ],
+    "region": "population",
+    "effets": [
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 4
+      }
+    ],
+    "justification": "Plans sociaux d'ampleur plusieurs fois par an ; plus nombreux quand la croissance est faible."
+  },
+  {
+    "id": "inondations",
+    "titre": "Des inondations meurtrières ravagent une région",
+    "description": "Crues soudaines, routes coupées, milliers de sinistrés : l'état de catastrophe naturelle est déclaré.",
+    "categorie": "climat",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.025,
+    "delai_min_mois": 6,
+    "mois": [
+      1,
+      2,
+      3,
+      10,
+      11,
+      12
+    ],
+    "conditions": [],
+    "region": "population",
+    "effets": [
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.collectivites"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 12
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "justification": "Épisodes majeurs presque chaque automne-hiver (Pas-de-Calais 2023-2024, Var, Gard…)."
+  },
+  {
+    "id": "canicule_secheresse",
+    "titre": "Canicule et sécheresse",
+    "description": "Records de chaleur, restrictions d'eau, récoltes compromises ; les hôpitaux font face à l'afflux de personnes âgées.",
+    "categorie": "climat",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.2,
+    "delai_min_mois": 10,
+    "mois": [
+      6,
+      7,
+      8
+    ],
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "justification": "Vagues de chaleur marquées presque chaque été depuis 2019 ; au plus une par été."
+  },
+  {
+    "id": "tempete",
+    "titre": "Une tempête violente balaie l'Ouest",
+    "description": "Rafales record, centaines de milliers de foyers privés d'électricité, dégâts considérables.",
+    "categorie": "climat",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.02,
+    "delai_min_mois": 6,
+    "mois": [
+      1,
+      2,
+      3,
+      10,
+      11,
+      12
+    ],
+    "conditions": [],
+    "region": "population",
+    "effets": [
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.collectivites"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 12
+      }
+    ],
+    "justification": "Tempêtes majeures (Ciarán 2023, Nils 2026) : environ une par an en saison froide."
+  },
+  {
+    "id": "epidemie_hivernale",
+    "titre": "Épidémie hivernale sévère, hôpitaux saturés",
+    "description": "Grippe et virus respiratoires : plans blancs dans de nombreux hôpitaux, déprogrammations, polémique sur les moyens.",
+    "categorie": "sante",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.08,
+    "delai_min_mois": 10,
+    "mois": [
+      12,
+      1,
+      2
+    ],
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.sante"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "justification": "Saisons épidémiques sévères un hiver sur trois environ."
+  },
+  {
+    "id": "attentat",
+    "titre": "Attentat terroriste",
+    "description": "Une attaque fait plusieurs victimes. Le pays se rassemble ; le gouvernement renforce les moyens de sécurité.",
+    "categorie": "securite",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.008,
+    "delai_min_mois": 18,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.securite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 24
+      }
+    ],
+    "justification": "Menace terroriste qualifiée d'élevée ; attaques meurtrières plusieurs fois par décennie. Effet de ralliement bref."
+  },
+  {
+    "id": "emeutes_urbaines",
+    "titre": "Nuits d'émeutes dans plusieurs villes",
+    "description": "Après un drame lors d'une intervention de police, des violences éclatent dans plusieurs quartiers ; bâtiments publics incendiés.",
+    "categorie": "securite",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.006,
+    "delai_min_mois": 18,
+    "conditions": [
+      {
+        "variable": "tension",
+        "op": ">",
+        "seuil": 0.6,
+        "multiplicateur": 3
+      },
+      {
+        "variable": "groupe:etudiants_jeunes",
+        "op": "<",
+        "seuil": 0.3,
+        "multiplicateur": 2
+      },
+      {
+        "variable": "chomage_bit",
+        "op": ">",
+        "seuil": 9,
+        "multiplicateur": 2
+      }
+    ],
+    "region": "tension",
+    "effets": [
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": 1,
+        "magnitude": "forte",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "justification": "Épisodes de 2005 et 2023 ; bien plus probables quand la tension, le chômage et le malaise des jeunes sont élevés."
+  },
+  {
+    "id": "cyberattaque_hopitaux",
+    "titre": "Cyberattaque contre des hôpitaux",
+    "description": "Des rançongiciels paralysent plusieurs centres hospitaliers ; les urgences fonctionnent en mode dégradé.",
+    "categorie": "securite",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.012,
+    "delai_min_mois": 24,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.sante"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "justification": "Attaques d'ampleur récurrentes (Corbeil-Essonnes 2022, Armentières 2024, DGFiP 2026)."
+  },
+  {
+    "id": "blocages_agricoles",
+    "titre": "Les agriculteurs bloquent les routes",
+    "description": "Tracteurs sur les autoroutes, préfectures assiégées : la profession dénonce les prix, les normes et la concurrence étrangère.",
+    "categorie": "social",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.008,
+    "delai_min_mois": 8,
+    "conditions": [
+      {
+        "variable": "groupe:agriculteurs",
+        "op": "<",
+        "seuil": 0.3,
+        "multiplicateur": 4
+      }
+    ],
+    "region": "tension",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "justification": "Mouvements de 2024 et janvier 2026 ; très probables quand la satisfaction des agriculteurs est basse."
+  },
+  {
+    "id": "greve_transports",
+    "titre": "Grève reconductible dans les transports",
+    "description": "Trains et métros à l'arrêt, journées de mobilisation qui s'enchaînent : les syndicats réclament le retrait des mesures.",
+    "categorie": "social",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.006,
+    "delai_min_mois": 10,
+    "conditions": [
+      {
+        "variable": "tension",
+        "op": ">",
+        "seuil": 0.55,
+        "multiplicateur": 4
+      },
+      {
+        "variable": "groupe:ouvriers_employes",
+        "op": "<",
+        "seuil": 0.3,
+        "multiplicateur": 2
+      }
+    ],
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "justification": "Conflits longs en 1995, 2019-2020, 2023 ; liés à un climat social dégradé."
+  },
+  {
+    "id": "blocage_universites",
+    "titre": "Les universités bloquées",
+    "description": "Assemblées générales, amphithéâtres occupés, cortèges lycéens : la jeunesse se mobilise.",
+    "categorie": "social",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.006,
+    "delai_min_mois": 8,
+    "mois": [
+      3,
+      4,
+      5,
+      10,
+      11
+    ],
+    "conditions": [
+      {
+        "variable": "groupe:etudiants_jeunes",
+        "op": "<",
+        "seuil": 0.3,
+        "multiplicateur": 4
+      }
+    ],
+    "region": "population",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "etudiants_jeunes"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "region"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "justification": "Mouvements étudiants réguliers en période universitaire ; plus probables quand les jeunes sont mécontents."
+  },
+  {
+    "id": "scandale_ministre",
+    "titre": "Un ministre mis en cause démissionne",
+    "description": "Révélations de presse, enquête ouverte : le ministre quitte le gouvernement, l'opposition parle d'affaire d'État.",
+    "categorie": "politique",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.024,
+    "delai_min_mois": 8,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 4
+      }
+    ],
+    "justification": "Démissions sur fond d'affaire plusieurs fois par quinquennat."
+  },
+  {
+    "id": "fronde_majorite",
+    "titre": "Fronde au sein du camp présidentiel",
+    "description": "Des députés du bloc central menacent de ne plus voter les textes du gouvernement et réclament un changement de cap.",
+    "categorie": "politique",
+    "depuis": "2026-06",
+    "proba_mensuelle": 0.008,
+    "delai_min_mois": 12,
+    "conditions": [
+      {
+        "variable": "popularite",
+        "op": "<",
+        "seuil": 0.2,
+        "multiplicateur": 3
+      }
+    ],
+    "effets": [
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      }
+    ],
+    "justification": "Frondes de 2014-2016 et de 2024-2025 ; probables quand la popularité s'effondre."
+  },
+  {
+    "id": "succes_diplomatique",
+    "titre": "Succès diplomatique de la France",
+    "description": "Un accord négocié sous l'égide de Paris est salué par les partenaires européens.",
+    "categorie": "international",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.016,
+    "delai_min_mois": 12,
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "justification": "Sommets et accords à fort écho quelques fois par an ; effet bref."
+  },
+  {
+    "id": "victoire_sportive",
+    "titre": "Une victoire sportive soulève le pays",
+    "description": "Une équipe de France remporte un titre majeur ; des centaines de milliers de personnes dans les rues.",
+    "categorie": "sport_culture",
+    "depuis": "2027-01",
+    "proba_mensuelle": 0.008,
+    "delai_min_mois": 24,
+    "mois": [
+      6,
+      7,
+      8
+    ],
+    "conditions": [],
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "justification": "Grandes compétitions chaque été pair ; titres majeurs quelques fois par décennie."
+  }
+]

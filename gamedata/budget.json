@@ -1,0 +1,287 @@
+{
+  "scope": "APU",
+  "year": 2026,
+  "context": "Au 1er janvier 2026, la France n'a pas de loi de finances pour 2026. Le gouvernement de Sébastien Lecornu (renommé Premier ministre le 10 octobre 2025, gouvernement « Lecornu II » nommé le 12 octobre ; Roland Lescure à l'Économie, Amélie de Montchalin aux Comptes publics) a déposé le PLF 2026 en octobre 2025 avec une cible de déficit public de 4,7 % du PIB (5,4 % prévu pour 2025). L'Assemblée nationale a rejeté la première partie du PLF, et donc l'ensemble du texte, dans la nuit du vendredi 21 au samedi 22 novembre 2025 (séance du 21 novembre ; 404 voix contre, 1 pour, 84 abstentions) ; le Sénat a adopté une version remaniée le 15 décembre 2025 (187 voix contre 109) ; la commission mixte paritaire a échoué (rapport de désaccord du 19 décembre 2025). Le gouvernement a alors déposé le 22 décembre un projet de loi spéciale (article 45 de la LOLF), adopté par les deux chambres le 23 décembre : loi n° 2025-1316 du 26 décembre 2025 (JO du 27 décembre). Elle autorise la perception des impôts existants, reconduit les prélèvements sur recettes au profit des collectivités et autorise l'emprunt ; un décret du 29 décembre 2025 ouvre les crédits des seuls « services votés ». Aucune mesure nouvelle (fiscale ou de dépense) n'est donc en vigueur côté État ; l'examen du PLF doit reprendre en janvier 2026. Le Premier ministre vise désormais un déficit « sous 5 % » du PIB en 2026 (la version du Sénat aboutissait à environ 5,3 %). La loi de financement de la sécurité sociale pour 2026 est en revanche adoptée (lecture définitive à l'Assemblée, texte adopté le 16 décembre 2025 ; décision du Conseil constitutionnel n° 2025-899 DC du 30 décembre 2025, non-conformité partielle) : loi n° 2025-1403 du 30 décembre 2025 (JO du 31 décembre). Mesures phares : suspension jusqu'en janvier 2028 du relèvement de l'âge légal et de la durée d'assurance de la réforme des retraites de 2023 (modalités détaillées, dont l'âge figé à 62 ans et 9 mois, non vérifiées sur source primaire), ONDAM fixé à 274,4 Md€, soit +3,2 % par rapport à l'ONDAM 2025 rectifié de 265,9 Md€ (270,4 Md€, environ +1,6 %, dans le projet initial), maintien de l'indexation des pensions et minima sociaux, hausse de la CSG sur les revenus du capital, création d'un congé de naissance, hausse de 30 % à 40 % de la contribution patronale sur les ruptures conventionnelles ; déficit des régimes obligatoires de base fixé à 19,4 Md€ pour 2026 (selon Force ouvrière ; article d'équilibre non vérifié sur Légifrance). Les montants ci-dessous sont la dernière prévision officielle consolidée disponible au 1er janvier 2026 pour l'ensemble des APU, celle du RESF annexé au PLF/PLFSS 2026 (octobre 2025) : recettes 52,3 % et dépenses 57,1 % du PIB (ratios du RESF, calculés par lui sur un PIB de 3 061 Md€ base 2014, appliqués ici à pib_reference_md = 3 066,3 Md€, voir (c)), soit un déficit d'environ 4,8 % (4,7 % affiché, écart d'arrondi), auxquels sont ajoutés le relèvement de l'ONDAM voté en LFSS (+3,9 Md€, déficit implicite ≈ 4,9 %) et une réaffectation interne vers la défense. Ils ne reflètent ni l'absence de LFI au 1er janvier ni les autres modifications parlementaires, et sont optimistes : cible officielle de déficit au 1er janvier = « sous 5 % » (4,7 % au PLF), dette prévue à 117,9 % du PIB fin 2026 (RESF, base 2014). Réalisé 2025 (Insee, base 2020, mai 2026) : déficit 152,5 Md€ (5,1 % du PIB, contre 5,4 % prévu au RESF), dont État −128,1, ODAC −2,2, APUL −15,6, ASSO −6,7 Md€ ; dette 115,7 % du PIB fin 2025. — Compléments v2. (a) Coût de la suspension de la réforme des retraites (LFSS 2026, art. 45 bis du PLFSS) : la lettre rectificative du 23 octobre 2025 l'évaluait à 0,1 Md€ en 2026 et 1,4 Md€ en 2027 ; le Premier ministre avançait 0,4 Md€ en 2026 et 1,8 Md€ en 2027 ; lors du vote de l'article à l'Assemblée (12 novembre 2025 : 255 pour, 146 contre), le coût retenu était de 0,3 Md€ en 2026 et 1,9 Md€ en 2027 (sources secondaires : Banque des Territoires, https://www.banquedesterritoires.fr/plfss-2026-debut-de-lexamen-en-commission-dun-budget-de-la-securite-sociale-rectifie-pour-suspendre ; CMS Francis Lefebvre, https://cms.law/fr/fra/legal-updates/plfss-pour-2026-une-lettre-rectificative-pour-suspendre-la-reforme-des-retraites). Ce coût n'est pas ajouté aux dépenses ci-dessous (≤ 0,4 Md€ en 2026). (b) Ce que contiendra la loi de finances finalement adoptée (information postérieure au 1er janvier 2026, à NE PAS appliquer à l'état initial : dans le jeu, c'est au joueur de faire voter la LFI) : loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JO du 20 février), adoptée après recours à l'article 49.3 et rejet des motions de censure (le dernier recours et la lecture définitive le 2 février 2026, voir events-2026.json), décision du Conseil constitutionnel du 19 février ne censurant que des cavaliers. Selon l'OFCE (« Budget 2026 : un déficit de compromis », 27 février 2026, https://www.ofce.fr/blog2024/fr/2026/20260228_MPPIMRS/index.html) : déficit visé 5,0 % du PIB (4,7 % au PLF, soit environ 9 Md€ de plus, écart venant de la dépense) ; effort structurel ramené de 0,8 à 0,5 point de PIB ; économies État −16,3 Md€ (hors défense, prime d'activité, intérêts, PSR-UE et APD), Sécurité sociale −4,1 Md€ (10 Md€ prévus : abandon du gel des pensions et de la hausse des franchises), collectivités −3,4 Md€ (moitié de l'effort initial) ; défense +5,3 Md€ ; prélèvements obligatoires +9,0 Md€, dont contribution exceptionnelle sur les grandes entreprises 7,3 Md€, hausse de 1,4 point de la CSG sur les revenus du capital (1,5 Md€, mesure de la LFSS), lutte contre la fraude 2,3 Md€, taxe sur les complémentaires santé 1,0 Md€, hausse de la cotisation CNRACL 1,7 Md€, prorogation de la CDHR 0,7 Md€ (jusqu'au retour du déficit sous 3 %) ; taxe sur les holdings patrimoniales réduite à environ 0,1 Md€ ; gel du barème de l'IR abandonné (barème indexé de 0,9 %, art. 4). (c) PIB de référence : pib_reference_md = 3066.3 Md€ = PIB 2025 de macro.json (2 991,1 Md€, Insee base 2020) × 1,010 (croissance en volume prévue pour 2026) × 1,015 (déflateur du PIB prévu pour 2026), hypothèses du RESF PLF 2026 (onglet « Annexe macro », tableaux 1 et 2). Tous les ratios du RESF sont appliqués à ce PIB.",
+  "total_recettes": {
+    "value": 1603.7,
+    "unit": "Md€",
+    "date": "2026-12",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/ec5c70c1-aeb8-4dc9-bb10-30c27936c99c/files/16ea2c0e-2d6e-42ec-a6fd-29e71e3a28fd",
+      "title": "DG Trésor – Rapport économique, social et financier (RESF) annexé au PLF 2026, données des tableaux (xlsx)",
+      "accessed": "2026-10-20"
+    },
+    "estimate": true,
+    "note": "Recettes totales APU brutes des crédits d'impôt = 52,3 % du PIB (RESF PLF 2026, onglet « Annexe finances publiques », tableau 17) × pib_reference_md = 3066.3 Md€. Prévision d'octobre 2025, dernière prévision officielle au 1er janvier 2026 (le RESF appliquait ce ratio à son propre PIB de 3 061 Md€, base 2014)."
+  },
+  "total_depenses": {
+    "value": 1754.7,
+    "unit": "Md€",
+    "date": "2026-12",
+    "source": {
+      "url": "https://www.tresor.economie.gouv.fr/Articles/ec5c70c1-aeb8-4dc9-bb10-30c27936c99c/files/16ea2c0e-2d6e-42ec-a6fd-29e71e3a28fd",
+      "title": "DG Trésor – Rapport économique, social et financier (RESF) annexé au PLF 2026, données des tableaux (xlsx)",
+      "accessed": "2026-10-20"
+    },
+    "estimate": true,
+    "note": "Somme des postes = 1754.7 Md€ : dépenses totales APU y compris crédits d'impôt = 57,1 % du PIB (RESF PLF 2026, tableau 17) × 3066.3 Md€ = 1750.9 Md€, + 3,9 Md€ pour le relèvement de l'ONDAM dans la LFSS 2026 définitive (274,4 Md€ contre 270,4 Md€ au PLFSS ; décision du Conseil constitutionnel 2025-899 DC). Le coût de la suspension de la réforme des retraites (≈ 0,3 à 0,4 Md€ en 2026, 1,8 à 1,9 Md€ en 2027 ; voir context) n'est pas ajouté : il est inférieur à l'incertitude des postes et sera porté par l'évolution du levier retraite dans le moteur. Déficit implicite : 151.0 Md€, soit 4.92 % du PIB. Hors crédits d'impôt : 56,4 % du PIB (RESF, tableau 17), soit environ 1 729 Md€ sur pib_reference_md, à rapprocher de depense_publique dans macro.json (57,3 % en 2025, hors crédits d'impôt)."
+  },
+  "recettes": {
+    "tva": {
+      "value": 215.7,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2381408",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "TVA totale APU. Valeur 2025 Insee (provisoire, APU) × 1.0331, croissance des prélèvements obligatoires totaux 2025→2026 prévue par le RESF PLF 2026 (1 345,1 / 1 302,0 Md€). Ne tient pas compte des mesures spécifiques à la TVA."
+    },
+    "ir": {
+      "value": 107.0,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2381408",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "IRPP avant crédits d'impôt (cohérent avec des recettes totales brutes des crédits d'impôt). Valeur 2025 Insee (provisoire, APU) × 1.0331, croissance des prélèvements obligatoires totaux 2025→2026 prévue par le RESF PLF 2026 (1 345,1 / 1 302,0 Md€). Le PLF prévoyait le gel du barème (+1,9 Md€), abandonné ensuite au Parlement. Comprend la CDHR (≈ 0,4 Md€ en 2025, impôt D.51 inclus dans l'IRPP de l'Insee) ; au 1er janvier 2026 (loi spéciale), sa reconduction pour 2026 n'est pas votée (la LFI 2026 la prolongera, +0,7 Md€ selon l'OFCE) ; les leviers CDHR ciblent recettes.ir."
+    },
+    "is": {
+      "value": 67.8,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2381408",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "IS avant crédits d'impôt, y compris contribution exceptionnelle sur les grandes entreprises. Valeur 2025 Insee (provisoire, APU) × 1,0331 (croissance des prélèvements obligatoires totaux 2025→2026 prévue par le RESF PLF 2026 : 1 345,1 / 1 302,0 Md€) = 71,8 Md€, puis −4,0 Md€ : RESF PLF 2026, onglet « Annexe finances publiques », tableau 19 — la contribution exceptionnelle de la LFI 2025 (8 Md€) s'éteint en 2026 (−8,0 Md€), le PLF 2026 en reconduisant la moitié (+4 Md€). Sans LFI 2026 (situation au 1er janvier), la reconduction n'est pas acquise : l'IS pourrait être inférieur d'environ 4 Md€ supplémentaires (−8 Md€ au total)."
+    },
+    "csg": {
+      "value": 161.8,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2381408",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "CSG hors jeux. Valeur 2025 Insee (provisoire, APU) × 1.0331, croissance des prélèvements obligatoires totaux 2025→2026 prévue par le RESF PLF 2026 (1 345,1 / 1 302,0 Md€)."
+    },
+    "cotisations_sociales": {
+      "value": 521.3,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.tresor.economie.gouv.fr/Articles/ec5c70c1-aeb8-4dc9-bb10-30c27936c99c/files/16ea2c0e-2d6e-42ec-a6fd-29e71e3a28fd",
+        "title": "DG Trésor – Rapport économique, social et financier (RESF) annexé au PLF 2026, données des tableaux (xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Cotisations sociales (D.61, y compris cotisations imputées) = 17,0 % du PIB en 2026 (RESF PLF 2026, tableau 17) × pib_reference_md (3066.3 Md€)."
+    },
+    "ticpe": {
+      "value": 31.5,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2381408",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Accises sur les produits énergétiques (ex-TICPE), toutes APU. Valeur 2025 Insee (provisoire, APU) × 1.0331, croissance des prélèvements obligatoires totaux 2025→2026 prévue par le RESF PLF 2026 (1 345,1 / 1 302,0 Md€)."
+    },
+    "autres": {
+      "value": 393.3,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.tresor.economie.gouv.fr/Articles/ec5c70c1-aeb8-4dc9-bb10-30c27936c99c/files/16ea2c0e-2d6e-42ec-a6fd-29e71e3a28fd",
+        "title": "DG Trésor – Rapport économique, social et financier (RESF) annexé au PLF 2026, données des tableaux (xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Solde : recettes totales APU (52,3 % × 3066.3 Md€ = 1603.7 Md€) moins les postes ci-dessus. Contient : CRDS (9,3 Md€ en 2025), accises sur les tabacs (13,6), taxes sur les salaires (17,6), C3S (5,3), TEOM, IFER, versement mobilité, TSCA, autres impôts sur les produits et la production, cotisations imputées non comprises dans D.61, recettes non fiscales (ventes, revenus de la propriété, transferts reçus). Ancien poste « autres » v1 (496,7 Md€) ventilé en v2 en impots_locaux, droits_mutation, impots_patrimoine et autres. L'IS intègre la reconduction de moitié de la contribution exceptionnelle prévue au PLF (+4 Md€, non acquise au 1er janvier, voir note IS). La CDHR, comptée dans ir, a été retirée de impots_patrimoine en v2 (−0,4 Md€), écart reporté sur ce solde."
+    },
+    "impots_locaux": {
+      "value": 60.9,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Taxe foncière (44,18 Md€) + CFE (8,10) + CVAE résiduelle (3,75, en extinction progressive) + taxe d'habitation résiduelle sur les résidences secondaires et logements vacants (2,90) : montants APU 2025 Insee (provisoires, base 2020) = 58.93 Md€, × 1,0331 (croissance des prélèvements obligatoires 2025→2026 prévue au RESF PLF 2026). Non inclus (restent dans « autres ») : TEOM (9,2 Md€), IFER (2,0), TASCOM (1,0), versement mobilité (5,7), fractions de TVA affectées aux collectivités (déjà comptées dans la TVA). Repère OFGL 2025 : foncier bâti perçu par les collectivités 43,1 Md€ (+2,8 %), CFE 8,4 Md€."
+    },
+    "droits_mutation": {
+      "value": 39.0,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "DMTG (successions et donations, « droits de mutation à titre gratuit ») 2025 = 21,05 Md€ (Insee, impôts en capital, provisoire) + DMTO (« frais de notaire ») perçus par les collectivités 2025 = 16,70 Md€ (+18,5 %, rebond des transactions ; OFGL 2026, annexe 8, tableau 1 : https://www.collectivites-locales.gouv.fr/files/files/Etudes-et-statistiques/OFGL/2026/Rapport%20OFGL%202026%20complet%20V24ao%C3%BBt2026.pdf) = 37.75 Md€, × 1,0331 (croissance des PO prévue au RESF). La faible part de DMTO perçue par l'État n'est pas ajoutée (comprise dans « autres »). Les départements peuvent relever de 0,5 point le taux plafond des DMTO du 1/04/2025 au 31/03/2028 (LFI 2025)."
+    },
+    "impots_patrimoine": {
+      "value": 5.4,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+        "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "IFI 2025 = 2,71 Md€ (Insee) + taxe sur les transactions financières ≈ 2,5 Md€ en 2025 (taux porté de 0,3 % à 0,4 % au 1/04/2025 ; Cour des comptes, septembre 2026, citée par https://www.moneyvox.fr/bourse/actualites/110311/taxe-sur-les-transactions-financieres-quel-bilan-15-ans-apres) = 5,21 Md€, × 1,0331 = 5,38 Md€. La CDHR (contribution différentielle sur les hauts revenus, LFI 2025, ≈ 0,4 Md€ en 2025 ; source secondaire : https://www.clubpatrimoine.com/contenus/impots-riches) n'est PAS ici : impôt sur le revenu en comptabilité nationale (D.51), elle est comprise dans l'IRPP de l'Insee, donc dans recettes.ir ; les leviers CDHR ciblent recettes.ir. Taxe sur les holdings patrimoniales : non en vigueur au 1er janvier."
+    }
+  },
+  "depenses": {
+    "retraites": {
+      "value": 447.7,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 432.56 Md€ (COFOG 10.2 Vieillesse (391,95) + 10.3 Survivants (40,61)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "sante": {
+      "value": 361.1,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 345.06 Md€ (COFOG 07 Santé (261,16) + 10.1 Maladie et invalidité (83,90 : indemnités journalières, pensions d'invalidité)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). Puis +3,9 Md€ : la LFSS 2026 définitive (loi n° 2025-1403 du 30/12/2025, art. 109, jugé conforme par la décision 2025-899 DC) fixe l'ONDAM 2026 à 274,4 Md€, contre 270,4 Md€ dans le PLFSS initial sur lequel repose le RESF (soit +3,2 % par rapport à l'ONDAM 2025 rectifié de 265,9 Md€, au lieu d'environ +1,6 %). Sources : Conseil constitutionnel, décision 2025-899 DC (https://www.conseil-constitutionnel.fr/decision/2025/2025899DC.htm) et FHF, lettre LFSS 2026 (février 2026). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "education": {
+      "value": 153.9,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 148.64 Md€ (COFOG 09 Enseignement (148,64)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "defense": {
+      "value": 63.8,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "COFOG 02 Défense 2024 = 54,20 Md€ (T_3301 ; 51,18 Md€ en 2023, soit +5,9 %). 2025 estimé en reconduisant cette progression (+5,9 % → 57,4 Md€) ; 2026 = 2025 × 1,11, progression des crédits de la mission « Défense » au PLF 2026 (57,1 Md€, +11 % : marche de la LPM 2024-2030 + 3,5 Md€ supplémentaires annoncés par le Président de la République le 13 juillet 2025 ; Sénat, avis n° 141 (2025-2026), tome VI, synthèse : https://www.senat.fr/rap/a25-141-6/a25-141-6-syn.pdf). Cette hausse spécifique (+7,4 Md€ par rapport à une extrapolation uniforme) est prélevée proportionnellement sur les autres postes COFOG, car elle est déjà incluse dans le total de dépenses du RESF. Attention : au 1er janvier 2026, faute de LFI, seuls les crédits des « services votés » sont ouverts (loi spéciale), donc la mission ne peut dépasser son niveau de la LFI 2025 (environ 51,4 Md€ = 57,1 / 1,11) tant que la LFI 2026 n'est pas votée ; la valeur retenue est la cible annuelle du PLF. v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "interets_dette": {
+      "value": 73.6,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.tresor.economie.gouv.fr/Articles/ec5c70c1-aeb8-4dc9-bb10-30c27936c99c/files/16ea2c0e-2d6e-42ec-a6fd-29e71e3a28fd",
+        "title": "DG Trésor – Rapport économique, social et financier (RESF) annexé au PLF 2026, données des tableaux (xlsx)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Charge d'intérêts APU (D.41) = 2,4 % du PIB en 2026 (RESF PLF 2026, tableaux 13 et 17) × pib_reference_md (3066.3 Md€) = 73.6 Md€. Cohérence avec la dette de macro.json : dette fin 2025 = 3 460,5 Md€ ; avec un déficit 2026 d'environ 150 Md€, dette moyenne 2026 ≈ 3 535 Md€, d'où un taux apparent implicite de 2,08 % contre 1,91 % en 2025 (64,7 Md€ / dette moyenne 2025, coefficient taux_apparent_dette). Cette hausse de 0,17 point correspond au refinancement d'environ 1/8,5 du stock par an (durée de vie moyenne 8,5 ans) à un taux de marché d'environ 3,4-3,6 % : 1,91 + 0,118 × (3,5 − 1,91) ≈ 2,10 %. Moteur : vitesse_transmission_taux a été supprimé ; la dynamique du taux apparent passe par part_dette_refinancee_mois (0,0054/mois) et taux_apparent_dette (r(0) = 2,01 %, calé pour que les 12 intérêts mensuels simulés de 2026 totalisent ≈ 73,6 Md€, vérifié par simulation papier en phase 0.5). Repères : 2025 réalisé = 64,7 Md€ (+11,2 %, Insee Première n° 2106, base 2020 : https://www.insee.fr/fr/statistiques/8997691) ; COFOG 01.7 2024 = 58,87 Md€ (Insee, T_3301)."
+    },
+    "securite": {
+      "value": 40.1,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 38.70 Md€ (COFOG 03.1 Police (28,90) + 03.2 Protection civile (7,94) + 03.6 Ordre et sécurité n.c.a. (1,87)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "justice": {
+      "value": 13.8,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 13.41 Md€ (COFOG 03.3 Tribunaux (8,30) + 03.4 Administration pénitentiaire (5,12)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "ecologie": {
+      "value": 47.4,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 45.75 Md€ (COFOG 05 Protection de l'environnement (30,29) + 04.3 Combustibles et énergie (15,46)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "collectivites": {
+      "value": 177.1,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3307.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.307 : répartition par sous-secteur des dépenses consolidées des APU par fonction, 2009-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 171.10 Md€ (Part des APUL (dépenses consolidées, tableau 3.307) dans les fonctions non affectées ailleurs : 01 hors 01.7 (53,18) + 04 hors 04.3 (51,90) + 06 Logement et équipements collectifs (36,11) + 08 Loisirs, culture (29,92)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "aides_sociales": {
+      "value": 182.8,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3301.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.301 : dépenses des APU (S13) ventilées par fonction (COFOG), 1995-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 176.57 Md€ (COFOG 10.4 Famille (66,71) + 10.5 Chômage (48,52) + 10.6 Logement (21,15) + 10.7 Exclusion sociale (36,46) + 10.9 n.c.a. (3,73)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    },
+    "autres": {
+      "value": 193.4,
+      "unit": "Md€",
+      "date": "2026-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/fichier/8574707/T_3307.xlsx",
+        "title": "Insee – Comptes nationaux, tableau 3.307 : répartition par sous-secteur des dépenses consolidées des APU par fonction, 2009-2024",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Montant 2024 de 186.94 Md€ (Reste : part État/ODAC/ASSO des fonctions 01 hors dette (69,05), 04 hors énergie (98,71), 06 (6,02), 08 (13,15)), extrapolé à 2026 par le facteur 1,0334 : facteur uniforme 1,0381 = (dépenses totales RESF 2026 – intérêts 2026) / (dépenses 2024 – intérêts 2024 COFOG 01.7 = 58,87 Md€), réduit de 0,46 % pour absorber la hausse spécifique de la défense (+7,4 Md€) à total inchangé ; hypothèse de structure par fonction inchangée depuis 2024 (dernière ventilation COFOG publiée). Arrondi ajusté pour que la somme des postes égale exactement total_depenses. v2 : multiplié par 1.00173 = pib_reference_md / PIB RESF (3 066,3 / 3 061) pour conserver les ratios au PIB du RESF."
+    }
+  },
+  "mapping_notes": "Champ : APU consolidées (S13), comptabilité nationale SEC 2010. Totaux 2026 = ratios du RESF PLF 2026 appliqués à pib_reference_md (v2) (onglet « Annexe finances publiques », tableau 17 : recettes totales brutes des crédits d'impôt 52,3 % du PIB ; dépenses totales y compris crédits d'impôt 57,1 % du PIB) × pib_reference_md (3 066,3 Md€ ; le RESF les appliquait à son propre PIB de 3 061 Md€, base 2014), plus 3,9 Md€ de dépenses pour l'ONDAM de la LFSS définitive. Recettes : TVA, IR (avant crédits d'impôt), IS (avant crédits d'impôt), CSG et TICPE = montants APU 2025 de l'Insee (impôts, données provisoires parues le 28/08/2026) extrapolés par la croissance des prélèvements obligatoires prévue au PLF (+3,3 %) ; cotisations sociales = D.61 du RESF (17,0 % du PIB) ; impots_locaux = taxe foncière + CFE + CVAE + TH résiduelle (Insee 2025) ; droits_mutation = DMTG (Insee) + DMTO des collectivités (OFGL) ; impots_patrimoine = IFI (Insee) + TTF (la CDHR, impôt sur le revenu D.51, est comprise dans l'IRPP de l'Insee, donc dans ir) ; tous trois × 1,0331 ; « autres » = solde (CRDS, accises tabac, taxes sur les salaires, TEOM, IFER, recettes non fiscales…). Dépenses : ventilation fonctionnelle COFOG de l'Insee pour 2024 (dernière disponible : les tableaux 2025 sont annoncés pour décembre 2026), consolidée APU (total 2024 = 1 671,8 Md€), appliquée au total 2026 hors intérêts (facteur uniforme), sauf la défense, extrapolée selon la hausse propre de la mission Défense (+11 % au PLF 2026), l'écart étant prélevé proportionnellement sur les autres postes ; santé majorée de 3,9 Md€ (ONDAM LFSS). Correspondance : retraites = 10.2+10.3 ; santé = 07+10.1 ; éducation = 09 ; défense = 02 ; sécurité = 03.1+03.2+03.6 ; justice = 03.3+03.4 ; écologie = 05+04.3 ; aides sociales = 10.4+10.5+10.6+10.7+10.9 ; intérêts = D.41 du RESF (remplace COFOG 01.7) ; collectivités = dépenses consolidées des APUL (tableau 3.307) dans les fonctions 01 (hors dette), 04 (hors énergie), 06 et 08, c'est-à-dire les dépenses locales non déjà classées dans un autre poste (les dépenses locales d'éducation, d'action sociale, d'environnement ou de sécurité restent dans ces postes) ; autres = part État, ODAC et ASSO de ces mêmes fonctions (administration générale, affaires économiques, transports, recherche, culture…). Les postes sont disjoints et somment exactement au total (arrondi ajusté sur « autres »). Bases comptables : les totaux et ratios du RESF (octobre 2025) sont en base 2014 de la comptabilité nationale, la ventilation COFOG 2024 (T_3301/T_3307) aussi, alors que les impôts 2025 de l'Insee (août 2026) et les comptes 2025 (Insee Première n° 2106, mai 2026, https://www.insee.fr/fr/statistiques/8997691) sont en base 2020 ; les niveaux ne sont donc pas strictement comparables. Point de départ réalisé 2025 en base 2020 : recettes 1 561,7 Md€ (52,2 % du PIB), dépenses 1 714,2 Md€ (57,3 %), déficit 152,5 Md€ (5,1 %). Le PIB 2026 du RESF (3 061 Md€, base 2014, après 2 987 Md€ en 2025) diffère du PIB 2025 de macro.json (2 991,1 Md€, base 2020) : appliquer la croissance nominale du RESF (+2,5 %) à ce dernier donnerait environ 3 065 Md€ ; un ratio calculé avec un autre PIB diffère donc légèrement des 4,7-4,9 % indiqués. Cohérence avec macro.json : total_depenses (57,1 % du PIB 2026) se compare à depense_publique (57,3 % en 2025, Insee https://www.insee.fr/fr/statistiques/8988841) ; total_recettes (52,3 %) ne se compare PAS au taux de prélèvements obligatoires (43,6 % en 2025, même source) mais aux recettes publiques totales (52,2 % en 2025), qui ajoutent aux PO les cotisations sociales imputées, les crédits d'impôt bruts et les recettes non fiscales (ventes, revenus de la propriété, transferts).",
+  "pib_reference_md": 3066.3
+}

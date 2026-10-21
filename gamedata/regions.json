@@ -1,0 +1,1928 @@
+[
+  {
+    "code": "11",
+    "name": "Île-de-France",
+    "population": {
+      "value": 12594502,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 865.652,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 69514,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 7.6,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.1672,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (2105997 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 17.3,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.45,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 7.6 % (T4 2025, champ chomage), pauvreté 17.3 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.2103,
+        "ouvriers_employes": 0.2456,
+        "cadres": 0.1834,
+        "fonctionnaires": 0.109,
+        "independants": 0.0573,
+        "agriculteurs": 0.0006,
+        "etudiants_jeunes": 0.0633,
+        "chomeurs_inactifs": 0.1305
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-11",
+        "title": "Insee – Dossier complet, région Île-de-France (11) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 10154355 personnes). Indicateurs : retraités = « Retraités » (1991737) ; agriculteurs = « Agriculteurs exploitants » (5570) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (339089, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 1627952) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (2091908) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (3894747) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 939430). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "24",
+    "name": "Centre-Val de Loire",
+    "population": {
+      "value": 2589286,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 91.467,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 35451,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 7.4,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2465,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (638170 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 14.5,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.44,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 7.4 % (T4 2025, champ chomage), pauvreté 14.5 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3426,
+        "ouvriers_employes": 0.2802,
+        "cadres": 0.0597,
+        "fonctionnaires": 0.1013,
+        "independants": 0.0587,
+        "agriculteurs": 0.0083,
+        "etudiants_jeunes": 0.0335,
+        "chomeurs_inactifs": 0.1157
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-24",
+        "title": "Insee – Dossier complet, région Centre-Val de Loire (24) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 2155164 personnes). Indicateurs : retraités = « Retraités » (688495) ; agriculteurs = « Agriculteurs exploitants » (17656) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (73763, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 321161) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (179857) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (906866) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 105549). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "27",
+    "name": "Bourgogne-Franche-Comté",
+    "population": {
+      "value": 2794043,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 95.775,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 34216,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 7.1,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2539,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (709367 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 14.2,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.44,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 7.1 % (T4 2025, champ chomage), pauvreté 14.2 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3476,
+        "ouvriers_employes": 0.2776,
+        "cadres": 0.0479,
+        "fonctionnaires": 0.1045,
+        "independants": 0.0627,
+        "agriculteurs": 0.0114,
+        "etudiants_jeunes": 0.0341,
+        "chomeurs_inactifs": 0.1142
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-27",
+        "title": "Insee – Dossier complet, région Bourgogne-Franche-Comté (27) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 2356316 personnes). Indicateurs : retraités = « Retraités » (763899) ; agriculteurs = « Agriculteurs exploitants » (26351) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (86103, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 362028) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (171551) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (989366) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 117291). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "28",
+    "name": "Normandie",
+    "population": {
+      "value": 3353726,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 117.713,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 35287,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 7.5,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2416,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (810144 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 14.7,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.45,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 7.5 % (T4 2025, champ chomage), pauvreté 14.7 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3366,
+        "ouvriers_employes": 0.2832,
+        "cadres": 0.0511,
+        "fonctionnaires": 0.1029,
+        "independants": 0.0582,
+        "agriculteurs": 0.0091,
+        "etudiants_jeunes": 0.0373,
+        "chomeurs_inactifs": 0.1216
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-28",
+        "title": "Insee – Dossier complet, région Normandie (28) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 2782506 personnes). Indicateurs : retraités = « Retraités » (873322) ; agriculteurs = « Agriculteurs exploitants » (24898) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (94313, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 421241) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (210075) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (1184651) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 151880). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "32",
+    "name": "Hauts-de-France",
+    "population": {
+      "value": 5965764,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 197.331,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 32891,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 9.5,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.206,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (1228993 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 19.0,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.47,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 9.5 % (T4 2025, champ chomage), pauvreté 19.0 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.2871,
+        "ouvriers_employes": 0.2901,
+        "cadres": 0.0581,
+        "fonctionnaires": 0.1069,
+        "independants": 0.0489,
+        "agriculteurs": 0.0049,
+        "etudiants_jeunes": 0.0428,
+        "chomeurs_inactifs": 0.1612
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-32",
+        "title": "Insee – Dossier complet, région Hauts-de-France (32) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 4903609 personnes). Indicateurs : retraités = « Retraités » (1312726) ; agriculteurs = « Agriculteurs exploitants » (23604) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (139907, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 770919) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (408692) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (2143702) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 306799). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "44",
+    "name": "Grand Est",
+    "population": {
+      "value": 5544271,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 197.832,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 35431,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 7.5,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2285,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (1266814 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 15.9,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.45,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 7.5 % (T4 2025, champ chomage), pauvreté 15.9 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3072,
+        "ouvriers_employes": 0.2912,
+        "cadres": 0.0596,
+        "fonctionnaires": 0.104,
+        "independants": 0.0543,
+        "agriculteurs": 0.0072,
+        "etudiants_jeunes": 0.0408,
+        "chomeurs_inactifs": 0.1357
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-44",
+        "title": "Insee – Dossier complet, région Grand Est (44) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 4660837 personnes). Indicateurs : retraités = « Retraités » (1335066) ; agriculteurs = « Agriculteurs exploitants » (32888) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (147612, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 712828) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (391936) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (2033929) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 278163). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "52",
+    "name": "Pays de la Loire",
+    "population": {
+      "value": 3965226,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 147.791,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 37541,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 6.5,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2292,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (908879 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 11.5,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.43,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 6.5 % (T4 2025, champ chomage), pauvreté 11.5 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3247,
+        "ouvriers_employes": 0.2891,
+        "cadres": 0.0732,
+        "fonctionnaires": 0.0994,
+        "independants": 0.0607,
+        "agriculteurs": 0.0101,
+        "etudiants_jeunes": 0.0392,
+        "chomeurs_inactifs": 0.1036
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-52",
+        "title": "Insee – Dossier complet, région Pays de la Loire (52) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 3231898 personnes). Indicateurs : retraités = « Retraités » (978751) ; agriculteurs = « Agriculteurs exploitants » (32072) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (114410, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 472348) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (310836) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (1391183) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 185065). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "53",
+    "name": "Bretagne",
+    "population": {
+      "value": 3510058,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 126.549,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 36552,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 6.4,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2491,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (874378 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 11.6,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.43,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 6.4 % (T4 2025, champ chomage), pauvreté 11.6 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3464,
+        "ouvriers_employes": 0.2664,
+        "cadres": 0.066,
+        "fonctionnaires": 0.1063,
+        "independants": 0.0635,
+        "agriculteurs": 0.0105,
+        "etudiants_jeunes": 0.0397,
+        "chomeurs_inactifs": 0.1012
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-53",
+        "title": "Insee – Dossier complet, région Bretagne (53) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 2895555 personnes). Indicateurs : retraités = « Retraités » (935295) ; agriculteurs = « Agriculteurs exploitants » (30038) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (107222, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 452616) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (263034) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (1179318) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 167933). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "75",
+    "name": "Nouvelle-Aquitaine",
+    "population": {
+      "value": 6241784,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 223.433,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 36206,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 7.2,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2619,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (1634689 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 14.6,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.44,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 7.2 % (T4 2025, champ chomage), pauvreté 14.6 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3524,
+        "ouvriers_employes": 0.2593,
+        "cadres": 0.0601,
+        "fonctionnaires": 0.1083,
+        "independants": 0.0753,
+        "agriculteurs": 0.0109,
+        "etudiants_jeunes": 0.0363,
+        "chomeurs_inactifs": 0.0974
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-75",
+        "title": "Insee – Dossier complet, région Nouvelle-Aquitaine (75) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 5223476 personnes). Indicateurs : retraités = « Retraités » (1716474) ; agriculteurs = « Agriculteurs exploitants » (56149) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (229304, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 831869) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (447408) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (2089369) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 276961). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "76",
+    "name": "Occitanie",
+    "population": {
+      "value": 6246988,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 221.752,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 35934,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 9.4,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2464,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (1539018 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 18.6,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.47,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 9.4 % (T4 2025, champ chomage), pauvreté 18.6 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3272,
+        "ouvriers_employes": 0.2472,
+        "cadres": 0.0735,
+        "fonctionnaires": 0.107,
+        "independants": 0.077,
+        "agriculteurs": 0.0107,
+        "etudiants_jeunes": 0.0438,
+        "chomeurs_inactifs": 0.1136
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-76",
+        "title": "Insee – Dossier complet, région Occitanie (76) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 5163128 personnes). Indicateurs : retraités = « Retraités » (1575202) ; agriculteurs = « Agriculteurs exploitants » (54282) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (231752, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 812588) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (507817) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (1983085) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 330807). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "84",
+    "name": "Auvergne-Rhône-Alpes",
+    "population": {
+      "value": 8303191,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 346.405,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 41949,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 6.8,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2179,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (1809225 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 14.2,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.44,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 6.8 % (T4 2025, champ chomage), pauvreté 14.2 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.2968,
+        "ouvriers_employes": 0.2762,
+        "cadres": 0.0889,
+        "fonctionnaires": 0.1028,
+        "independants": 0.071,
+        "agriculteurs": 0.0075,
+        "etudiants_jeunes": 0.0435,
+        "chomeurs_inactifs": 0.1133
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-84",
+        "title": "Insee – Dossier complet, région Auvergne-Rhône-Alpes (84) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 6790433 personnes). Indicateurs : retraités = « Retraités » (1879601) ; agriculteurs = « Agriculteurs exploitants » (50269) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (280914, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 1026108) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (762921) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (2830623) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 432095). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "93",
+    "name": "Provence-Alpes-Côte d'Azur",
+    "population": {
+      "value": 5318370,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 217.942,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 41818,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 8.4,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2523,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (1341695 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 18.9,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.46,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 8.4 % (T4 2025, champ chomage), pauvreté 18.9 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3207,
+        "ouvriers_employes": 0.246,
+        "cadres": 0.0745,
+        "fonctionnaires": 0.1088,
+        "independants": 0.0835,
+        "agriculteurs": 0.0038,
+        "etudiants_jeunes": 0.0392,
+        "chomeurs_inactifs": 0.1235
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-93",
+        "title": "Insee – Dossier complet, région Provence-Alpes-Côte d'Azur (93) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 4380838 personnes). Indicateurs : retraités = « Retraités » (1310269) ; agriculteurs = « Agriculteurs exploitants » (16564) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (213105, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 700811) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (437157) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (1681398) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 250870). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "94",
+    "name": "Corse",
+    "population": {
+      "value": 365636,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 13.358,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 37470,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 6.8,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2633,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (96263 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 20.0,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.45,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 6.8 % (T4 2025, champ chomage), pauvreté 20.0 % (Filosofi 2023, champ taux_pauvrete), soit 0.450 hors majoration, majoration +0.00 : aucun événement récent ne la justifie. Le processus d'autonomie suit une voie institutionnelle (projet de loi constitutionnelle « pour une Corse autonome au sein de la République » adopté en Conseil des ministres le 30/07/2025 puis transmis au Parlement, non encore examiné au 1/1/2026 : https://www.senat.fr/leg/pjl24-869.html) ; les violences de mars 2022 sont anciennes et aucune mobilisation n'est en cours au 1/1/2026. La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.3215,
+        "ouvriers_employes": 0.2537,
+        "cadres": 0.0348,
+        "fonctionnaires": 0.1122,
+        "independants": 0.1048,
+        "agriculteurs": 0.0089,
+        "etudiants_jeunes": 0.0263,
+        "chomeurs_inactifs": 0.1378
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-94",
+        "title": "Insee – Dossier complet, région Corse (94) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 301885 personnes). Indicateurs : retraités = « Retraités » (90511) ; agriculteurs = « Agriculteurs exploitants » (2644) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (18445, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 49815) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (18681) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (119532) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 11593). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "01",
+    "name": "Guadeloupe",
+    "population": {
+      "value": 382586,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 11.878,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif). Guadeloupe y compris Saint-Martin. Périmètre différent de la population (estimation Insee hors Saint-Martin et Saint-Barthélemy) : PIB / population donne ~31 000 €/hab au lieu de 29 099 publiés ; ne pas recalculer le PIB/hab à partir de ces deux champs."
+    },
+    "pib_par_habitant": {
+      "value": 29099,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 17.2,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2532,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (96875 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 34.5,
+      "unit": "%",
+      "date": "2017-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/4797606",
+        "title": "Insee - France, portrait social, édition 2020 : Pauvreté (taux de pauvreté dans les DOM en 2017, seuil national)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi ne couvre pas ce territoire : taux au seuil national (60 % du niveau de vie médian de France métropolitaine), enquête Budget de famille 2017. Non strictement comparable aux taux Filosofi (métropole, La Réunion, Martinique) ; dernier chiffre publié par l'Insee pour ce territoire."
+    },
+    "tension_initiale": {
+      "value": 0.56,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 17.2 % (T4 2025, champ chomage), pauvreté 34.5 % (Budget de famille 2017, champ taux_pauvrete), soit 0.563 hors majoration, majoration +0.00 : le couvre-feu des mineurs dans quelques quartiers (Pointe-à-Pitre, Les Abymes) et la panne électrique générale datent de septembre-octobre 2024, sans revendication politique structurée ; aucun mouvement social en cours au 1/1/2026. Résultat 0.56. La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.2791,
+        "ouvriers_employes": 0.2468,
+        "cadres": 0.0271,
+        "fonctionnaires": 0.1175,
+        "independants": 0.0917,
+        "agriculteurs": 0.0073,
+        "etudiants_jeunes": 0.0338,
+        "chomeurs_inactifs": 0.1967
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-01",
+        "title": "Insee – Dossier complet, région Guadeloupe (01) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 322264 personnes). Indicateurs : retraités = « Retraités » (83867) ; agriculteurs = « Agriculteurs exploitants » (2328) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (17222, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 55672) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (17951) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (126054) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 15938). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "02",
+    "name": "Martinique",
+    "population": {
+      "value": 358818,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 10.48,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 29866,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 12.5,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.2675,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (95974 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 26.8,
+      "unit": "%",
+      "date": "2021-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/4482393",
+        "title": "Insee - L'essentiel sur… la Martinique (section niveau de vie médian et pauvreté)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de pauvreté 2021 (Filosofi, seuil à 60 % du niveau de vie médian) cité par l'Insee ; Filosofi 2023 non diffusé pour la Martinique (nd). Remplace le 33 % de Budget de famille 2017 (28,6 % en Filosofi 2017). Seuil non explicité sur la page : supposé métropolitain comme pour La Réunion (comparaison « près de deux fois plus qu'en France »). Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.56,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.maire-info.com/couvre-feu-et-interdiction-de-manifester-en-martinique-apres-les-violences-article2-29000",
+        "title": "Maire-info – Couvre-feu et interdiction de manifester en Martinique après les violences (octobre 2024)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 12.5 % (T4 2025, champ chomage), pauvreté 26.8 % (Filosofi 2021, champ taux_pauvrete), soit 0.510 hors majoration, majoration +0.05 (et non +0.10) : le mouvement contre la vie chère (RPPRAC) de septembre-octobre 2024 (violences urbaines, couvre-feu jusqu'au 28/10/2024) est vieux de 15 mois ; protocole de lutte contre la vie chère appliqué depuis le 2/01/2025, revendications non éteintes mais pas de mobilisation en cours au 1/1/2026. Résultat 0.56. La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.2969,
+        "ouvriers_employes": 0.257,
+        "cadres": 0.0278,
+        "fonctionnaires": 0.1264,
+        "independants": 0.0703,
+        "agriculteurs": 0.0057,
+        "etudiants_jeunes": 0.0302,
+        "chomeurs_inactifs": 0.1857
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-02",
+        "title": "Insee – Dossier complet, région Martinique (02) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 306781 personnes). Indicateurs : retraités = « Retraités » (84939) ; agriculteurs = « Agriculteurs exploitants » (1718) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (12564, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 57026) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (17982) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (125871) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 13548). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "03",
+    "name": "Guyane",
+    "population": {
+      "value": 298554,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 5.244,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 17703,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 17.5,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.0809,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (24161 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 52.9,
+      "unit": "%",
+      "date": "2017-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/4797606",
+        "title": "Insee - France, portrait social, édition 2020 : Pauvreté (taux de pauvreté dans les DOM en 2017, seuil national)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi ne couvre pas ce territoire : taux au seuil national (60 % du niveau de vie médian de France métropolitaine), enquête Budget de famille 2017. Non strictement comparable aux taux Filosofi (métropole, La Réunion, Martinique) ; dernier chiffre publié par l'Insee pour ce territoire."
+    },
+    "tension_initiale": {
+      "value": 0.58,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 17.5 % (T4 2025, champ chomage), pauvreté 52.9 % (Budget de famille 2017, champ taux_pauvrete), soit 0.602 hors majoration, majoration +0.00 (aucun mouvement social régional en cours au 1/1/2026). La formule donne 0.601 : ramenée au plafond de 0.58 appliqué à toute région sans mouvement en cours (même règle que tension_nationale dans macro.json, minorée pour rester sous seuil_tension_greves = 0,6). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.0899,
+        "ouvriers_employes": 0.2252,
+        "cadres": 0.0213,
+        "fonctionnaires": 0.1361,
+        "independants": 0.052,
+        "agriculteurs": 0.0073,
+        "etudiants_jeunes": 0.0444,
+        "chomeurs_inactifs": 0.4238
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-03",
+        "title": "Insee – Dossier complet, région Guyane (03) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 200438 personnes). Indicateurs : retraités = « Retraités » (16805) ; agriculteurs = « Agriculteurs exploitants » (1435) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (6071, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 40112) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (10971) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (75755) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 13014). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "04",
+    "name": "La Réunion",
+    "population": {
+      "value": 910985,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Estimation provisoire (résultats précoces arrêtés fin 2025)."
+    },
+    "pib_md": {
+      "value": 24.457,
+      "unit": "Md€",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB régional 2024 provisoire (2023 semi-définitif)."
+    },
+    "pib_par_habitant": {
+      "value": 27539,
+      "unit": "€/habitant",
+      "date": "2024-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Dénominateur Insee : moyenne des populations au 1er janvier de n et n+1."
+    },
+    "chomage": {
+      "value": 16.4,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de chômage localisé, T4 2025, CVS, moyenne trimestrielle."
+    },
+    "part_65_plus": {
+      "value": 0.1642,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé : somme des tranches 65-69 à 95+ (149568 hab.) / population totale, onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx."
+    },
+    "taux_pauvrete": {
+      "value": 36.4,
+      "unit": "%",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012803",
+        "title": "Insee - Taux de pauvreté par tranches d'âge en 2023, comparaisons régionales (Filosofi 2023, 11/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi 2023, seuil à 60 % du niveau de vie médian, champ ménages fiscaux en logement ordinaire. Attention : la moyenne métropolitaine Filosofi 2023 est de 15,9 %, contre 15,4 % pour le taux national ERFS de macro.json (écart de méthode, pas de territoire)."
+    },
+    "tension_initiale": {
+      "value": 0.56,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8903534",
+        "title": "Insee Informations Rapides n° 65 - Taux de chômage localisés au 4e trimestre 2025 (20/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 16.4 % (T4 2025, champ chomage), pauvreté 36.4 % (Filosofi 2023, champ taux_pauvrete), majoration +0.00 (aucun mouvement social régional spécifique en cours au 1/1/2026 ; les mobilisations nationales de septembre-octobre 2025 sont déjà dans la tension nationale). La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.1919,
+        "ouvriers_employes": 0.2829,
+        "cadres": 0.029,
+        "fonctionnaires": 0.126,
+        "independants": 0.0654,
+        "agriculteurs": 0.0082,
+        "etudiants_jeunes": 0.0383,
+        "chomeurs_inactifs": 0.2583
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2011101?geo=REG-04",
+        "title": "Insee – Dossier complet, région La Réunion (04) : RP2023, tableaux POP T7, FOR T1 et EMP T8 (paru le 27/08/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Méthode : parts nationales de gamedata/groups.json (même découpage, population de 18 ans ou plus, étrangers compris) modulées par la structure régionale du recensement. Pour chaque groupe, part régionale = part nationale × (indicateur régional / indicateur France), l'indicateur étant rapporté à la population de 15 ans ou plus du RP2023 (tableau POP T7, exploitation complémentaire, géographie 2026 ; ici 699674 personnes). Indicateurs : retraités = « Retraités » (125233) ; agriculteurs = « Agriculteurs exploitants » (5680) ; indépendants = « Artisans, commerçants et chefs d'entreprise » (26664, professions libérales laissées dans les cadres, faute de détail régional) ; fonctionnaires = emplois au lieu de travail du secteur « Administration publique, enseignement, santé, action sociale » (tableau EMP T8 : 129604) × 0.6644 (rapport national 5,877 M agents SIASP fin 2024 / 8844697 emplois de ce secteur au RP2023) : proxy, le secteur inclut la santé et l'action sociale privées et les agents ne sont pas ventilés par région dans les sources consultées ; cadres du privé = cadres et professions intellectuelles supérieures (41740) − 0.255 × agents publics estimés (0.255 = part des agents publics classés cadres implicite dans groups.json : (6,993 − 0,694 − 4,799) / 5,877) ; salariés non cadres du privé = professions intermédiaires + employés + ouvriers (309307) − 0.745 × agents publics estimés ; étudiants = population scolarisée de 18 ans ou plus (tableau FOR T1, exploitation principale : 39172). Chômeurs/inactifs = résidu (1 − somme des 7 autres groupes). Les catégories RP sont « actuelles ou antérieures » (les chômeurs ayant déjà travaillé sont classés dans leur ancienne PCS), ce que la normalisation par le ratio France neutralise en moyenne. Contrôle : la moyenne des 18 régions pondérée par la population de 15 ans ou plus reproduit les parts nationales de groups.json à moins de 0,002 près. Date de référence : RP2023 (recensements 2021-2025), non extrapolé à 2026."
+    }
+  },
+  {
+    "code": "06",
+    "name": "Mayotte",
+    "population": {
+      "value": 323153,
+      "unit": "habitants",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/information/9022279",
+        "title": "Insee - Au 1er janvier 2026 la population à Mayotte est de 323 153 habitants (07/07/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Population municipale issue du recensement exhaustif (collecte du 27/11/2025 au 10/01/2026), publiée le 07/07/2026. Remplace l'estimation provisoire du 13/01/2026 (338 208). Le total France entière de macro.json a été recalé sur cette valeur (69,066 M, Insee 8687895 du 24/09/2026) : la somme des 18 régions (69 066 941) lui est égale."
+    },
+    "pib_md": {
+      "value": 3.473,
+      "unit": "Md€",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/2012723",
+        "title": "Insee - Produit intérieur brut en 2024, comparaisons régionales (12/05/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB 2024 non disponible (nd) pour Mayotte ; valeur 2023 semi-définitive."
+    },
+    "pib_par_habitant": {
+      "value": 11020,
+      "unit": "€/habitant",
+      "date": "2023-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8666627",
+        "title": "Insee Flash Mayotte n° 199 - La croissance économique reste dynamique à Mayotte en 2023 (13/11/2025)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PIB/hab 2023 (PIB 3 473,5 M€ provisoire) de la publication dédiée de l'Insee. Le tableau régional TCR_062 (insee.fr/fr/statistiques/2012723) donne 11 977 €/hab pour le même PIB, ce qui impliquerait ~290 000 habitants, incohérent avec les estimations (~315 000) et le recensement 2026 (323 153). PIB/hab 2024 non disponible."
+    },
+    "chomage": {
+      "value": 25,
+      "unit": "%",
+      "date": "2025-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/9050780",
+        "title": "Insee Flash Mayotte n° 215 - En 2025, la situation sur le marché du travail se dégrade à Mayotte après le cyclone Chido (11/09/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Pas de taux localisé trimestriel pour Mayotte : moyenne annuelle 2025 du chômage BIT (15 ans ou plus), enquête Emploi Mayotte, non comparable aux taux localisés T4 des autres régions. Enquête rénovée en 2024 (séries 2014-2023 rétropolées). La baisse de 4 pts vs 2024 vient du recul de l'activité après le cyclone Chido (taux d'activité des 15-64 ans ~40 %, report vers le halo), pas d'une amélioration : le taux d'emploi des 15-64 ans tombe à 30 %, plus bas niveau depuis 2014."
+    },
+    "part_65_plus": {
+      "value": 0.0267,
+      "unit": "fraction",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/8721456",
+        "title": "Insee - Estimation de la population au 1er janvier 2026, séries par région, sexe et âge (13/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Calculé sur l'estimation provisoire du 13/01/2026 (9042 hab. de 65 ans ou plus / 338 208), onglet 2026 du fichier estim-pop-nreg-sexe-aq-1975-2026.xlsx. Structure par âge du recensement 2025-2026 annoncée par l'Insee pour fin 2026 : valeur à revoir."
+    },
+    "taux_pauvrete": {
+      "value": 77.3,
+      "unit": "%",
+      "date": "2017-12",
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/4797606",
+        "title": "Insee - France, portrait social, édition 2020 : Pauvreté (taux de pauvreté dans les DOM en 2017, seuil national)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Filosofi ne couvre pas ce territoire : taux au seuil national (60 % du niveau de vie médian de France métropolitaine), enquête Budget de famille 2017 (millésime 2017 ; à Mayotte collecte d'octobre 2017 à octobre 2018, fourchette 74-78 %). Non strictement comparable aux taux Filosofi (métropole, La Réunion, Martinique) ; dernier chiffre publié par l'Insee pour ce territoire."
+    },
+    "tension_initiale": {
+      "value": 0.76,
+      "unit": "score 0-1",
+      "date": "2026-01-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/17/questions/QANR5L17QG1168",
+        "title": "Assemblée nationale – Question au Gouvernement n° 1168 (Mme Anchya Bamana) sur la crise de l'eau à Mayotte (JO du 14/01/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation (aucun indice officiel). Méthode commune aux 18 régions : tension = tension_nationale (0.45, macro.json) + 0,008 × (chômage régional − 7.9 %) + 0,002 × (pauvreté régionale − 15.4 %) + majoration événementielle, bornée à [0,2 ; 0,85] et plafonnée à 0,58 en l'absence de mouvement social ou de crise documentés en cours au 1/1/2026 (règle de macro.json : rester sous seuil_tension_greves = 0,6), arrondie à 0,01. Ici : chômage 25 % (moyenne annuelle 2025, enquête Emploi Mayotte, champ chomage), pauvreté 77.3 % (Budget de famille 2017, champ taux_pauvrete), soit 0.711 hors majoration, majoration +0.05 : crise post-Chido (cyclone du 14/12/2024, loi de refondation n° 2025-797 du 11/08/2025) et crise de l'eau toujours en cours au 1/1/2026 (coupures d'eau persistantes décrites dans la question au Gouvernement n° 1168 de Mme Anchya Bamana, JO du 14/01/2026 : https://www.assemblee-nationale.fr/dyn/17/questions/QANR5L17QG1168 ; plan Eau Mayotte sans effet concret avant 2027) ; pas de barrages documentés fin 2025, d'où une majoration réduite de +0.10 à +0.05. Résultat 0.76 : choix DÉLIBÉRÉ de faire partir Mayotte au-dessus de seuil_tension_greves (0,6), seule région dans ce cas, car la formule seule (0.71) l'y place déjà et une crise (eau, reconstruction) est documentée au 1/1/2026 ; poids PIB très faible dans l'intensité de grève du moteur. La source citée est celle de la majoration événementielle si elle existe, sinon celle du chômage. Moyenne pondérée par la population des 18 régions ≈ 0,454, cohérente avec la tension nationale 0,45. Incertitude ±0,1."
+    },
+    "composition_sociale": {
+      "parts": {
+        "retraites": 0.0428,
+        "ouvriers_employes": 0.1357,
+        "cadres": 0.0151,
+        "fonctionnaires": 0.1669,
+        "independants": 0.0143,
+        "agriculteurs": 0.0031,
+        "etudiants_jeunes": 0.0583,
+        "chomeurs_inactifs": 0.5638
+      },
+      "source": {
+        "url": "https://www.insee.fr/fr/statistiques/9050773",
+        "title": "Insee Flash Mayotte n° 214 – 51 100 salariés à Mayotte fin 2024 (11/09/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Estimation directe (le dossier complet Insee de Mayotte ne publie pas les tableaux RP2023 POP T7, FOR T1, EMP T8). Dénominateur : population de 18 ans ou plus, comme groups.json. Fichier Insee « Estimation de la population au 1er janvier 2026 par région, sexe et âge quinquennal » (https://www.insee.fr/fr/statistiques/8721456, onglet 2026) : Mayotte 338 208 hab., dont 15 ans ou plus 190 203 et 15-19 ans 33 784 ; 15-17 ans ≈ 21 500 (interpolation linéaire de la densité par âge entre les tranches 10-14 et 20-24, soit ≈ 64 % des 15-19 ans) ; 18 ans ou plus ≈ 168 700, soit 49,9 % de la population, appliqué aux 323 153 habitants du recensement 2025 (champ population) : ≈ 161 200. Numérateurs : fonctionnaires = 26 900 salariés du secteur public fin 2024 (Insee Flash Mayotte n° 214, 53 % des 51 100 salariés ; champ plus large que les seuls titulaires, analogue aux agents SIASP de groups.json) ; salariés du privé = 24 300 (même source), ventilés en cadres 10 % (2 430) et non-cadres 90 % (21 870) : ventilation SUPPOSÉE, aucune source consultée ne donne la PCS des salariés mahorais ; non-salariés = emploi total de l'enquête Emploi 2025 (30 % des ≈ 179 700 15-64 ans ≈ 53 900, Insee Flash Mayotte n° 215, https://www.insee.fr/fr/statistiques/9050780) − 51 100 salariés ≈ 2 800, répartis en indépendants 2 300 et agriculteurs 500 (hypothèse ; sources de dates et de champs différents, l'emploi informel et la baisse post-Chido rendent ce résidu fragile) ; retraités = 6 894 bénéficiaires de prestations vieillesse de la Caisse de sécurité sociale de Mayotte au 31/12/2024, dont 3 579 retraités de droit propre (chiffre CSSM cité dans le sous-amendement n° 2708 au PLFSS 2026, Assemblée nationale, 12/11/2025 : https://www.assemblee-nationale.fr/dyn/17/amendements/1907/AN/2708) ; étudiants de 18 ans ou plus = 16 % des 15-64 ans en études (Flash n° 215 : ≈ 28 750) − 90 % des 15-17 ans supposés scolarisés (≈ 19 350) ≈ 9 400 (lycéens majeurs, BTS et université ; borne basse ≈ 3 000 étudiants du supérieur sur l'île, dont un peu moins de 2 000 à l'université de Mayotte selon son président, presse locale). Chômeurs/inactifs = résidu (chômeurs BIT 18 000, halo 50 300, personnes au foyer). Parts non normalisées par la France. Incertitude forte (±0,05 par groupe)."
+    }
+  }
+]

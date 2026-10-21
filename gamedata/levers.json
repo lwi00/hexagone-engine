@@ -1,0 +1,3876 @@
+[
+  {
+    "id": "tva.taux_normal",
+    "label": "TVA – taux normal",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 15,
+    "max": 27,
+    "valeur_initiale": {
+      "value": 20,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux en vigueur au 1er janvier 2026 (annexe Voies et moyens du PLF 2026, encadré méthodologique TVA)."
+    },
+    "description": "Taux normal de TVA (s'applique par défaut). Une hausse d'un point réduit le pouvoir d'achat ; DG Trésor : perte relative plus forte pour les ménages modestes (0,7 % pour le 1er quintile contre 0,4 % pour le dernier, pour un point de tous les taux).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.tva"
+        },
+        "elasticite": 7.5,
+        "unite_effet": "Md€/an sur la ligne recettes.tva (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "DG Trésor : rendement net 2025 d'un point de ce taux = 7.5 Md€ (brut 8.9 Md€), net de la TVA payée par les APU (tableaux 1 et 2). Rendement NET retenu sur recettes.tva : la TVA supplémentaire payée par les APU sur leurs propres achats (écart brut − net) est déduite ici plutôt qu'ajoutée en dépenses.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2025/09/25/analyse-de-la-composition-des-recettes-de-tva",
+          "title": "DG Trésor, Trésor-Éco n° 371 – Analyse de la composition des recettes de TVA (septembre 2025)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.37,
+        "unite_effet": "% du niveau de l'IPC par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante TVA (hausse) : prix de la consommation +1.48 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 7.50 Md€ par unité. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "chomeurs_inactifs",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "tva.taux_intermediaire",
+    "label": "TVA – taux intermédiaire",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 5.5,
+    "max": 20,
+    "valeur_initiale": {
+      "value": 10,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux en vigueur au 1er janvier 2026 (annexe Voies et moyens du PLF 2026, encadré méthodologique TVA)."
+    },
+    "description": "Taux intermédiaire (restauration, transports, rénovation, médicaments non remboursables). Effet distributif plus uniforme selon le niveau de vie (DG Trésor).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.tva"
+        },
+        "elasticite": 1.6,
+        "unite_effet": "Md€/an sur la ligne recettes.tva (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "DG Trésor : rendement net 2025 d'un point de ce taux = 1.6 Md€ (brut 1.9 Md€), net de la TVA payée par les APU (tableaux 1 et 2). Rendement NET retenu sur recettes.tva : la TVA supplémentaire payée par les APU sur leurs propres achats (écart brut − net) est déduite ici plutôt qu'ajoutée en dépenses.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2025/09/25/analyse-de-la-composition-des-recettes-de-tva",
+          "title": "DG Trésor, Trésor-Éco n° 371 – Analyse de la composition des recettes de TVA (septembre 2025)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0789,
+        "unite_effet": "% du niveau de l'IPC par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante TVA (hausse) : prix de la consommation +1.48 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 1.60 Md€ par unité. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "tva.taux_reduit",
+    "label": "TVA – taux réduit",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 2.1,
+    "max": 10,
+    "valeur_initiale": {
+      "value": 5.5,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux en vigueur au 1er janvier 2026 (annexe Voies et moyens du PLF 2026, encadré méthodologique TVA)."
+    },
+    "description": "Taux réduit (produits alimentaires, livres, rénovation thermique, cinéma). Postes surreprésentés chez les ménages modestes.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.tva"
+        },
+        "elasticite": 2,
+        "unite_effet": "Md€/an sur la ligne recettes.tva (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "DG Trésor : rendement net 2025 d'un point de ce taux = 2.0 Md€ (brut 2.4 Md€), net de la TVA payée par les APU (tableaux 1 et 2). Rendement NET retenu sur recettes.tva : la TVA supplémentaire payée par les APU sur leurs propres achats (écart brut − net) est déduite ici plutôt qu'ajoutée en dépenses.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2025/09/25/analyse-de-la-composition-des-recettes-de-tva",
+          "title": "DG Trésor, Trésor-Éco n° 371 – Analyse de la composition des recettes de TVA (septembre 2025)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0987,
+        "unite_effet": "% du niveau de l'IPC par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante TVA (hausse) : prix de la consommation +1.48 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 2.00 Md€ par unité. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "chomeurs_inactifs",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "tva.taux_super_reduit",
+    "label": "TVA – taux super-réduit",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 0,
+    "max": 5.5,
+    "valeur_initiale": {
+      "value": 2.1,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux en vigueur au 1er janvier 2026 (annexe Voies et moyens du PLF 2026, encadré méthodologique TVA)."
+    },
+    "description": "Taux super-réduit (médicaments remboursables, presse).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.tva"
+        },
+        "elasticite": 0.4,
+        "unite_effet": "Md€/an sur la ligne recettes.tva (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "DG Trésor : rendement net 2025 d'un point de ce taux = 0.4 Md€ (brut 0.4 Md€), net de la TVA payée par les APU (tableaux 1 et 2). Rendement NET retenu sur recettes.tva : la TVA supplémentaire payée par les APU sur leurs propres achats (écart brut − net) est déduite ici plutôt qu'ajoutée en dépenses.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2025/09/25/analyse-de-la-composition-des-recettes-de-tva",
+          "title": "DG Trésor, Trésor-Éco n° 371 – Analyse de la composition des recettes de TVA (septembre 2025)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0197,
+        "unite_effet": "% du niveau de l'IPC par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante TVA (hausse) : prix de la consommation +1.48 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 0.40 Md€ par unité. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "ir.bareme",
+    "label": "Impôt sur le revenu – variation globale du barème",
+    "categorie": "fiscalite",
+    "unit": "% (variation de l'impôt dû, écart au barème 2026)",
+    "min": -30,
+    "max": 30,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "% (écart au barème)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = barème appliqué aux revenus 2025 (tranches 0/11/30/41/45 % ; seuils 11 600 / 29 579 / 84 577 / 181 917 € par part, soit une indexation de +0,9 %). Ce barème a été fixé par l'art. 4 de la LFI 2026 (loi n° 2026-103 du 19 février 2026, JO du 20 février 2026). Il n'était pas encore voté au 1er janvier 2026, date à laquelle la France était sous loi spéciale. Une valeur de +5 signifie un impôt dû majoré de 5 % pour tous les foyers imposables."
+    },
+    "description": "Variation proportionnelle de l'impôt sur le revenu dû (hausse ou baisse uniforme du barème). Touche surtout les classes moyennes supérieures et aisées (environ la moitié des foyers sont imposables).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.ir"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne recettes.ir (APU, positif = hausse de la ligne) par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Périmètre APU (cohérent avec budget.json) : recettes.ir = 107,0 Md€ en 2026 (IR avant crédits d'impôt, Insee extrapolé). 1 % = 1,07 Md€, diminué d'environ 7 % pour la part forfaitaire (PFU, plus-values immobilières) qui ne suit pas le barème, soit ≈ 1,0 Md€ (v1 : 1,02 Md€ au périmètre État, IR net 102,1 Md€). Statique, comportements inchangés. Délai : prélèvement à la source recalé en début d'année suivante.",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/2381408",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.0018,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. IR ≈ 12 % du revenu disponible des cadres, 8 % des indépendants, 6 % des retraités et fonctionnaires, 2 % des ouvriers et employés : +1 % d'impôt ≈ −0,12 / −0,08 / −0,06 / −0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.0012,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. IR ≈ 12 % du revenu disponible des cadres, 8 % des indépendants, 6 % des retraités et fonctionnaires, 2 % des ouvriers et employés : +1 % d'impôt ≈ −0,12 / −0,08 / −0,06 / −0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "elasticite": -0.0009,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. IR ≈ 12 % du revenu disponible des cadres, 8 % des indépendants, 6 % des retraités et fonctionnaires, 2 % des ouvriers et employés : +1 % d'impôt ≈ −0,12 / −0,08 / −0,06 / −0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "fonctionnaires"
+        },
+        "elasticite": -0.0009,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. IR ≈ 12 % du revenu disponible des cadres, 8 % des indépendants, 6 % des retraités et fonctionnaires, 2 % des ouvriers et employés : +1 % d'impôt ≈ −0,12 / −0,08 / −0,06 / −0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "elasticite": -0.0003,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. IR ≈ 12 % du revenu disponible des cadres, 8 % des indépendants, 6 % des retraités et fonctionnaires, 2 % des ouvriers et employés : +1 % d'impôt ≈ −0,12 / −0,08 / −0,06 / −0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "ir.taux_marginal_max",
+    "label": "Impôt sur le revenu – taux de la tranche supérieure",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 30,
+    "max": 75,
+    "valeur_initiale": {
+      "value": 45,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de 45 %, inchangé, applicable à la fraction de revenu supérieure à 181 917 € par part (barème des revenus 2025). Ce seuil vient de l'art. 4 de la LFI 2026 (loi n° 2026-103, JO du 20 février 2026) ; au 1er janvier 2026, sous loi spéciale, il n'était pas encore voté."
+    },
+    "description": "Taux marginal de la dernière tranche du barème de l'IR (hors contribution exceptionnelle et contribution différentielle sur les hauts revenus).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.ir"
+        },
+        "elasticite": 0.3,
+        "unite_effet": "Md€/an sur la ligne recettes.ir (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Ordre de grandeur posé faute de chiffrage officiel accessible : la contribution différentielle sur les très hauts revenus rapporte 1,5 Md€ au titre de 2026 (Voies et moyens) ; un point sur la seule tranche supérieure est supposé rapporter environ 0,3 Md€ en statique, avant réactions d'optimisation (élasticité du revenu imposable élevée en haut de la distribution).",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.001,
+        "unite_effet": "points de score 0-1 par point de taux",
+        "forme": "choc",
+        "delai_mois": 3,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse (v1 : 0,1 point 0-100) : mesure de justice fiscale plutôt populaire ; réaction à l'annonce."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.0008,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 0,3 Md€ payés par les foyers au-delà de 181 917 € par part, surtout cadres dirigeants et indépendants : ≈ −0,05 % et −0,03 % du revenu disponible de ces groupes. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.0005,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 0,3 Md€ payés par les foyers au-delà de 181 917 € par part, surtout cadres dirigeants et indépendants : ≈ −0,05 % et −0,03 % du revenu disponible de ces groupes. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "is.taux",
+    "label": "Impôt sur les sociétés – taux normal",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 15,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 25,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23575",
+        "title": "Service-public.fr Entreprendre – Impôt sur les sociétés (IS)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux normal ; taux réduit de 15 % jusqu'à 42 500 € de bénéfice pour les PME éligibles. La contribution exceptionnelle sur les bénéfices des grandes entreprises est un levier distinct (is.contribution_exceptionnelle)."
+    },
+    "description": "Taux normal de l'IS. Une hausse améliore les recettes mais renchérit le coût du capital (investissement, attractivité).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.is"
+        },
+        "elasticite": 1.9,
+        "unite_effet": "Md€/an sur la ligne recettes.is (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Périmètre APU : recettes.is = 67,8 Md€ en 2026 (IS avant crédits d'impôt, dont ≈ 4 Md€ de contribution exceptionnelle pilotée par is.contribution_exceptionnelle). (67,8 − 4) / 25 ≈ 2,55 Md€ par point en mécanique pure, −5 % pour la part au taux réduit de 15 %, puis −20 % de réponse de l'assiette (transferts de bénéfices) ≈ 1,9 Md€. La v1 (1,9 Md€) partait de l'IS net État (59,0 Md€) majoré de l'effet des crédits d'impôt ; le résultat est inchangé. Délai : acomptes et solde.",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/2381408",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025 (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "elasticite": -0.012,
+        "unite_effet": "% du niveau du PIB en volume (effet d'offre, terme O du moteur) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 36,
+        "hypothese": true,
+        "justification": "Hypothèse : seule la composante d'offre (coût du capital, investissement, attractivité) est conservée, soit la moitié de l'effet v1 (−0,024 % de niveau de PIB à 3 ans par point), l'autre moitié étant l'effet de demande appliqué par le moteur. Écart de niveau durable de −0,012 % atteint en 36 mois de montée."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "csg.taux_activite",
+    "label": "CSG sur les revenus d'activité",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 5,
+    "max": 15,
+    "valeur_initiale": {
+      "value": 9.2,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+        "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de CSG applicable aux salaires (9,2 %), cité par le rapport du Sénat ; inchangé par la LFSS 2026."
+    },
+    "description": "Taux de CSG sur les salaires et revenus d'activité. Prélèvement à large assiette, rendement élevé.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.csg"
+        },
+        "elasticite": 12,
+        "unite_effet": "Md€/an sur la ligne recettes.csg (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Sénat (Mecss, d'après le rapport à la CCSS d'octobre 2024) : un point de CSG sur les revenus d'activité rapporte 12,0 Md€.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de CSG sur les revenus d'activité ≈ −1,1 % du revenu disponible des actifs (assiette 98,25 % du brut), soit 0,015 × 1,1 ≈ 0,016. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de CSG sur les revenus d'activité ≈ −1,1 % du revenu disponible des actifs (assiette 98,25 % du brut), soit 0,015 × 1,1 ≈ 0,016. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "fonctionnaires"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de CSG sur les revenus d'activité ≈ −1,1 % du revenu disponible des actifs (assiette 98,25 % du brut), soit 0,015 × 1,1 ≈ 0,016. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de CSG sur les revenus d'activité ≈ −1,1 % du revenu disponible des actifs (assiette 98,25 % du brut), soit 0,015 × 1,1 ≈ 0,016. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de CSG sur les revenus d'activité ≈ −1,1 % du revenu disponible des actifs (assiette 98,25 % du brut), soit 0,015 × 1,1 ≈ 0,016. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "csg.taux_capital",
+    "label": "CSG sur les revenus du capital",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 5,
+    "max": 20,
+    "valeur_initiale": {
+      "value": 10.6,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+        "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Art. 12 de la LFSS 2026 : le taux général de l'art. L136-8 CSS passe de 9,2 % à 10,6 %. Le IV maintient 9,2 % pour les revenus fonciers (a du I de l'art. L136-6), les plus-values immobilières, certains intérêts et primes d'épargne, l'assurance-vie et les rentes viagères. Le levier ne pilote que la fraction taxée au taux général (dividendes, intérêts, plus-values mobilières) ; la fraction restée à 9,2 % est supposée fixe."
+    },
+    "description": "Taux de CSG sur les revenus du patrimoine et de placement (dividendes, intérêts, plus-values).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.csg"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne recettes.csg (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Estimation de l'auteur. Le Sénat (Mecss) chiffre un point de CSG à 1,9 Md€ sur l'ensemble des revenus du patrimoine (0,8) et de placement (1,1), mais avant la scission de taux de la LFSS 2026. L'assurance-vie et les revenus fonciers, restés à 9,2 %, pèsent lourd dans cette assiette : on suppose qu'environ la moitié seulement suit le taux général, soit ≈ 1,0 Md€ par point.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.0005,
+        "unite_effet": "points de score 0-1 par point de taux",
+        "forme": "choc",
+        "delai_mois": 3,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse (v1 : 0,05 point 0-100) : la taxation du capital est plutôt bien acceptée ; réaction à l'annonce."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.002,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 1 Md€ sur des revenus du capital concentrés : ≈ −0,13 % du revenu disponible des cadres, −0,1 % pour retraités et indépendants (ménages ≈ 1 700 Md€ de revenu disponible). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "elasticite": -0.0015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 1 Md€ sur des revenus du capital concentrés : ≈ −0,13 % du revenu disponible des cadres, −0,1 % pour retraités et indépendants (ménages ≈ 1 700 Md€ de revenu disponible). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.0015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 1 Md€ sur des revenus du capital concentrés : ≈ −0,13 % du revenu disponible des cadres, −0,1 % pour retraités et indépendants (ménages ≈ 1 700 Md€ de revenu disponible). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "capital.pfu_part_ir",
+    "label": "Flat tax (PFU) – part impôt sur le revenu",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 0,
+    "max": 45,
+    "valeur_initiale": {
+      "value": 12.8,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2613",
+        "title": "Service-public.fr – Revenus d'épargne et de placements (PFU)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "PFU = 12,8 % d'impôt sur le revenu + prélèvements sociaux (18,6 % sur les revenus 2026, soit un taux global de 31,4 % ; 30 % pour les revenus 2025). Le levier ne porte que sur la part IR ; la part sociale est pilotée par csg.taux_capital."
+    },
+    "description": "Part impôt sur le revenu du prélèvement forfaitaire unique sur les revenus mobiliers (dividendes, intérêts, plus-values).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.ir"
+        },
+        "elasticite": 1.1,
+        "unite_effet": "Md€/an sur la ligne recettes.ir (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Estimation de l'auteur, sans chiffrage direct dans la source. Estimation : on applique à la part IR l'assiette des revenus de placement implicite dans le chiffrage Sénat/Mecss d'un point de CSG sur les revenus de placement (1,1 Md€), à comportements inchangés. Les hausses de 2013 et la baisse de 2018 ont montré une forte élasticité des dividendes distribués : le rendement réel serait plus faible.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.002,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 1,1 Md€ sur des revenus du capital concentrés : ≈ −0,13 % du revenu disponible des cadres, −0,1 % pour retraités et indépendants. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "elasticite": -0.0015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 1,1 Md€ sur des revenus du capital concentrés : ≈ −0,13 % du revenu disponible des cadres, −0,1 % pour retraités et indépendants. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.0015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point ≈ 1,1 Md€ sur des revenus du capital concentrés : ≈ −0,13 % du revenu disponible des cadres, −0,1 % pour retraités et indépendants. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "cotisations.patronales",
+    "label": "Cotisations patronales – variation du taux",
+    "categorie": "fiscalite",
+    "unit": "points de taux (écart au barème 2026)",
+    "min": -10,
+    "max": 10,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "points (écart au barème)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.tresor.economie.gouv.fr/Articles/284b121f-b187-4280-b327-05f18064c3fa/files/1d1d1848-48bb-40a9-a14f-585b8072e716",
+        "title": "Salaire minimum interprofessionnel de croissance – Rapport du Groupe d'experts (25 novembre 2025)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = barème et allègements généraux en vigueur au 1er janvier 2026 (réforme du décret du 4 septembre 2025 applicable au 1er janvier 2026, sortie à 3 Smic ; allègements généraux ≈ 75 Md€/an selon le Groupe d'experts Smic)."
+    },
+    "description": "Variation uniforme du taux de cotisation patronale déplafonnée (coût du travail).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.cotisations_sociales"
+        },
+        "elasticite": 6.2,
+        "unite_effet": "Md€/an sur la ligne recettes.cotisations_sociales (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Cour des comptes (rapport de février 2025 sur les retraites), repris par le Sénat : un point de cotisation patronale déplafonnée rapporte 6,2 Md€.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "chomage_bit"
+        },
+        "elasticite": 0.25,
+        "unite_effet": "points de % de taux de chômage BIT par point de taux",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 30,
+        "hypothese": true,
+        "justification": "Effet coût du travail (offre) seul. Mésange 2017, variante cotisations employeurs : −1,21 pt de chômage à 3 ans pour 1 pt de PIB. La part demande (≈ 0,33 % de PIB × Okun 0,45 ≈ 0,15 pt) est appliquée par le moteur ; reste ≈ 1,06 pt par point de PIB, soit 0,3 (v1) × 1,06/1,21 ≈ 0,25 pt par point de taux. Montée sur 30 mois (horizon 3 ans).",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "elasticite": -0.15,
+        "unite_effet": "% du niveau du PIB en volume (effet d'offre, terme O du moteur) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 36,
+        "hypothese": true,
+        "justification": "Hypothèse : l'emploi perdu (≈ 0,25 % de l'emploi) réduit le niveau de PIB d'environ 0,15 % (élasticité de la production à l'emploi ≈ 0,6), écart durable atteint en 36 mois. Interaction : le moteur applique Okun à toute croissance, effets d'offre compris ; cet écart ajoute donc ≈ +0,07 pt de chômage à l'effet direct de +0,25 (surestimation d'environ un quart), à corriger côté coefficients en excluant O du ḡ d'Okun. Effet conservé car le moteur n'a pas de canal chômage → PIB : le retirer effacerait la perte de production."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0744,
+        "unite_effet": "% du niveau de l'IPC par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante cotisations employeurs (baisse, signe inversé) : prix de la consommation +0.36 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 6.20 Md€ par unité. Report du coût sur les prix (effet de coût, non de demande). Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de demande de la v1 supprimé (multiplicateur du moteur) ; chômage ramené à la seule composante coût du travail."
+  },
+  {
+    "id": "travail.exoneration_heures_sup",
+    "label": "Exonération des heures supplémentaires – part maintenue",
+    "categorie": "fiscalite",
+    "unit": "% de l'exonération salariale actuelle",
+    "min": 0,
+    "max": 150,
+    "valeur_initiale": {
+      "value": 100,
+      "unit": "% de la niche actuelle",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+        "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Convention : 100 = exonération salariale de cotisations sur les heures supplémentaires telle qu'en vigueur (niche évaluée à 2,3 Md€ en 2024 par le Sénat, rapport r24-901, d'après l'annexe au Placss ; non compensée, art. 7 de la LFSS 2019)."
+    },
+    "description": "Ampleur de l'exonération de cotisations salariales sur les heures supplémentaires (0 = suppression).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.cotisations_sociales"
+        },
+        "elasticite": -0.023,
+        "unite_effet": "Md€/an sur la ligne recettes.cotisations_sociales (APU, positif = hausse de la ligne) par % de l'exonération maintenu",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Niche évaluée à 2,3 Md€ en 2024 (Sénat, r24-901) : chaque point de pourcentage de la niche maintenu coûte 0,023 Md€. Exonération non compensée : manque à gagner porté sur les cotisations sociales des ASSO.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "cadres",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "patrimoine.ifi_bareme",
+    "label": "IFI – variation du barème",
+    "categorie": "fiscalite",
+    "unit": "% (variation de l'impôt dû)",
+    "min": -100,
+    "max": 300,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "% (écart au barème)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F138",
+        "title": "Service-public.fr – Impôt sur la fortune immobilière (IFI)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = barème IFI 2026 (0,5 % à 1,5 % de 800 000 € à plus de 10 M€). +100 double l'impôt ; un retour vers un ISF élargi aux actifs financiers n'est pas modélisé par ce levier."
+    },
+    "description": "Variation proportionnelle de l'impôt sur la fortune immobilière.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.impots_patrimoine"
+        },
+        "elasticite": 0.028,
+        "unite_effet": "Md€/an sur la ligne recettes.impots_patrimoine (APU, positif = hausse de la ligne) par % de variation de l'impôt dû",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Base budget.json : IFI 2025 = 2,71 Md€ (Insee) × 1,0331 ≈ 2,80 Md€ en 2026 ; 1 % ≈ 0,028 Md€ en statique. Le PLF 2026 prévoyait 3 095 M€ (non revérifié, PDF non lisible en texte) ; la base budget.json est retenue par cohérence.",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.0001,
+        "unite_effet": "points de score 0-1 par % de variation de l'impôt dû",
+        "forme": "choc",
+        "delai_mois": 3,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse (v1 : 0,01 point 0-100) : +1 point de popularité pour un doublement ; réaction à l'annonce."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "patrimoine.ifi_seuil",
+    "label": "IFI – seuil d'assujettissement",
+    "categorie": "fiscalite",
+    "unit": "M€ de patrimoine immobilier net taxable",
+    "min": 0.5,
+    "max": 5,
+    "valeur_initiale": {
+      "value": 1.3,
+      "unit": "M€",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F138",
+        "title": "Service-public.fr – Impôt sur la fortune immobilière (IFI)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Assujettissement au-delà de 1 300 000 € au 1er janvier 2026 ; imposition dès 800 000 € une fois assujetti."
+    },
+    "description": "Seuil de patrimoine immobilier net taxable à partir duquel l'IFI est dû.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.impots_patrimoine"
+        },
+        "elasticite": -0.4,
+        "unite_effet": "Md€/an sur la ligne recettes.impots_patrimoine (APU, positif = hausse de la ligne) par M€ de seuil",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : relever le seuil de 1 M€ exonérerait une large part des redevables (recettes IFI totales 3,1 Md€ en 2026) ; on retient 0,4 Md€ de moindres recettes par M€ de hausse du seuil, et symétriquement pour une baisse (élargissement aux patrimoines moyens-supérieurs).",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "cadres",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "energie.accise_gazole",
+    "label": "Accise sur le gazole (ex-TICPE)",
+    "categorie": "energie",
+    "unit": "€/MWh",
+    "min": 0,
+    "max": 120,
+    "valeur_initiale": {
+      "value": 60.75,
+      "unit": "€/MWh",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000044595989/LEGISCTA000044598431/2026-01-01",
+        "title": "Légifrance – Code des impositions sur les biens et services, art. L312-35 (version en vigueur du 01/01/2026 au 01/03/2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Tarif normal de la catégorie fiscale « gazoles » à l'art. L312-35 du CIBS (« tarif normal à compter de 2022 », exprimé en euros par mégawattheure), dans la version en vigueur du 1er janvier au 1er mars 2026. L'unité est le MWh et non l'hectolitre ; converti avec un PCI d'environ 9,8 kWh/L, cela fait environ 59 €/hL (conversion approximative de l'auteur)."
+    },
+    "description": "Tarif normal de l'accise sur les gazoles (CIBS, art. L312-35), en €/MWh. Effet direct sur le prix à la pompe et sur le pouvoir d'achat des ménages périurbains et ruraux.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.ticpe"
+        },
+        "elasticite": 0.31,
+        "unite_effet": "Md€/an sur la ligne recettes.ticpe (APU, positif = hausse de la ligne) par €/MWh",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Estimation de l'auteur : 32 millions de m³ de gazole livrés en 2025 (Ufip, via Connaissance des énergies) ≈ 310 TWh (PCI ≈ 9,8 kWh/L) ; 1 €/MWh ≈ 0,31 Md€ d'accise, avant baisse des volumes.",
+        "source": {
+          "url": "https://www.connaissancedesenergies.org/afp/la-consommation-francaise-de-carburants-en-baisse-en-2025-le-diesel-en-recul-mais-toujours-dominant-260115",
+          "title": "Connaissance des Énergies (AFP/Ufip) – La consommation française de carburants en baisse en 2025",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.tva"
+        },
+        "elasticite": 0.03,
+        "unite_effet": "Md€/an sur la ligne recettes.tva (APU, positif = hausse de la ligne) par €/MWh",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "TVA sur le supplément d'accise pour la seule part payée par les ménages (les entreprises récupèrent la TVA) : ≈ 0,03 Md€ par €/MWh (v1 : 0,34 Md€ au total accise + TVA).",
+        "source": {
+          "url": "https://www.connaissancedesenergies.org/afp/la-consommation-francaise-de-carburants-en-baisse-en-2025-le-diesel-en-recul-mais-toujours-dominant-260115",
+          "title": "Connaissance des Énergies (AFP/Ufip) – La consommation française de carburants en baisse en 2025",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0186,
+        "unite_effet": "% du niveau de l'IPC par €/MWh",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante taxe carbone (hausse) : prix de la consommation +1.64 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 0,34 Md€ par €/MWh. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": 0.003,
+        "unite_effet": "points de score 0-1 par €/MWh",
+        "forme": "choc",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "duree_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse calibrée qualitativement sur le mouvement des gilets jaunes (2018), déclenché par la hausse de la fiscalité des carburants : forte sensibilité de la tension sociale. v1 : 0,3 point 0-100 par €/MWh. Réaction à l'annonce, 12 mois."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "energie.accise_electricite",
+    "label": "Accise sur l'électricité (ménages)",
+    "categorie": "energie",
+    "unit": "€/MWh",
+    "min": 0,
+    "max": 60,
+    "valeur_initiale": {
+      "value": 29.98,
+      "unit": "€/MWh",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.cre.fr/fileadmin/Documents/Communiques_de_presse/2026/260120_CP_CRE_TRVE_Fev26.pdf",
+        "title": "CRE – Communiqué du 20 janvier 2026 sur les TRVE au 1er février 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Tarif ménages appliqué au 1er janvier 2026 (29,98 €/MWh). Le communiqué de la CRE du 20 janvier 2026 l'annonce à 30,85 €/MWh au 1er février 2026 dans le cadre de sa proposition tarifaire. La valeur de février n'est pas confirmée ici par l'arrêté."
+    },
+    "description": "Tarif de l'accise sur l'électricité pour les ménages et assimilés.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.autres"
+        },
+        "elasticite": 0.185,
+        "unite_effet": "Md€/an sur la ligne recettes.autres (APU, positif = hausse de la ligne) par €/MWh",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Estimation de l'auteur : fraction électricité de l'accise prévue à 5 546 M€ bruts en 2026 (Voies et moyens) / tarif ménages ≈ 30 €/MWh ≈ 0,185 Md€ par €/MWh, probablement surestimé (tarifs réduits des entreprises). Ligne recettes.autres : budget.json ne range sous recettes.ticpe que les accises sur les produits énergétiques ; à basculer sur ticpe si le lot budget y inclut l'électricité.",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.tva"
+        },
+        "elasticite": 0.037,
+        "unite_effet": "Md€/an sur la ligne recettes.tva (APU, positif = hausse de la ligne) par €/MWh",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "TVA à 20 % sur le supplément d'accise.",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0121,
+        "unite_effet": "% du niveau de l'IPC par €/MWh",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Mésange 2017, variante taxe carbone (hausse), utilisée comme proxy de la fiscalité énergétique : prix de la consommation +1.64 % à 1 an pour 1 pt de PIB ; mis à l'échelle de 0.22 Md€ par unité. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/2017/05/12/le-modele-macroeconometrique-mesange-reestimation-et-nouveautes",
+          "title": "DG Trésor / Insee, Cahiers de la DG Trésor n° 2017-04 – Le modèle macroéconométrique Mésange : réestimation et nouveautés (variantes, partie 4)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "chomeurs_inactifs",
+        "direction": -1,
+        "intensite": "moyenne"
+      }
+    ],
+    "note": "Effets croissance et chômage de la v1 (variantes Mésange) supprimés : ils reflétaient l'effet de demande, désormais calculé par le moteur via les multiplicateurs appliqués aux lignes budgétaires (puis Okun pour le chômage)."
+  },
+  {
+    "id": "energie.trve",
+    "label": "Tarif réglementé de l'électricité (facture moyenne)",
+    "categorie": "energie",
+    "unit": "€ TTC/an pour 4,5 MWh",
+    "min": 600,
+    "max": 2000,
+    "valeur_initiale": {
+      "value": 1051,
+      "unit": "€ TTC/an",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.cre.fr/fileadmin/Documents/Communiques_de_presse/2026/260120_CP_CRE_TRVE_Fev26.pdf",
+        "title": "CRE – Communiqué du 20 janvier 2026 sur les TRVE au 1er février 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Facture annuelle moyenne au TRVE pour 4,5 MWh au 1er janvier 2026 (1 051 € TTC) ; 19,75 millions de clients résidentiels au TRVE (30 septembre 2025). La CRE proposait de la ramener à 1 042 € au 1er février 2026 (proposition transmise au CSE, arrêté tarifaire non vérifié ici)."
+    },
+    "description": "Niveau du tarif réglementé de vente de l'électricité, exprimé par la facture annuelle moyenne d'un ménage.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.0025,
+        "unite_effet": "% du niveau de l'IPC par € de facture annuelle",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse de cohérence avec le levier accise_electricite : +1 €/MWh (≈ +0,45 % TTC) y donne 0,0121 pt d'inflation, ce qui implique un poids de l'électricité dans l'IPC d'environ 2,5 à 3 %. +1 € sur une facture de 1 051 € (+0,095 %) × 2,7 % ≈ 0,0025 pt. Le poids exact de l'électricité dans l'IPC (pondérations Insee) reste à sourcer. Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau."
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": -0.0001,
+        "unite_effet": "points de score 0-1 par € de facture annuelle",
+        "forme": "choc",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse (v1 : −0,01 point 0-100) : +100 € de facture moyenne ≈ −1 point de popularité ; réaction à l'annonce."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "chomeurs_inactifs",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Pas d'effet budgétaire direct modélisé (TVA sur la facture et dividendes d'EDF négligés)."
+  },
+  {
+    "id": "social.rsa_montant",
+    "label": "RSA – montant forfaitaire (personne seule)",
+    "categorie": "social",
+    "unit": "€/mois",
+    "min": 400,
+    "max": 1200,
+    "valeur_initiale": {
+      "value": 646.52,
+      "unit": "€/mois",
+      "date": "2025-04",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000051393086",
+        "title": "Légifrance – Décret n° 2025-293 du 29 mars 2025 portant revalorisation du montant forfaitaire du revenu de solidarité active",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Décret n° 2025-293, art. 1 : montant forfaitaire fixé à 646,52 € à compter du 1er avril 2025 (personne seule), en vigueur jusqu'au 31 mars 2026."
+    },
+    "description": "Montant forfaitaire du revenu de solidarité active pour une personne seule sans enfant (barème proportionnel pour les autres foyers).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": 0.03,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : environ 2 millions de foyers allocataires, avec un montant moyen proportionnel au forfaitaire ; +1 €/mois ≈ +0,03 Md€/an (12 mois × ~2,4 millions d'équivalents personne seule, à affiner avec les données Drees/Cnaf)."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "taux_pauvrete"
+        },
+        "elasticite": -0.004,
+        "unite_effet": "points de % de taux de pauvreté monétaire par €/mois",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : le RSA reste très inférieur au seuil de pauvreté ; une hausse de 50 €/mois réduirait le taux de pauvreté d'environ 0,2 point."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "chomeurs_inactifs"
+        },
+        "elasticite": 0.0006,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,15 % du RSA ; RSA ≈ 25 % du revenu des chômeurs et inactifs (≈ +0,04 %), moins chez les jeunes (25 ans et plus). Prest (indexation) ne porte pas ce levier. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "etudiants_jeunes"
+        },
+        "elasticite": 0.0002,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,15 % du RSA ; RSA ≈ 25 % du revenu des chômeurs et inactifs (≈ +0,04 %), moins chez les jeunes (25 ans et plus). Prest (indexation) ne porte pas ce levier. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "chomeurs_inactifs",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "social.allocations_familiales",
+    "label": "Allocations familiales – montant de base (2 enfants)",
+    "categorie": "social",
+    "unit": "€/mois",
+    "min": 0,
+    "max": 400,
+    "valeur_initiale": {
+      "value": 151.04,
+      "unit": "€/mois",
+      "date": "2025-04",
+      "source": {
+        "url": "https://www.moneyvox.fr/votre-argent/actualites/102505/caf-vous-touchez-les-allocations-familiales-voici-tous-les-nouveaux-montants-a-partir-du-1er-avril",
+        "title": "Moneyvox – Allocations familiales : les nouveaux montants à partir du 1er avril 2025",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Montant de base pour 2 enfants dans la tranche de ressources la plus basse, du 1er avril 2025 au 31 mars 2026 (revalorisation de 1,7 %). Barème proportionnel pour les autres configurations."
+    },
+    "description": "Montant de base des allocations familiales (modulé selon les ressources depuis 2015).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": 0.065,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse et calcul : le Sénat (Mecss) chiffre à 0,4 Md€ une indexation inférieure d'un point de l'ensemble des prestations de la branche famille. On suppose que les allocations familiales en représentent environ un quart, soit ≈ 0,1 Md€ pour 1 %, et 1 % du montant de référence vaut 1,51 €. D'où ≈ 0,1 / 1,51 ≈ 0,065 Md€ par €/mois. À remplacer par la dépense AF annuelle (Cnaf) divisée par 151,04 €.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "elasticite": 0.00015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,66 % du montant (2 enfants) ; allocations ≈ 1,5 % du revenu des ouvriers et employés, 1 % des fonctionnaires, 0,5 % des cadres (modulation). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "fonctionnaires"
+        },
+        "elasticite": 0.0001,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,66 % du montant (2 enfants) ; allocations ≈ 1,5 % du revenu des ouvriers et employés, 1 % des fonctionnaires, 0,5 % des cadres (modulation). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": 5e-05,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,66 % du montant (2 enfants) ; allocations ≈ 1,5 % du revenu des ouvriers et employés, 1 % des fonctionnaires, 0,5 % des cadres (modulation). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "cadres",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "social.apl_bareme",
+    "label": "Aides au logement (APL) – variation du barème",
+    "categorie": "social",
+    "unit": "% (écart au barème en vigueur)",
+    "min": -30,
+    "max": 30,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "% (écart au barème)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12006",
+        "title": "Service-public.fr – Aide personnalisée au logement (APL)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = barème des aides personnelles au logement en vigueur au 1er janvier 2026 (recalcul annuel au 1er janvier sur le loyer de juillet)."
+    },
+    "description": "Variation proportionnelle des aides personnelles au logement (APL, ALF, ALS).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": 0.15,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par % de variation du barème",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : dépense d'aides personnelles au logement de l'ordre de 15 Md€/an (ordre de grandeur à confirmer dans les comptes du logement) ; 1 % ≈ 0,15 Md€."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "taux_pauvrete"
+        },
+        "elasticite": -0.03,
+        "unite_effet": "points de % de taux de pauvreté monétaire par % de variation du barème",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : aides très ciblées sur les bas revenus ; une hausse de 10 % réduirait le taux de pauvreté d'environ 0,3 point."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "etudiants_jeunes"
+        },
+        "elasticite": 0.0022,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % d'écart au barème",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. APL ≈ 15 % du revenu des étudiants et jeunes, 10 % des chômeurs et inactifs, 2 % des ouvriers et employés : +1 % d'APL ≈ +0,15 / +0,10 / +0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "chomeurs_inactifs"
+        },
+        "elasticite": 0.0015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % d'écart au barème",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. APL ≈ 15 % du revenu des étudiants et jeunes, 10 % des chômeurs et inactifs, 2 % des ouvriers et employés : +1 % d'APL ≈ +0,15 / +0,10 / +0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "elasticite": 0.0003,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % d'écart au barème",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. APL ≈ 15 % du revenu des étudiants et jeunes, 10 % des chômeurs et inactifs, 2 % des ouvriers et employés : +1 % d'APL ≈ +0,15 / +0,10 / +0,02 % de revenu disponible. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "chomeurs_inactifs",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "moyenne"
+      }
+    ]
+  },
+  {
+    "id": "social.aspa_montant",
+    "label": "Minimum vieillesse (ASPA) – montant personne seule",
+    "categorie": "social",
+    "unit": "€/mois",
+    "min": 700,
+    "max": 1600,
+    "valeur_initiale": {
+      "value": 1043.59,
+      "unit": "€/mois",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F16871",
+        "title": "Service-public.fr – Allocation de solidarité aux personnes âgées (Aspa)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Montant maximal pour une personne seule depuis le 1er janvier 2026 (12 523,14 €/an)."
+    },
+    "description": "Montant maximal de l'allocation de solidarité aux personnes âgées.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.retraites"
+        },
+        "elasticite": 0.008,
+        "unite_effet": "Md€/an sur la ligne depenses.retraites (APU, positif = hausse de la ligne) par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : environ 700 000 allocataires ; +1 €/mois ≈ 0,008 Md€/an. Ligne depenses.retraites : l'Aspa relève de la fonction COFOG 10.2 (vieillesse), rangée dans ce poste par budget.json."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "taux_pauvrete"
+        },
+        "elasticite": -0.001,
+        "unite_effet": "points de % de taux de pauvreté monétaire par €/mois",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : l'ASPA est proche du seuil de pauvreté ; +100 €/mois réduirait le taux de pauvreté d'environ 0,1 point."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "moyenne"
+      }
+    ]
+  },
+  {
+    "id": "retraite.age_legal",
+    "label": "Âge légal de départ à la retraite",
+    "categorie": "retraites",
+    "unit": "ans",
+    "min": 60,
+    "max": 67,
+    "valeur_initiale": {
+      "value": 62.75,
+      "unit": "ans",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14043",
+        "title": "Service-public.fr – Âge légal de départ à la retraite",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "62 ans et 9 mois pour les assurés nés du 1er janvier 1963 au 31 mars 1965. L'art. 105 de la LFSS 2026 (loi n° 2025-1403) réécrit le calendrier de l'art. L161-17-2 CSS : 63 ans pour les assurés nés d'avril à décembre 1965, 63 ans et 3 mois en 1966, 63 ans et 6 mois en 1967, 63 ans et 9 mois en 1968. Il s'applique aux pensions prenant effet à compter du 1er septembre 2026 et ne fixe pas de date de fin."
+    },
+    "description": "Âge minimal d'ouverture des droits à la retraite (régime général et fonction publique).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.retraites"
+        },
+        "elasticite": -3.5,
+        "unite_effet": "Md€/an sur la ligne depenses.retraites (APU, positif = hausse de la ligne) par année d'âge",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 45,
+        "hypothese": true,
+        "justification": "Cour des comptes (février 2025), reprise par le Sénat : reculer l'âge d'ouverture des droits d'un an (64 → 65 ans, générations 1968-1972) améliore en 2035 le solde des régimes obligatoires de base de 4,7 Md€ (euros 2024), dont 3,5 Md€ de moindres dépenses. Solde quasi statique (les 7,1 Md€ de recettes induites par l'emploi sont portés par l'effet croissance ci-dessous). Montée en charge linéaire d3/r45 (≈ 20 % à 12 mois, 100 % à 48 mois) (un trimestre par génération), remplaçant les 4 tranches de la v1. Montants en euros constants 2024 à l'horizon 2035, appliqués comme effet plein à 48 mois.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.cotisations_sociales"
+        },
+        "elasticite": 1.2,
+        "unite_effet": "Md€/an sur la ligne recettes.cotisations_sociales (APU, positif = hausse de la ligne) par année d'âge",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 45,
+        "hypothese": true,
+        "justification": "Cour des comptes (février 2025), reprise par le Sénat : reculer l'âge d'ouverture des droits d'un an (64 → 65 ans, générations 1968-1972) améliore en 2035 le solde des régimes obligatoires de base de 4,7 Md€ (euros 2024), dont 1,2 Md€ de recettes (cotisations des assurés maintenus en activité). Même montée en charge. Montants en euros constants 2024 à l'horizon 2035, appliqués comme effet plein à 48 mois.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "elasticite": 0.37,
+        "unite_effet": "% du niveau du PIB en volume (effet d'offre, terme O du moteur) par année d'âge",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 45,
+        "hypothese": true,
+        "justification": "Effet d'offre de travail des seniors. Cour des comptes (tableau repris par le Sénat, r24-901) : +7,1 Md€ de recettes APU par an d'âge, dont 1,2 Md€ de cotisations des régimes de base déjà portées par l'effet recettes.cotisations_sociales de ce levier. Restent 5,9 Md€ de recettes induites par l'emploi ; à un taux de recettes publiques de 52,3 % du PIB, cela suppose ≈ 11,3 Md€ de PIB, soit ≈ 0,37 % du PIB 2026 (3 061 Md€). Écart de niveau durable ; montée d3/r45 (≈ 20 % à 12 mois, 100 % à 48 mois). Montants Cour des comptes en euros constants 2024 à l'horizon 2035 (générations 1968-1972), appliqués ici comme effet plein à 48 mois depuis 62,75 ans : approximation.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "chomage_bit"
+        },
+        "elasticite": 0.1,
+        "unite_effet": "points de % de taux de chômage BIT par année d'âge",
+        "forme": "choc",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "duree_mois": 36,
+        "hypothese": true,
+        "justification": "Hypothèse : le surcroît d'offre de travail des seniors maintenus en activité passe en partie par le chômage avant d'être absorbé (effet transitoire). Ce n'est pas contradictoire avec l'effet sur le déficit, qui ne retient que le solde Robss, sans les recettes induites par l'emploi. Transitoire : choc de 36 mois."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": 0.06,
+        "unite_effet": "points de score 0-1 par année d'âge",
+        "forme": "choc",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "duree_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse calibrée sur la mobilisation contre la réforme de 2023 (recul de 2 ans) : forte hausse de la tension sociale. v1 : 6 points 0-100. Réaction à l'annonce, 12 mois."
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": -0.03,
+        "unite_effet": "points de score 0-1 par année d'âge",
+        "forme": "choc",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "duree_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse : réforme très impopulaire (2023) ; -3 points par année de recul. v1 : −3 points 0-100. Réaction à l'annonce, 12 mois."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "moyenne"
+      }
+    ],
+    "note": "Âge légal applicable à la génération qui part en 2026 (nés de 1963 à mars 1965 : 62 ans et 9 mois), relèvement gelé par la LFSS 2026 (art. 105, loi n° 2025-1403) ; le calendrier reprend ensuite (+3 mois par génération à partir des nés d'avril 1965). Une valeur de 63,75 signifie un an de plus que ce niveau gelé pour la génération partante. Les effets portent sur l'écart à 62,75. Interaction moteur : l'effet d'offre (+0,37 % de PIB) passe aussi par la loi d'Okun appliquée à la croissance totale, ce qui ferait baisser le chômage d'environ 0,17 pt, à l'inverse de l'effet transitoire codé (+0,1 pt). Un surcroît d'offre de travail ne devrait pas réduire le chômage : à corriger côté coefficients (exclure O du ḡ d'Okun)."
+  },
+  {
+    "id": "retraite.duree_cotisation",
+    "label": "Durée d'assurance requise pour le taux plein",
+    "categorie": "retraites",
+    "unit": "trimestres",
+    "min": 160,
+    "max": 180,
+    "valeur_initiale": {
+      "value": 170,
+      "unit": "trimestres",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F35063",
+        "title": "Service-public.fr – Durée d'assurance pour une retraite à taux plein (vérifié le 1er janvier 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "170 trimestres (42 ans et 6 mois) pour les générations 1963-1964 et début 1965. La LFSS 2026 (art. 105, loi n° 2025-1403) suspend la hausse prévue par la réforme de 2023 pour les pensions prenant effet à compter du 1er septembre 2026."
+    },
+    "description": "Nombre de trimestres d'assurance requis pour une pension à taux plein avant l'âge d'annulation de la décote.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.retraites"
+        },
+        "elasticite": -0.975,
+        "unite_effet": "Md€/an sur la ligne depenses.retraites (APU, positif = hausse de la ligne) par trimestre requis",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 45,
+        "hypothese": true,
+        "justification": "Cour des comptes (février 2025), reprise par le Sénat : porter la durée requise à 176 trimestres (+4) pour les générations 1969-1973 améliore en 2035 le solde des régimes de base de 5,2 Md€ (3,9 de moindres dépenses + 1,3 de recettes), soit par trimestre 0,975 Md€ de moindres dépenses. Montée en charge linéaire d3/r45 (≈ 20 % à 12 mois, 100 % à 48 mois) (remplace les 4 tranches de la v1). Montants en euros constants 2024 à l'horizon 2035, appliqués comme effet plein à 48 mois.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.cotisations_sociales"
+        },
+        "elasticite": 0.325,
+        "unite_effet": "Md€/an sur la ligne recettes.cotisations_sociales (APU, positif = hausse de la ligne) par trimestre requis",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 45,
+        "hypothese": true,
+        "justification": "Cour des comptes (février 2025), reprise par le Sénat : porter la durée requise à 176 trimestres (+4) pour les générations 1969-1973 améliore en 2035 le solde des régimes de base de 5,2 Md€ (3,9 de moindres dépenses + 1,3 de recettes), soit par trimestre 0,325 Md€ de recettes. Même montée en charge. Montants en euros constants 2024 à l'horizon 2035, appliqués comme effet plein à 48 mois.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "elasticite": 0.07,
+        "unite_effet": "% du niveau du PIB en volume (effet d'offre, terme O du moteur) par trimestre requis",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 45,
+        "hypothese": true,
+        "justification": "Effet d'offre de travail. Cour des comptes : 9,7 Md€ toutes APU contre 5,2 Md€ au solde des régimes de base pour 4 trimestres (les recettes des régimes de base étant déjà portées par l'effet recettes.cotisations_sociales), soit ≈ 1,1 Md€ de recettes induites par trimestre ; / 52,3 % ≈ 2,15 Md€ de PIB ≈ 0,07 % du PIB par trimestre, écart de niveau durable. Montée d3/r45. Montants en euros constants 2024, horizon 2035 (générations 1969-1973).",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": 0.01,
+        "unite_effet": "points de score 0-1 par trimestre requis",
+        "forme": "choc",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "duree_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse : mesure moins visible que l'âge légal. v1 : 1 point 0-100. Réaction à l'annonce, 12 mois."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "retraite.age_taux_plein",
+    "label": "Âge d'annulation de la décote (taux plein automatique)",
+    "categorie": "retraites",
+    "unit": "ans",
+    "min": 65,
+    "max": 70,
+    "valeur_initiale": {
+      "value": 67,
+      "unit": "ans",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F35063",
+        "title": "Service-public.fr – Durée d'assurance pour une retraite à taux plein (vérifié le 1er janvier 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux plein automatique à 67 ans quelle que soit la durée d'assurance (non modifié par les réformes de 2023 et 2025)."
+    },
+    "description": "Âge à partir duquel la pension est versée sans décote, quelle que soit la durée cotisée.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.retraites"
+        },
+        "elasticite": -1.5,
+        "unite_effet": "Md€/an sur la ligne depenses.retraites (APU, positif = hausse de la ligne) par année d'âge",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 36,
+        "hypothese": true,
+        "justification": "Hypothèse : concerne surtout les carrières incomplètes (femmes, carrières hachées) ; effet budgétaire nettement inférieur à celui de l'âge légal. Ordre de grandeur posé à −1,5 Md€/an en régime de croisière, montée de 12 à 48 mois."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": 0.02,
+        "unite_effet": "points de score 0-1 par année d'âge",
+        "forme": "choc",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "duree_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse (v1 : 2 points 0-100). Réaction à l'annonce, 12 mois."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "chomeurs_inactifs",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "retraite.indexation_pensions",
+    "label": "Revalorisation annuelle des pensions de base",
+    "categorie": "retraites",
+    "unit": "% au 1er janvier",
+    "min": -2,
+    "max": 6,
+    "valeur_initiale": {
+      "value": 0.9,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://placement.meilleurtaux.com/retraite/actualites/2025-decembre/retraites-base-0-9-confirme-1-janvier-2026.html",
+        "title": "Meilleurtaux – Retraites de base : +0,9 % confirmé au 1er janvier 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Revalorisation de 0,9 % au 1er janvier 2026 (règle de droit commun de l'art. L161-25 CSS : inflation hors tabac). La LFSS 2026 ne contient pas d'article dérogatoire : le gel envisagé dans le PLFSS 2026 n'a pas été retenu. Le taux vient d'une source secondaire, faute de source primaire consultée."
+    },
+    "description": "Taux de revalorisation des pensions de base. Toute revalorisation inférieure à l'inflation est une économie pérenne.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.retraites"
+        },
+        "elasticite": 2.9,
+        "unite_effet": "Md€/an sur la ligne depenses.retraites (APU, positif = hausse de la ligne) par point de revalorisation",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Cour des comptes (février 2025), reprise par le Sénat : une indexation inférieure d'un point à l'inflation économise 2,9 Md€, de façon pérenne si elle est maintenue en base.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.015,
+        "unite_effet": "points de score 0-1 par point de revalorisation",
+        "forme": "choc",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse : les retraités votent beaucoup ; un gel est très impopulaire (débat PLFSS 2026). v1 : 1,5 point 0-100. Réaction à l'annonce, 6 mois (l'effet durable passe par la satisfaction des retraités)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "forte"
+      }
+    ],
+    "note": "Pas d'effet group : le levier fixe la revalorisation de l'indice Pen, qui agit déjà sur la satisfaction des retraités via PA_g (w_pa = 0,015, coefficients.json satisfaction_poids_pouvoir_achat)."
+  },
+  {
+    "id": "travail.smic",
+    "label": "SMIC – montant brut mensuel (35 h)",
+    "categorie": "travail",
+    "unit": "€ brut/mois",
+    "min": 1400,
+    "max": 2600,
+    "valeur_initiale": {
+      "value": 1823.03,
+      "unit": "€ brut/mois",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053042520",
+        "title": "Légifrance – Décret n° 2025-1228 du 17 décembre 2025 portant relèvement du salaire minimum de croissance",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Décret n° 2025-1228, art. 1 : Smic horaire porté à 12,02 € (+1,18 %) au 1er janvier 2026, soit 1 823,03 € brut mensuels pour 35 h (métropole et DROM hors Mayotte ; 9,33 €/h à Mayotte). Revalorisé ensuite en cours d'année 2026."
+    },
+    "description": "Salaire minimum interprofessionnel de croissance. Sa hausse soutient le pouvoir d'achat des bas salaires mais renchérit le coût du travail peu qualifié.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "chomage_bit"
+        },
+        "elasticite": 0.0031,
+        "unite_effet": "points de % de taux de chômage BIT par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 12,
+        "hypothese": true,
+        "justification": "Calcul de l'auteur à partir du Groupe d'experts Smic (2025) : 2,2 millions de salariés du privé hors agriculture concernés par la revalorisation au 1er novembre 2024 (12,4 % du champ) ; élasticité de la demande de travail à son coût de -0,8 au Smic (fourchette -0,6 à -0,9). +1 % de Smic (18,2 €) ≈ -17 600 emplois, soit ≈ +0,057 pt de chômage pour ~31 millions d'actifs, donc ≈ 0,0031 pt par €. Borne basse : la diffusion de la hausse aux salaires un peu supérieurs au Smic (élasticité décroissante jusqu'à -0,1 à 2 Smic) n'est pas comptée. Effet coût du travail (offre), conservé.",
+        "source": {
+          "url": "https://www.tresor.economie.gouv.fr/Articles/284b121f-b187-4280-b327-05f18064c3fa/files/1d1d1848-48bb-40a9-a14f-585b8072e716",
+          "title": "Salaire minimum interprofessionnel de croissance – Rapport du Groupe d'experts (25 novembre 2025)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.cotisations_sociales"
+        },
+        "elasticite": -0.0247,
+        "unite_effet": "Md€/an sur la ligne recettes.cotisations_sociales (APU, positif = hausse de la ligne) par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse (décomposition du coût net v1 de ≈ 0,5 Md€ pour +1 % = 18,23 €) : hausse du coût des allègements généraux (≈ 75 Md€, concentrés autour du Smic) nette des cotisations sur des salaires plus élevés ≈ −0,45 Md€ pour +1 %, soit −0,0247 Md€ par €. Signe net négatif : la hausse d'assiette (+1 % sur la masse salariale au voisinage du Smic, quelques dixièmes de Md€ de cotisations brutes) est plus que compensée par la hausse du coût des allègements généraux, dégressifs jusqu'à 1,6 Smic et plus : la plupart des salaires concernés gardent le même salaire en multiples du Smic, mais ceux juste au-dessus perdent leur position relative et voient leurs allègements augmenter. Hypothèse non chiffrée sur source."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": -0.0055,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : baisse de la prime d'activité dans sa zone de dégressivité ≈ −0,1 Md€ pour +1 %. Net des trois lignes : +0,0274 Md€ de déficit par € (v1 : 0,03)."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "elasticite": 0.002,
+        "unite_effet": "% du niveau de l'IPC par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : diffusion partielle aux prix des services intensifs en main-d'œuvre (≈ 0,04 pt d'inflation pour +1 %). Écart durable de NIVEAU de l'indice des prix (forme niveau) : visible 12 mois dans le glissement annuel, sans retour en arrière du niveau."
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.0002,
+        "unite_effet": "points de score 0-1 par € brut/mois",
+        "forme": "choc",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse : un coup de pouce de 50 € rapporte environ 1 point. v1 : 0,02 point 0-100. Réaction à l'annonce."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.education"
+        },
+        "elasticite": 0.0036,
+        "unite_effet": "Md€/an sur la ligne depenses.education (APU, positif = hausse de la ligne) par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : salaires publics proches du Smic (indemnité différentielle, contractuels) ≈ +0,15 Md€ pour +1 % (0,0082 Md€ par €), ventilés selon la clé 44/35/21 des leviers fonction_publique.* (État-éducation / territoriale / hospitalière)."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.collectivites"
+        },
+        "elasticite": 0.0029,
+        "unite_effet": "Md€/an sur la ligne depenses.collectivites (APU, positif = hausse de la ligne) par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : salaires publics proches du Smic (indemnité différentielle, contractuels) ≈ +0,15 Md€ pour +1 % (0,0082 Md€ par €), ventilés selon la clé 44/35/21 des leviers fonction_publique.* (État-éducation / territoriale / hospitalière)."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.sante"
+        },
+        "elasticite": 0.0017,
+        "unite_effet": "Md€/an sur la ligne depenses.sante (APU, positif = hausse de la ligne) par € brut/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : salaires publics proches du Smic (indemnité différentielle, contractuels) ≈ +0,15 Md€ pour +1 % (0,0082 Md€ par €), ventilés selon la clé 44/35/21 des leviers fonction_publique.* (État-éducation / territoriale / hospitalière)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "travail.duree_legale",
+    "label": "Durée légale hebdomadaire du travail",
+    "categorie": "travail",
+    "unit": "heures/semaine",
+    "min": 32,
+    "max": 39,
+    "valeur_initiale": {
+      "value": 35,
+      "unit": "heures/semaine",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1911",
+        "title": "Service-public.fr – Durée légale du travail d'un salarié du privé",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "35 heures par semaine, soit 151,67 heures par mois et 1 607 heures par an."
+    },
+    "description": "Seuil de déclenchement des heures supplémentaires pour un salarié à temps plein.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "elasticite": 0.1,
+        "unite_effet": "% du niveau du PIB en volume (effet d'offre, terme O du moteur) par heure/semaine",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 36,
+        "hypothese": true,
+        "justification": "Hypothèse : allonger la durée légale sans hausse de salaire mensuel réduit le coût horaire du travail et augmente le volume d'heures ; effet modeste et très incertain (littérature partagée sur les 35 heures). +0,1 % de niveau de PIB par heure à 3 ans (v1), écart durable atteint en 36 mois."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "chomage_bit"
+        },
+        "elasticite": 0.03,
+        "unite_effet": "points de % de taux de chômage BIT par heure/semaine",
+        "forme": "choc",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "duree_mois": 24,
+        "hypothese": true,
+        "justification": "Hypothèse : effet transitoire de partage du travail à court terme."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": 0.03,
+        "unite_effet": "points de score 0-1 par heure/semaine",
+        "forme": "choc",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "duree_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse : remise en cause des 35 heures très conflictuelle avec les syndicats. v1 : 3 points 0-100. Réaction à l'annonce, 12 mois."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "forte"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "independants",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": -1,
+        "intensite": "moyenne"
+      }
+    ]
+  },
+  {
+    "id": "travail.chomage_duree_max",
+    "label": "Assurance chômage – durée maximale d'indemnisation (moins de 55 ans)",
+    "categorie": "travail",
+    "unit": "mois",
+    "min": 6,
+    "max": 36,
+    "valeur_initiale": {
+      "value": 18,
+      "unit": "mois",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.unedic.org/indemnisation/fiches-thematiques/duree-dindemnisation",
+        "title": "Unédic – Principales règles de l'indemnisation : durée d'indemnisation",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "548 jours (18 mois) pour les moins de 55 ans, 22,5 mois à 55-56 ans, 27 mois à 57 ans et plus ; coefficient de réduction de 0,75 appliqué depuis le 1er février 2023 (hors complément de fin de droits en conjoncture dégradée)."
+    },
+    "description": "Durée maximale de versement de l'allocation chômage pour les moins de 55 ans (les autres tranches d'âge suivent proportionnellement).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": 0.5,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par mois de durée maximale",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse : la réduction de 25 % des durées en 2023 (24 → 18 mois, soit -6 mois) visait plusieurs milliards d'euros d'économies annuelles pour l'Unédic. Avec ≈ 3 Md€ pour 6 mois, on retient ≈ 0,5 Md€ par mois de durée maximale. À recaler sur le chiffrage Unédic en régime de croisière. Ligne depenses.aides_sociales (COFOG 10.5 chômage). Montée sur 12 mois (seuls les nouveaux entrants sont concernés)."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "chomage_bit"
+        },
+        "elasticite": 0.02,
+        "unite_effet": "points de % de taux de chômage BIT par mois de durée maximale",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 12,
+        "hypothese": true,
+        "justification": "Hypothèse : la littérature (effet des durées potentielles d'indemnisation sur la durée du chômage) indique un effet positif mais modéré ; +0,02 pt par mois supplémentaire. Effet d'incitation (offre)."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": -0.002,
+        "unite_effet": "points de score 0-1 par mois de durée maximale",
+        "forme": "choc",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse : une réduction de la durée suscite l'opposition syndicale (-0,2 pt de tension par mois ajouté, +0,2 par mois retiré). v1 : −0,2 point 0-100. Réaction à l'annonce."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "chomeurs_inactifs"
+        },
+        "elasticite": 0.005,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par mois de durée maximale",
+        "forme": "niveau",
+        "delai_mois": 3,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 mois ≈ +0,5 Md€ d'allocations, ≈ +0,3 % du revenu des chômeurs et inactifs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "chomeurs_inactifs",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "fonction_publique.effectifs",
+    "label": "Effectifs de la fonction publique",
+    "categorie": "fonction_publique",
+    "unit": "milliers d'ETP (écart au schéma d'emplois 2026)",
+    "min": -150,
+    "max": 150,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "milliers d'ETP (écart)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = schémas d'emplois de la loi de finances pour 2026 (loi publiée au JO du 20 février 2026 ; au 1er janvier 2026, loi spéciale reconduisant les autorisations). Les trois versants sont agrégés. Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Créations (+) ou suppressions (-) de postes publics par rapport à la trajectoire prévue.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.education"
+        },
+        "elasticite": 0.026,
+        "unite_effet": "Md€/an sur la ligne depenses.education (APU, positif = hausse de la ligne) par millier d'ETP",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : coût complet moyen d'un ETP public d'environ 60 000 €/an, soit 0,06 Md€ par millier d'ETP. Le chiffre inclut les cotisations employeur, élevées pour les fonctionnaires de l'État (CAS Pensions). À sourcer via le rapport annuel DGAFP. Répartition par versant (FPE ≈ 44 %, FPT ≈ 35 %, FPH ≈ 21 % des effectifs, ordre de grandeur non vérifié) : État → depenses.education (premier employeur de l'État), territoriale → depenses.collectivites, hospitalière → depenses.sante. 0,06 × 44 %."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.collectivites"
+        },
+        "elasticite": 0.021,
+        "unite_effet": "Md€/an sur la ligne depenses.collectivites (APU, positif = hausse de la ligne) par millier d'ETP",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Même coût unitaire, part FPT (0,06 × 35 %). Répartition par versant (FPE ≈ 44 %, FPT ≈ 35 %, FPH ≈ 21 % des effectifs, ordre de grandeur non vérifié) : État → depenses.education (premier employeur de l'État), territoriale → depenses.collectivites, hospitalière → depenses.sante."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.sante"
+        },
+        "elasticite": 0.013,
+        "unite_effet": "Md€/an sur la ligne depenses.sante (APU, positif = hausse de la ligne) par millier d'ETP",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Même coût unitaire, part FPH (0,06 × 21 %). Répartition par versant (FPE ≈ 44 %, FPT ≈ 35 %, FPH ≈ 21 % des effectifs, ordre de grandeur non vérifié) : État → depenses.education (premier employeur de l'État), territoriale → depenses.collectivites, hospitalière → depenses.sante."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "chomage_bit"
+        },
+        "elasticite": -0.0032,
+        "unite_effet": "points de % de taux de chômage BIT par millier d'ETP",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 12,
+        "hypothese": true,
+        "justification": "Estimation : 1 000 emplois sur une population active d'environ 31 millions ≈ 0,003 pt de chômage, avant effet d'éviction. Effet direct d'embauche seulement ; l'effet d'entraînement passe par le multiplicateur du moteur."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "elasticite": -0.0002,
+        "unite_effet": "points de score 0-1 par millier d'ETP",
+        "forme": "choc",
+        "delai_mois": 3,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse : les suppressions de postes (signe négatif) dans l'éducation et la santé suscitent des mobilisations. v1 : −0,02 point 0-100. Réaction à l'annonce."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "fonction_publique.point_indice",
+    "label": "Valeur du point d'indice",
+    "categorie": "fonction_publique",
+    "unit": "€ brut annuels pour l'indice majoré 100",
+    "min": 5000,
+    "max": 7500,
+    "valeur_initiale": {
+      "value": 5907.34,
+      "unit": "€ brut/an (indice 100)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F461",
+        "title": "Service-public.fr – Traitement indiciaire du fonctionnaire (valeur du point)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "5 907,34 € depuis le 1er juillet 2023 (soit 4,92278 € brut mensuels par point) ; gelé depuis."
+    },
+    "description": "Valeur du point servant au calcul du traitement de base de tous les fonctionnaires.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.education"
+        },
+        "elasticite": 0.016,
+        "unite_effet": "Md€/an sur la ligne depenses.education (APU, positif = hausse de la ligne) par € de valeur annuelle du point",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : une hausse de 1 % du point coûterait environ 2,2 Md€ par an pour les trois versants (ordre de grandeur usuel du débat public, à confirmer) ; 1 % = 59,07 €, d'où ≈ 0,037 Md€ par € de valeur annuelle. Répartition par versant (FPE ≈ 44 %, FPT ≈ 35 %, FPH ≈ 21 % des effectifs, ordre de grandeur non vérifié) : État → depenses.education (premier employeur de l'État), territoriale → depenses.collectivites, hospitalière → depenses.sante. 0,037 × 44 %."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.collectivites"
+        },
+        "elasticite": 0.013,
+        "unite_effet": "Md€/an sur la ligne depenses.collectivites (APU, positif = hausse de la ligne) par € de valeur annuelle du point",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Part FPT (0,037 × 35 %). Répartition par versant (FPE ≈ 44 %, FPT ≈ 35 %, FPH ≈ 21 % des effectifs, ordre de grandeur non vérifié) : État → depenses.education (premier employeur de l'État), territoriale → depenses.collectivites, hospitalière → depenses.sante."
+      },
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.sante"
+        },
+        "elasticite": 0.008,
+        "unite_effet": "Md€/an sur la ligne depenses.sante (APU, positif = hausse de la ligne) par € de valeur annuelle du point",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Part FPH (0,037 × 21 %). Répartition par versant (FPE ≈ 44 %, FPT ≈ 35 %, FPH ≈ 21 % des effectifs, ordre de grandeur non vérifié) : État → depenses.education (premier employeur de l'État), territoriale → depenses.collectivites, hospitalière → depenses.sante."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "forte"
+      }
+    ],
+    "note": "Pas d'effet group : l'indice du point est le revenu Rev_g des fonctionnaires, qui agit déjà sur leur satisfaction via PA_g (w_pa = 0,015)."
+  },
+  {
+    "id": "depenses.retraites",
+    "label": "Dépenses – Retraites (dépense)",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+        "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (objectif de dépenses de la branche vieillesse 2026 : 310,4 Md€ (LFSS 2026, art. 112)). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Retraites (dépense) » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.retraites"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.retraites (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.retraites de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+          "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "forte"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "depenses.sante",
+    "label": "Dépenses – Santé (Ondam)",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+        "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (objectifs de dépenses de la LFSS 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Santé (Ondam) » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.sante"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.sante (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.sante de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+          "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "chomeurs_inactifs",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "depenses.education",
+    "label": "Dépenses – Éducation et recherche",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (crédits de la loi de finances pour 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU). Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Éducation et recherche » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.education"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.education (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.education de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+          "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "forte"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "depenses.defense",
+    "label": "Dépenses – Défense",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (crédits de la loi de finances pour 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU). Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Défense » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.defense"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.defense (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.defense de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+          "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "depenses.securite",
+    "label": "Dépenses – Sécurité intérieure",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (crédits de la loi de finances pour 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU). Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Sécurité intérieure » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.securite"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.securite (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.securite de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+          "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "depenses.justice",
+    "label": "Dépenses – Justice",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (crédits de la loi de finances pour 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU). Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Justice » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.justice"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.justice (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.justice de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+          "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "depenses.ecologie",
+    "label": "Dépenses – Écologie et transition énergétique",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (crédits de la loi de finances pour 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU). Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Écologie et transition énergétique » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.ecologie"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.ecologie (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.ecologie de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+          "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "agriculteurs",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste). La v1 donnait un effet croissance plus fort (0,044 et 0,035 contre 0,026), reflet de la part d'investissement public ; en phase 1 le moteur n'a qu'un multiplicateur de dépense unique (multiplicateur_investissement_public non utilisé) : différenciation perdue, à reprendre quand une ligne investissement existera."
+  },
+  {
+    "id": "depenses.collectivites",
+    "label": "Dépenses – Concours aux collectivités",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+        "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (concours financiers de l'État aux collectivités en loi de finances pour 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU). Les crédits par mission et le plafond des emplois figurent dans la seconde partie de la loi (art. 148 à 157 et états annexés)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Concours aux collectivités » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.collectivites"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.collectivites (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.collectivites de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053508155",
+          "title": "Légifrance – Loi n° 2026-103 du 19 février 2026 de finances pour 2026 (JORF n° 43 du 20 février 2026)",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste). La v1 donnait un effet croissance plus fort (0,044 et 0,035 contre 0,026), reflet de la part d'investissement public ; en phase 1 le moteur n'a qu'un multiplicateur de dépense unique (multiplicateur_investissement_public non utilisé) : différenciation perdue, à reprendre quand une ligne investissement existera."
+  },
+  {
+    "id": "depenses.aides_sociales",
+    "label": "Dépenses – Aides sociales et solidarité",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -40,
+    "max": 40,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+        "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = trajectoire de référence 2026 (prestations sociales des LFI et LFSS 2026). Le joueur fixe un écart annuel en Md€ courants ; le niveau absolu du poste figure dans gamedata/budget.json (périmètre APU)."
+    },
+    "description": "Écart annuel de dépense sur le poste « Aides sociales et solidarité » par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense supplémentaire non financée augmente la ligne depenses.aides_sociales de 1 Md€ (élasticité 1) (rétroactions via la croissance traitées par le moteur).",
+        "source": {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053226384",
+          "title": "Légifrance – Loi n° 2025-1403 du 30 décembre 2025 de financement de la sécurité sociale pour 2026",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "chomeurs_inactifs",
+        "direction": 1,
+        "intensite": "forte"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance de la v1 supprimé : pur effet de demande, appliqué par le moteur via le multiplicateur de la ligne (dépense courante, ciblée ou investissement selon le poste)."
+  },
+  {
+    "id": "fiscalite.cdhr",
+    "label": "Contribution différentielle sur les hauts revenus (CDHR)",
+    "categorie": "fiscalite",
+    "unit": "% du rendement inclus dans budget.json",
+    "min": 0,
+    "max": 300,
+    "valeur_initiale": {
+      "value": 100,
+      "unit": "% du rendement inclus dans budget.json",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Convention : 100 = CDHR reconduite à son rendement 2025 (≈ 0,4 Md€, × 1,0331 ≈ 0,41 Md€), montant compris dans recettes.ir de budget.json (impôt D.51, dans l'IRPP de l'Insee). Au 1er janvier 2026 (loi spéciale), la prorogation n'était pas votée ; la LFI 2026 la prolongera (+0,7 Md€ selon l'OFCE ; le PLF 2026 prévoyait 1,5 Md€). 0 = CDHR non reconduite."
+    },
+    "description": "Imposition minimale des très hauts revenus, distincte de la tranche à 45 % et de la CEHR. Le joueur module son rendement (taux ou seuil) en % du rendement prévu.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.ir"
+        },
+        "elasticite": 0.0041,
+        "unite_effet": "Md€/an sur la ligne recettes.ir (APU, positif = hausse de la ligne) par % du rendement inclus dans budget.json",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Base budget.json : ≈ 0,41 Md€ de CDHR comprise dans recettes.ir (note de la ligne) ; 1 % = 0,0041 Md€ (proportionnel). La cible reste recettes.ir, conformément à budget.json (la CDHR est un impôt sur le revenu D.51, pas un impôt sur le patrimoine). Repères : PLF 2026 1,5 Md€, OFCE +0,7 Md€.",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.00018,
+        "unite_effet": "points de score 0-1 par % du rendement prévu",
+        "forme": "choc",
+        "delai_mois": 3,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse : taxer les très hauts revenus est populaire dans l'opinion (débat fin 2025) ; effet faible. v1 : 0,005 point 0-100. Remis à l'échelle de la nouvelle unité (base 0,41 Md€ au lieu de 1,5 Md€)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "is.contribution_exceptionnelle",
+    "label": "Contribution exceptionnelle sur les bénéfices des grandes entreprises",
+    "categorie": "fiscalite",
+    "unit": "% du rendement prévu pour 2026",
+    "min": 0,
+    "max": 300,
+    "valeur_initiale": {
+      "value": 100,
+      "unit": "% du rendement prévu",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": true,
+      "note": "Convention : 100 = surtaxe d'IS des entreprises dont le chiffre d'affaires dépasse 1 Md€, prorogée pour un an à la moitié de son niveau de 2025 comme le prévoit le PLF 2026, soit 4 Md€ (8 Md€ en 2025). L'adoption dans la LFI 2026 n'a pas été vérifiée ici. 200 = retour au niveau de 2025."
+    },
+    "description": "Surtaxe temporaire de l'impôt sur les sociétés pour les très grandes entreprises (chiffre d'affaires > 1 Md€).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.is"
+        },
+        "elasticite": 0.04,
+        "unite_effet": "Md€/an sur la ligne recettes.is (APU, positif = hausse de la ligne) par % du rendement prévu",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Voies et moyens PLF 2026 : prorogation de la surtaxe pour 4 Md€ en 2026 ; 1 % du rendement = 0,04 Md€ (proportionnel).",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Effet croissance v1 (−0,0005 pt par point) supprimé : surtaxe temporaire, effet d'offre négligeable ; la demande passe par le multiplicateur du moteur."
+  },
+  {
+    "id": "regulation.taux_livret_a",
+    "label": "Taux du livret A",
+    "categorie": "regulation",
+    "unit": "%",
+    "min": 0,
+    "max": 6,
+    "valeur_initiale": {
+      "value": 1.7,
+      "unit": "%",
+      "date": "2025-08",
+      "source": {
+        "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000052009310",
+        "title": "Légifrance – Arrêté du 23 juillet 2025 relatif aux taux d'intérêt des produits d'épargne réglementée",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux de 1,7 % (art. 1, 1° de l'arrêté) pour la période du 1er août 2025 au 31 janvier 2026, donc en vigueur au 1er janvier 2026."
+    },
+    "description": "Taux de rémunération du livret A, fixé par arrêté du ministre de l'économie. Il conditionne le coût de la ressource du logement social (fonds d'épargne) et le rendement de l'épargne populaire.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "elasticite": 0.003,
+        "unite_effet": "points de score 0-1 par point de taux",
+        "forme": "choc",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "duree_mois": 6,
+        "hypothese": true,
+        "justification": "Hypothèse : produit d'épargne le plus répandu ; une hausse du taux est bien accueillie, une baisse critiquée. v1 : 0,3 point 0-100. Réaction à l'annonce."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "fiscalite.ttf",
+    "label": "Taxe sur les transactions financières",
+    "categorie": "fiscalite",
+    "unit": "%",
+    "min": 0,
+    "max": 1,
+    "valeur_initiale": {
+      "value": 0.4,
+      "unit": "%",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Taux relevé de 0,3 % à 0,4 % par la LFI 2025 ; recettes prévues à 2 630 M€ en 2026 en année pleine (Voies et moyens PLF 2026, ligne 1797). Montant non revérifié sur le PDF (illisible en texte) ; l'élasticité est calée sur budget.json."
+    },
+    "description": "Taxe sur les acquisitions d'actions de sociétés françaises cotées dont la capitalisation dépasse 1 Md€.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.impots_patrimoine"
+        },
+        "elasticite": 6.45,
+        "unite_effet": "Md€/an sur la ligne recettes.impots_patrimoine (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Base budget.json : TTF ≈ 2,5 Md€ en 2025 × 1,0331 ≈ 2,58 Md€ en 2026 au taux de 0,4 %, soit ≈ 6,45 Md€ par point en proportionnel (Voies et moyens PLF 2026 : 2 630 M€, chiffre non revérifié, PDF non lisible en texte). Hypothèse : assiette fixe ; une forte hausse déplacerait les transactions (rendement surestimé au-delà de quelques dixièmes de point). Ligne recettes.impots_patrimoine (budget.json : impots_patrimoine = IFI + TTF).",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "patrimoine.droits_succession",
+    "label": "Droits de succession",
+    "categorie": "fiscalite",
+    "unit": "% (variation des droits dus)",
+    "min": -100,
+    "max": 100,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "% (variation des droits dus)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+        "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = barème et abattements des droits de mutation à titre gratuit par décès au 1er janvier 2026 ; recettes prévues à 17,0 Md€ en 2026 (successions, ligne 1706 ; donations 4,4 Md€, non pilotées)."
+    },
+    "description": "Variation proportionnelle des droits de succession (barème ou abattements).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.droits_mutation"
+        },
+        "elasticite": 0.17,
+        "unite_effet": "Md€/an sur la ligne recettes.droits_mutation (APU, positif = hausse de la ligne) par % de variation des droits dus",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Voies et moyens PLF 2026 : successions 17,0 Md€ en 2026 ; 1 % ≈ 0,17 Md€ en statique. Délai : déclaration dans les 6 mois du décès. Ligne recettes.droits_mutation (droits de mutation à titre gratuit et onéreux). Chiffre de 17,0 Md€ non revérifié sur le PDF (illisible en texte) ; cohérent avec budget.json (DMTG 21,05 Md€ en 2025 ≈ successions 17 + donations 4,4).",
+        "source": {
+          "url": "https://www.assemblee-nationale.fr/dyn/contenu/visualisation/1087930/file/PLF%202026%20-%20V%26M%20TI%20-%20Evaluations%20des%20recettes.pdf",
+          "title": "Annexe au PLF 2026 – Évaluation des voies et moyens, tome 1 : recettes",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "elasticite": -0.00015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation des droits dus",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Les successions ne sont pas du revenu disponible : perte ressentie approchée par 1 % de 17 Md€ rapporté au revenu disponible des ménages (≈ 0,01 %). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.00015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation des droits dus",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Les successions ne sont pas du revenu disponible : perte ressentie approchée par 1 % de 17 Md€ rapporté au revenu disponible des ménages (≈ 0,01 %). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.00015,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation des droits dus",
+        "forme": "niveau",
+        "delai_mois": 6,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Les successions ne sont pas du revenu disponible : perte ressentie approchée par 1 % de 17 Md€ rapporté au revenu disponible des ménages (≈ 0,01 %). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ],
+    "note": "Mesure impopulaire dans les sondages, effet de popularité non chiffré faute de source : à traiter par le tag de la loi."
+  },
+  {
+    "id": "impots_locaux.taxe_fonciere",
+    "label": "Taxe foncière sur les propriétés bâties",
+    "categorie": "fiscalite",
+    "unit": "% (variation du produit)",
+    "min": -50,
+    "max": 50,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "% (variation du produit)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.impots.gouv.fr/dgfip-statistiques-en-2025-la-taxe-fonciere-progresse-de-24",
+        "title": "DGFiP Statistiques n° 46 – En 2025, la taxe foncière progresse de 2,4 % (mai 2026)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = produit 2026 tendanciel. Taux votés par les collectivités : le levier représente un cadrage national (revalorisation des valeurs locatives, plafonnement ou compensation des taux). Repère DGFiP : 55,1 Md€ en 2025, taxes annexes (dont TEOM) et frais de gestion compris ; la ligne recettes.impots_locaux de budget.json ne compte que la taxe foncière stricte (44,18 Md€ Insee 2025), la TEOM étant dans « autres »."
+    },
+    "description": "Variation du produit de la taxe foncière sur les propriétés bâties (propriétaires occupants et bailleurs, entreprises).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.impots_locaux"
+        },
+        "elasticite": 0.46,
+        "unite_effet": "Md€/an sur la ligne recettes.impots_locaux (APU, positif = hausse de la ligne) par % de variation du produit",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Base budget.json : taxe foncière 2025 = 44,18 Md€ (Insee) × 1,0331 ≈ 45,6 Md€ ; 1 % ≈ 0,46 Md€. Le chiffre DGFiP de 55,1 Md€ (TEOM et frais de gestion compris) n'est qu'un repère : la TEOM est rangée dans recettes.autres. Délai : avis d'imposition à l'automne.",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "elasticite": -0.0004,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation du produit",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Part ménages ≈ 60 % du produit : 1 % ≈ 0,27 Md€, ≈ −0,025 % du revenu disponible des retraités (forte part de propriétaires), −0,02 % pour cadres, indépendants et agriculteurs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.0003,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation du produit",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Part ménages ≈ 60 % du produit : 1 % ≈ 0,27 Md€, ≈ −0,025 % du revenu disponible des retraités (forte part de propriétaires), −0,02 % pour cadres, indépendants et agriculteurs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "elasticite": -0.0003,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation du produit",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Part ménages ≈ 60 % du produit : 1 % ≈ 0,27 Md€, ≈ −0,025 % du revenu disponible des retraités (forte part de propriétaires), −0,02 % pour cadres, indépendants et agriculteurs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "elasticite": -0.0003,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par % de variation du produit",
+        "forme": "niveau",
+        "delai_mois": 9,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. Part ménages ≈ 60 % du produit : 1 % ≈ 0,27 Md€, ≈ −0,025 % du revenu disponible des retraités (forte part de propriétaires), −0,02 % pour cadres, indépendants et agriculteurs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "retraites",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "independants",
+        "direction": -1,
+        "intensite": "faible"
+      },
+      {
+        "group": "agriculteurs",
+        "direction": -1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "cotisations.salariales",
+    "label": "Cotisations salariales",
+    "categorie": "fiscalite",
+    "unit": "points de taux (écart au barème 2026)",
+    "min": -5,
+    "max": 5,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "points de taux (écart au barème 2026)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+        "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = taux de cotisation salariale déplafonnée en vigueur au 1er janvier 2026."
+    },
+    "description": "Variation uniforme du taux de cotisation salariale déplafonnée (salaire net).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "recettes.cotisations_sociales"
+        },
+        "elasticite": 7.6,
+        "unite_effet": "Md€/an sur la ligne recettes.cotisations_sociales (APU, positif = hausse de la ligne) par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Cour des comptes (février 2025), reprise par le Sénat (r24-901, annexe IV) : un point de cotisation salariale déplafonnée rapporte 7,6 Md€. Effet de demande (baisse du salaire net) appliqué par le moteur via le multiplicateur des prélèvements.",
+        "source": {
+          "url": "https://www.senat.fr/rap/r24-901/r24-901_mono.html",
+          "title": "Sénat, rapport d'information n° 901 (2024-2025) sur la sécurité sociale – annexe IV : chiffrage des mesures",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de cotisation salariale déplafonnée (7,6 Md€, salariés du privé) ≈ −1,1 % du revenu disponible des salariés concernés. Fonctionnaires non comptés (régime propre). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "cadres"
+        },
+        "elasticite": -0.016,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par point de taux",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. 1 point de cotisation salariale déplafonnée (7,6 Md€, salariés du privé) ≈ −1,1 % du revenu disponible des salariés concernés. Fonctionnaires non comptés (régime propre). Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": -1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "cadres",
+        "direction": -1,
+        "intensite": "moyenne"
+      }
+    ]
+  },
+  {
+    "id": "social.prime_activite_montant",
+    "label": "Prime d'activité – montant forfaitaire",
+    "categorie": "social",
+    "unit": "€/mois",
+    "min": 300,
+    "max": 1000,
+    "valeur_initiale": {
+      "value": 633.21,
+      "unit": "€/mois",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.banquedesterritoires.fr/le-rsa-la-prime-dactivite-et-laah-revalorises-au-1er-avril",
+        "title": "Banque des Territoires – Le RSA, la prime d'activité et l'AAH revalorisés au 1er avril (2025)",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Montant forfaitaire pour une personne seule depuis le 1er avril 2025 (décret n° 2025-294 du 29 mars 2025, +1,7 %), en vigueur au 1er janvier 2026 ; source secondaire, décret non consulté sur Légifrance."
+    },
+    "description": "Montant forfaitaire de la prime d'activité (complément de revenu des travailleurs modestes).",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.aides_sociales"
+        },
+        "elasticite": 0.017,
+        "unite_effet": "Md€/an sur la ligne depenses.aides_sociales (APU, positif = hausse de la ligne) par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse de proportionnalité : dépense ≈ 10,3 Md€ en 2024 (Cnaf, PA Conjoncture 2024T4 : ≈ 10,32 Md€ en cumul sur un an ; relevé via la synthèse de la recherche, PDF non relu en texte), en hausse fin 2024 (+10,4 % sur un an au T4) ; ≈ 10,7 Md€ en 2025-2026. 10,7 / 633,21 ≈ 0,017 Md€ par €/mois (élargissement des éligibles non compté).",
+        "source": {
+          "url": "https://caf.fr/sites/default/files/medias/cnaf/Nous_connaitre/Recherche_et_statistiques/PPA%20Conjoncture/PA%20Conjoncture_2024T4.pdf",
+          "title": "Cnaf – Prime d'activité, conjoncture 4e trimestre 2024",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "taux_pauvrete"
+        },
+        "elasticite": -0.002,
+        "unite_effet": "points de % de taux de pauvreté monétaire par €/mois",
+        "forme": "niveau",
+        "delai_mois": 12,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse : +50 €/mois réduirait le taux de pauvreté d'environ 0,1 point (prestation ciblée sur les travailleurs modestes, en partie au-dessus du seuil)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "elasticite": 5e-05,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,16 % de la prime ; prime ≈ 2 % du revenu des ouvriers et employés, 4 % des jeunes actifs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "etudiants_jeunes"
+        },
+        "elasticite": 0.0001,
+        "unite_effet": "points de score 0-1 de satisfaction du groupe par €/mois",
+        "forme": "niveau",
+        "delai_mois": 1,
+        "rampe_mois": 0,
+        "hypothese": true,
+        "justification": "Hypothèse d'ordre de grandeur. +1 €/mois = +0,16 % de la prime ; prime ≈ 2 % du revenu des ouvriers et employés, 4 % des jeunes actifs. Règle commune : élasticité = w_pa (0,015 point de score par % de pouvoir d'achat, coefficients.json satisfaction_poids_pouvoir_achat) × variation estimée du revenu disponible du groupe en % par unité du levier. Pas d'effet group sur la TVA ni les accises (captées par l'IPC)."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "ouvriers_employes",
+        "direction": 1,
+        "intensite": "moyenne"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  },
+  {
+    "id": "depenses.recherche",
+    "label": "Budget de la recherche",
+    "categorie": "depenses",
+    "unit": "Md€ (écart au tendanciel)",
+    "min": -10,
+    "max": 10,
+    "valeur_initiale": {
+      "value": 0,
+      "unit": "Md€ (écart au tendanciel)",
+      "date": "2026-01",
+      "source": {
+        "url": "https://www.senat.fr/rap/l25-139-323/l25-139-323-syn.pdf",
+        "title": "Sénat – Rapport général n° 139 (2025-2026), mission « Recherche et enseignement supérieur », synthèse",
+        "accessed": "2026-10-20"
+      },
+      "estimate": false,
+      "note": "Convention : 0 = crédits de la mission « Recherche et enseignement supérieur » au PLF 2026 (31,5 Md€ de CP, dont ≈ 12,6 Md€ pour la recherche, selon les rapports parlementaires ; chiffres relevés via recherche, non relus intégralement)."
+    },
+    "description": "Écart annuel de dépense de recherche publique (organismes, ANR, universités) par rapport au tendanciel 2026.",
+    "effets": [
+      {
+        "cible": {
+          "kind": "budget",
+          "id": "depenses.autres"
+        },
+        "elasticite": 1,
+        "unite_effet": "Md€/an sur la ligne depenses.autres (APU, positif = hausse de la ligne) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 0,
+        "rampe_mois": 0,
+        "hypothese": false,
+        "justification": "Identité comptable : 1 Md€ de dépense de recherche augmente la ligne depenses.autres de 1 Md€ (la recherche, fonction COFOG transversale, est rangée dans « autres » par budget.json : affaires économiques, recherche).",
+        "source": {
+          "url": "https://www.senat.fr/rap/l25-139-323/l25-139-323-syn.pdf",
+          "title": "Sénat – Rapport général n° 139 (2025-2026), mission « Recherche et enseignement supérieur », synthèse",
+          "accessed": "2026-10-20"
+        }
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "elasticite": 0.02,
+        "unite_effet": "% du niveau du PIB en volume (effet d'offre, terme O du moteur) par Md€ d'écart au tendanciel",
+        "forme": "niveau",
+        "delai_mois": 36,
+        "rampe_mois": 120,
+        "hypothese": true,
+        "justification": "Hypothèse et approximation : la recherche publique agit sur le rythme de la productivité ; faute de canal « taux » dans le moteur, codé en écart de niveau croissant lentement (+0,02 % du PIB par Md€ durablement dépensé, après 3 ans, montée sur 10 ans). L'effet de demande passe par le multiplicateur du moteur."
+      }
+    ],
+    "groupes_touches": [
+      {
+        "group": "cadres",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "fonctionnaires",
+        "direction": 1,
+        "intensite": "faible"
+      },
+      {
+        "group": "etudiants_jeunes",
+        "direction": 1,
+        "intensite": "faible"
+      }
+    ]
+  }
+]

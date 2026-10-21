@@ -1,0 +1,1569 @@
+[
+  {
+    "id": "loi_speciale_lfss_2026",
+    "date": "2026-01-01",
+    "titre": "La France entre en 2026 sous loi spéciale, la LFSS 2026 s'applique",
+    "description": "Faute de loi de finances adoptée, l'État fonctionne sous la loi spéciale votée le 23 décembre 2025. La loi de financement de la sécurité sociale pour 2026 (loi n° 2025-1403 du 30 décembre 2025, publiée au JO du 31 décembre) entre en vigueur ; elle suspend la réforme des retraites de 2023. La loi de finances 2026 reste à faire adopter.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://lcp.fr/actualites/le-budget-2026-definitivement-adopte-apres-le-rejet-des-deux-dernieres-motions-de",
+        "title": "Le budget 2026 définitivement adopté après le rejet des deux dernières motions de censure (LCP, 2 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.editions-tissot.fr/actualite/representants-du-personnel-ce/lfss-2026-les-mesures-qui-sont-entrees-en-vigueur-au-1er-janvier",
+        "title": "LFSS 2026 : les mesures qui sont entrées en vigueur au 1er janvier (Éditions Tissot)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Conception : la LFSS 2026 et la loi spéciale font partie de l'état initial ; l'adoption (ou non) de la loi de finances 2026 dépend du joueur."
+  },
+  {
+    "id": "colere_agricole_janvier",
+    "date": "2026-01-08",
+    "titre": "Colère agricole : tracteurs dans Paris",
+    "description": "Une centaine de tracteurs convergent vers Paris malgré l'interdiction, contre l'accord UE-Mercosur, la gestion de la dermatose nodulaire contagieuse et les normes jugées excessives.",
+    "categorie": "social",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "region",
+          "id": "11"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1,
+        "note": "Tension en Île-de-France (convergence des tracteurs)."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.publicsenat.fr/actualites/politique/colere-des-agriculteurs-au-dela-de-la-gestion-de-la-mobilisation-le-gouvernement-attendu-au-tournant-sur-le-fond",
+        "title": "Colère des agriculteurs : le gouvernement attendu au tournant sur le fond (Public Sénat, 8 janvier 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "signature_mercosur",
+    "date": "2026-01-17",
+    "titre": "Signature de l'accord UE-Mercosur à Asunción",
+    "description": "L'Union européenne et le Mercosur signent l'accord de libre-échange à Asunción (Paraguay) après plus de 25 ans de négociations.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://euronews.com/video/2026/01/17/eu-and-mercosur-sign-major-trade-deal-in-asuncion",
+        "title": "EU and Mercosur sign major trade deal in Asunción (Euronews, 17 janvier 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "budget_2026_adopte",
+    "date": "2026-02-02",
+    "titre": "Loi de finances 2026 : une adoption à obtenir",
+    "description": "L'État fonctionne toujours sous loi spéciale. Le gouvernement doit faire adopter la loi de finances 2026 par une Assemblée sans majorité : compromis avec les groupes, recours éventuel au 49.3 et motions de censure possibles (289 voix requises pour renverser le gouvernement).",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://lcp.fr/actualites/le-budget-2026-definitivement-adopte-apres-le-rejet-des-deux-dernieres-motions-de",
+        "title": "Le budget 2026 définitivement adopté après le rejet des deux dernières motions de censure (LCP, 2 février 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : après un ultime 49.3, les deux motions de censure ont été rejetées le 2 février 2026 (260 voix pour la motion de gauche hors PS, 135 pour celle du RN-UDR) et la loi de finances, négociée avec le PS, a été définitivement adoptée ; le gouvernement Lecornu a survécu. Conception : l'issue (adoption, 49.3, censure) dépend du joueur et est simulée par le modèle de vote."
+  },
+  {
+    "id": "tempete_nils",
+    "date": "2026-02-12",
+    "titre": "Tempête Nils dans le Sud-Ouest",
+    "description": "La tempête Nils prive d'électricité jusqu'à près de 900 000 clients, surtout en Nouvelle-Aquitaine et en Occitanie, avec des crues (450 000 foyers encore privés le 13 au matin, selon Enedis) ; 2 morts. Les prévisionnistes parlent d'un événement d'une ampleur historique.",
+    "categorie": "climat",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "region",
+          "id": "75"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 1
+      },
+      {
+        "cible": {
+          "kind": "region",
+          "id": "76"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.aa.com.tr/fr/mode-de-vie/france-tempête-nils-450-000-foyers-privés-d-électricité/3828702",
+        "title": "France : tempête Nils, 450 000 foyers privés d'électricité (Anadolu, 13 février 2026) – près de 900 000 clients touchés au pic",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "mort_quentin_deranque",
+    "date": "2026-02-14",
+    "titre": "Mort du militant Quentin Deranque à Lyon",
+    "description": "Quentin Deranque meurt à Lyon deux jours après avoir été mortellement blessé lors d'une rixe entre militants antifascistes et d'extrême droite ; forte tension politique.",
+    "categorie": "securite",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "guerre_iran_debut",
+    "date": "2026-02-28",
+    "titre": "Début de la guerre contre l'Iran",
+    "description": "Les États-Unis et Israël lancent une campagne de frappes contre l'Iran (Téhéran, Ispahan, Tabriz…). L'Iran riposte contre Israël et les bases américaines du Golfe ; les Gardiens de la Révolution déclarent le détroit d'Ormuz fermé. Choc pétrolier et gazier pour l'Europe.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": 1,
+        "magnitude": "forte",
+        "forme": "choc",
+        "duree_mois": 12,
+        "note": "Choc d'offre importé (pétrole, gaz). Les chocs pétroliers suivants (pic_petrole_mars, blocus_ormuz_avril, reprise_guerre_iran, ormuz_octobre) s'AJOUTENT à celui-ci, ils ne le remplacent pas. Calage phase 0.5 (simulation à sec) : durée portée de 9 à 12 mois parce que le Brent reste au-dessus de 100 $ en octobre 2026 (voir ormuz_octobre) ; ordre de grandeur : +50 à +70 $ le baril × passthrough_petrole_total (0,33 % par 10 €) ≈ +1,5 à +2 % sur le niveau des prix, réparti entre ce choc et reprise_guerre_iran."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 9,
+        "note": "Choc d'offre énergétique."
+      },
+      {
+        "cible": {
+          "kind": "prime_risque"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6,
+        "note": "Prime de risque exogène : aversion au risque internationale (fuite vers la qualité) qui élargit les écarts souverains ; la composante liée aux finances publiques et à la stabilité est calculée par le moteur."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.france24.com/fr/moyen-orient/20260228-iran-israel-etats-unis-frappes-ce-que-l-on-sait-trump-teheran-khamenei",
+        "title": "Israël et les États-Unis frappent l'Iran : voici ce que l'on sait (France 24, 28 février 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://legrandcontinent.eu/fr/observatoire-de-la-bataille-dormuz/",
+        "title": "Observatoire de la bataille d'Ormuz (Le Grand Continent)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "dissuasion_ile_longue",
+    "date": "2026-03-02",
+    "titre": "Dissuasion nucléaire : une doctrine à redéfinir",
+    "description": "La guerre en Ukraine et l'incertitude sur l'engagement américain relancent le débat sur la dissuasion française : nombre de têtes nucléaires, publicité des chiffres, éventuelle « dissuasion avancée » avec des partenaires européens volontaires qui pourraient accueillir des forces aériennes stratégiques françaises. La France doit fixer sa doctrine.",
+    "categorie": "securite",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.france24.com/fr/europe/20260302-dissuasion-nucl%C3%A9aire-macron-va-prendre-la-parole-dans-un-discours-tr%C3%A8s-attendu",
+        "title": "Emmanuel Macron annonce que la France va augmenter le nombre de ses têtes nucléaires (France 24, 2 mars 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le 2 mars 2026, depuis l'île Longue, le chef de l'État a annoncé une hausse du nombre de têtes (chiffres non publiés) et une « dissuasion avancée » avec huit pays européens volontaires, la décision ultime restant au seul président. Conception : la doctrine et les dépenses de défense sont des décisions du joueur ; le coût passe par le levier depenses.defense."
+  },
+  {
+    "id": "reponse_militaire_iran",
+    "date": "2026-03-03",
+    "titre": "Guerre contre l'Iran : quelle réponse militaire ?",
+    "description": "Des drones visent les positions françaises dans la région, où vivent quelque 400 000 Français. La France doit décider de sa réponse militaire au conflit : rapatriements, renforcement de Sentinelle, déploiement de moyens aériens, navals (porte-avions Charles-de-Gaulle) et antiaériens, participation à une coalition pour sécuriser le détroit d'Ormuz.",
+    "categorie": "securite",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.publicsenat.fr/actualites/international/guerre-au-moyen-orient-emmanuel-macron-annonce-lenvoi-du-porte-avions-charles-de-gaulle-en-mediterranee",
+        "title": "Guerre au Moyen-Orient : Emmanuel Macron annonce l'envoi du porte-avions Charles de Gaulle en Méditerranée (Public Sénat, 3 mars 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le 3 mars 2026, le chef de l'État a annoncé l'envoi du Charles-de-Gaulle en Méditerranée, des drones abattus « en légitime défense », le rapatriement d'une partie des Français, le renforcement de Sentinelle, des Rafale et une défense antiaérienne, et un projet de coalition pour Ormuz. Conception : la réponse militaire est une décision du joueur."
+  },
+  {
+    "id": "pic_petrole_mars",
+    "date": "2026-03-09",
+    "titre": "Le Brent frôle 120 $, flambée des carburants",
+    "description": "Le Brent approche 120 dollars le baril à l'ouverture le 9 mars ; le 11 mars, l'AIE libère 400 millions de barils de réserves stratégiques. Les prix à la pompe flambent ; transporteurs, pêcheurs et agriculteurs réclament un soutien.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "ouvriers_employes"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 4,
+        "note": "Exposition aux carburants au-delà de l'effet moyen de l'inflation sur le pouvoir d'achat, déjà calculé par le moteur."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "independants"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3,
+        "note": "Transporteurs, artisans : forte dépendance au gazole."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3,
+        "note": "Gazole non routier, engrais."
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3,
+        "note": "Calage phase 0.5 : moyenne → faible. La colère liée aux carburants passe déjà par la satisfaction des groupes exposés (effets group ci-dessus), que le moteur reporte sur la tension via tension_poids_insatisfaction ; un effet direct moyen faisait double compte et, cumulé avec guerre_iran_debut et mort_quentin_deranque, portait la tension métropolitaine au-dessus du seuil de grèves (0,6) en mars 2026 sans mouvement social documenté."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://legrandcontinent.eu/fr/observatoire-de-la-bataille-dormuz/",
+        "title": "Observatoire de la bataille d'Ormuz (Le Grand Continent)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.france24.com/fr/france/20260323-prix-des-carburants-en-france-le-gouvernement-annonce-des-mesures-mais-pas-d-aide-directe",
+        "title": "Prix des carburants en France : le gouvernement annonce des mesures, mais pas d'aide directe (France 24, 23 mars 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le gouvernement a refusé une baisse des taxes et annoncé le 23 mars un soutien de trésorerie aux transporteurs, pêcheurs et agriculteurs (décision du joueur dans le jeu, retirée de la description)."
+  },
+  {
+    "id": "militaire_tue_irak",
+    "date": "2026-03-13",
+    "titre": "Un militaire français tué en Irak",
+    "description": "L'adjudant-chef Arnaud Frion meurt lors de l'attaque d'une milice pro-iranienne contre une base militaire française en Irak.",
+    "categorie": "securite",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "municipales_t1",
+    "date": "2026-03-15",
+    "titre": "Municipales : premier tour",
+    "description": "Premier tour des élections municipales dans les 35 000 communes.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.banquedesterritoires.fr/municipales-un-premier-tour-geometrie-tres-variable",
+        "title": "Municipales : un premier tour à géométrie très variable (Banque des Territoires, 16 mars 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : participation ≈ 58 % ; le RN et ses alliés arrivent en tête dans au moins 58 communes. Conception : le résultat est simulé à partir des intentions de vote et de la satisfaction des groupes."
+  },
+  {
+    "id": "municipales_t2",
+    "date": "2026-03-22",
+    "titre": "Municipales : second tour",
+    "description": "Second tour des élections municipales : Paris, Lyon et Marseille, ainsi que les villes moyennes où le RN progresse, sont les enjeux scrutés.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.banquedesterritoires.fr/municipales-un-premier-tour-geometrie-tres-variable",
+        "title": "Municipales : un premier tour à géométrie très variable (Banque des Territoires, 16 mars 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.franceinfo.fr/elections/la-gauche-conserve-paris-et-marseille-l-extreme-droite-s-etend-dans-les-villes-moyennes-bilan-mitige-pour-lfi-ce-qu-il-faut-retenir-du-2d-tour-des-elections-municipales-2026_7886837.html",
+        "title": "Ce qu'il faut retenir du 2d tour des élections municipales 2026 (franceinfo, 23 mars 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : Emmanuel Grégoire (PS) l'emporte à Paris (50,5 %) face à Rachida Dati, Grégory Doucet est réélu à Lyon, Benoît Payan à Marseille face au RN ; le RN ne gagne aucune grande ville mais progresse dans les villes moyennes ; Éric Ciotti (UDR) prend Nice ; participation ≈ 57 %. Conception : le résultat est simulé à partir des intentions de vote et de la satisfaction des groupes."
+  },
+  {
+    "id": "treve_iran_avril",
+    "date": "2026-04-08",
+    "titre": "Trêve de deux semaines entre Washington et Téhéran",
+    "description": "Trump annonce une trêve contre la réouverture d'Ormuz, avec des pourparlers prévus à Islamabad. Le Brent chute de 14 % à 94 $ et le gaz TTF de 15 %. Le même jour, Cécile Kohler et Jacques Paris, libérés après trois ans et demi de détention en Iran, rentrent en France.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 1
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1,
+        "note": "Libération de Cécile Kohler et Jacques Paris, rentrés en France."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://lepetitjournal.com/expat-politique/une-treve-de-deux-semaines-annoncee-entre-les-etats-unis-et-liran-440008",
+        "title": "Une trêve de deux semaines annoncée entre les États-Unis et l'Iran (Le Petit Journal, 8 avril 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://fr.hespress.com/468799-le-petrole-plonge-apres-la-treve-entre-liran-et-les-etats-unis.html",
+        "title": "Le pétrole plonge après la trêve entre l'Iran et les États-Unis (Hespress/AFP, 8 avril 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.elysee.fr/emmanuel-macron/2026/04/08/accueil-de-cecile-kohler-et-jacques-paris-a-lelysee",
+        "title": "Accueil de Cécile Kohler et Jacques Paris à l'Élysée (Élysée, 8 avril 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "moodys_avril",
+    "date": "2026-04-10",
+    "titre": "Moody's maintient Aa3, perspective négative",
+    "description": "Moody's maintient la note de la France à Aa3 avec perspective négative et prévoit un déficit de 5 % du PIB en 2026.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.franceinfo.fr/economie/budget/l-agence-moody-s-maintient-la-note-souveraine-de-la-france-a-aa3-avec-une-perspective-negative_7929542.html",
+        "title": "L'agence Moody's maintient la note souveraine de la France à Aa3 avec une perspective négative (franceinfo, 10 avril 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : l'agence a salué l'accord budgétaire (retiré de la description : l'adoption du budget dépend du joueur). Maintien de la note et de la perspective : aucun effet (la perspective négative existait déjà au 1er janvier 2026, voir macro.notations)."
+  },
+  {
+    "id": "blocus_ormuz_avril",
+    "date": "2026-04-13",
+    "titre": "Échec des négociations d'Islamabad, blocus américain",
+    "description": "Les pourparlers d'Islamabad (12 avril) échouent ; les États-Unis imposent le 13 avril un blocus des ports iraniens, Téhéran maintient Ormuz fermé et le pétrole repasse au-dessus de 100 $. Trump prolonge la trêve le 21 avril.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.universalis.fr/evenement/1er-29-avril-2026-iran-etats-unis-treve-prolongee-entre-les-etats-unis-et-l-iran/",
+        "title": "1er-29 avril 2026 : trêve prolongée entre les États-Unis et l'Iran (Encyclopædia Universalis)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "sp_mai",
+    "date": "2026-05-29",
+    "titre": "S&P confirme A+, perspective stable",
+    "description": "S&P maintient la note de la France à A+ avec une perspective stable (déjà abaissée d'AA- en octobre 2025).",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://selectra.info/finance/actualites/marche/moody-note-france-23-octobre-credit-immobilier",
+        "title": "Calendrier des notations de la France : Moody's 23/10, S&P 27/11 ; S&P A+ stable le 29/05/2026 (Selectra, d'après l'AFT)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Maintien : aucun effet."
+  },
+  {
+    "id": "aide_grands_rouleurs",
+    "date": "2026-05-31",
+    "titre": "Carburants : un soutien ciblé en débat",
+    "description": "La flambée des carburants pèse sur les actifs modestes qui utilisent leur véhicule pour travailler, sur les pêcheurs et sur les transporteurs. Le gouvernement doit décider d'un éventuel soutien (indemnité ciblée, aide sectorielle, prime carburant employeur exonérée) et de son financement.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.connaissancedesenergies.org/afp/carburant-plus-de-439000-demandes-effectuees-pour-les-aides-aux-grands-rouleurs-selon-lecornu-260531",
+        "title": "Carburant : plus de 439 000 demandes pour les aides aux grands rouleurs, selon Lecornu (AFP via Connaissance des Énergies, 31 mai 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : fin mai 2026, ouverture d'une indemnité carburant « grands rouleurs » de 100 € (≈ 20 c/l sur six mois ; plus de 439 000 demandes au 31 mai selon le Premier ministre), plus une aide pêche et une prime carburant employeur exonérée jusqu'à 600 € (coût total ≈ 1,2 Md€). Conception : un soutien carburant est une décision du joueur (lignes budgétaires et leviers énergie)."
+  },
+  {
+    "id": "bce_hausse_juin",
+    "date": "2026-06-11",
+    "titre": "La BCE relève ses taux pour la première fois depuis 2023",
+    "description": "Face aux pressions inflationnistes liées à la guerre au Moyen-Orient, la BCE relève ses trois taux de 25 pb (facilité de dépôt à 2,25 %) et prévoit 3,0 % d'inflation en 2026 dans la zone euro.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6,
+        "note": "Canal monétaire, non couvert par les multiplicateurs budgétaires du moteur (pas de double compte)."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 9
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260611~4d41bd5e83.fr.html",
+        "title": "Décisions de politique monétaire (BCE, 11 juin 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/key_ecb_interest_rates/html/index.en.html",
+        "title": "Key ECB interest rates (BCE) – dernière hausse précédente le 20 septembre 2023",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "La hausse des taux directeurs devrait relever le taux de référence (Bund) et donc l'OAT, mais le schéma v2 n'a pas de cible pour le taux sans risque : canal non représenté (taux_oat_10 est dérivé)."
+  },
+  {
+    "id": "g7_evian",
+    "date": "2026-06-15",
+    "titre": "Sommet du G7 à Évian sous présidence française",
+    "description": "Du 15 au 17 juin, la France accueille et préside le sommet du G7 à Évian. Au programme : minerais critiques, croissance équilibrée, guerre d'agression de la Russie contre l'Ukraine, trafic de migrants et de drogue, protection des mineurs en ligne.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.elysee.fr/emmanuel-macron/sommet-du-g7-devian-2026",
+        "title": "Sommet du G7 d'Évian 2026 (Élysée)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Conception : la France préside le G7, le rendez-vous est fixe et son issue dépend du joueur."
+  },
+  {
+    "id": "protocole_versailles",
+    "date": "2026-06-17",
+    "titre": "Protocole d'accord États-Unis–Iran signé à Versailles",
+    "description": "Après le G7, Trump signe à Versailles un protocole d'accord paraphé par Pezeshkian : réouverture d'Ormuz, levée du blocus, suspension des sanctions pétrolières, 60 jours pour un accord définitif. Le pétrole recule nettement.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1,
+        "note": "Accord signé en France, à Versailles."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.publicsenat.fr/actualites/politique/guerre-iran-etats-unis-que-sait-on-de-laccord-signe-pour-cesser-les-hostilites",
+        "title": "Guerre Iran–États-Unis : que sait-on de l'accord signé pour cesser les hostilités ? (Public Sénat, juin 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "canicule_juin",
+    "date": "2026-06-17",
+    "titre": "Canicule meurtrière de fin juin",
+    "description": "Vague de chaleur du 17 juin au 2 juillet : 5 764 décès en excès selon Santé publique France. Sur l'ensemble des épisodes de l'été jusqu'au 20 août, 7 919 décès en excès (bilan provisoire SpF du 16 septembre, à consolider ; la canicule de 2003 avait fait environ 15 000 morts).",
+    "categorie": "sante",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "retraites"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.lequotidiendumedecin.fr/actu-medicale/sante-publique/canicule-pres-de-8000-deces-en-exces-entre-le-17-juin-et-le-20-aout",
+        "title": "Canicule : près de 8 000 décès en excès cet été (Le Quotidien du Médecin, 17 septembre 2026, d'après Santé publique France)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "corse_assemblee",
+    "date": "2026-06-23",
+    "titre": "Autonomie de la Corse : la révision constitutionnelle en suspens",
+    "description": "Le processus d'autonomie de la Corse suppose une révision de la Constitution. L'exécutif doit décider s'il porte le texte : adoption dans les mêmes termes par l'Assemblée et le Sénat, puis Congrès aux trois cinquièmes.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7454",
+        "title": "Scrutin public n° 7454 sur l'ensemble du projet de loi constitutionnelle relatif à la Corse (Assemblée nationale, 23 juin 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le 23 juin 2026, l'Assemblée nationale a adopté le projet de loi constitutionnelle (271 voix contre 202) et l'a transmis au Sénat. Conception : la réforme et son vote dépendent du joueur (modèle de vote)."
+  },
+  {
+    "id": "le_pen_appel",
+    "date": "2026-07-07",
+    "titre": "Marine Le Pen condamnée en appel mais éligible en 2027",
+    "description": "La cour d'appel de Paris condamne Marine Le Pen à 3 ans de prison dont 1 ferme sous bracelet, 100 000 € d'amende et 45 mois d'inéligibilité dont 30 avec sursis ; la partie ferme étant purgée, elle peut se présenter en avril 2027. Pourvoi en cassation annoncé.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6,
+        "note": "Incertitude sur la présidentielle 2027 (pourvoi en cassation) ; l'effet sur le spread passe par la stabilité, calculé par le moteur."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.touteleurope.eu/vie-politique-des-etats-membres/proces-des-assistants-du-rn-marine-le-pen-condamnee-en-appel-mais-eligible-a-l-election-presidentielle-2027/",
+        "title": "Procès des assistants du RN : Marine Le Pen condamnée en appel, mais éligible à la présidentielle 2027 (Toute l'Europe, juillet 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "reprise_guerre_iran",
+    "date": "2026-07-07",
+    "titre": "Reprise des hostilités entre les États-Unis et l'Iran",
+    "description": "Après des attaques contre trois navires à Ormuz, les États-Unis frappent l'Iran dans la nuit du 7 au 8 juillet et rétablissent les sanctions pétrolières ; l'Iran riposte contre des bases américaines au Koweït et à Bahreïn. Le protocole du 17 juin est enterré ; le Brent repart à la hausse (≈ 78 $, +5 %, le 8 juillet).",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": 1,
+        "magnitude": "forte",
+        "forme": "choc",
+        "duree_mois": 6,
+        "note": "Calage phase 0.5 (simulation à sec, hypothèse) : magnitude passée de moyenne à forte pour approcher les points de contrôle Insee (glissement IPC 2,4 % en août, 3,1 % en septembre 2026). Avec ce calage et guerre_iran_debut sur 12 mois, la simulation sans action du joueur donne ≈ 2,6 % en août et ≈ 2,5 % en septembre : l'écart résiduel vient de l'absence d'effets de second tour dans le moteur (voir inertie_inflation)."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6
+      },
+      {
+        "cible": {
+          "kind": "prime_risque"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3,
+        "note": "Prime de risque exogène : aversion au risque internationale (fuite vers la qualité) qui élargit les écarts souverains ; la composante liée aux finances publiques et à la stabilité est calculée par le moteur."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.franceinfo.fr/monde/iran/guerre-entre-les-etats-unis-israel-et-l-iran/cessez-le-feu-enterre-cours-du-petrole-en-hausse-ce-que-l-on-sait-de-la-reprise-des-hostilites-entre-les-etats-unis-et-l-iran_8099060.html",
+        "title": "Cessez-le-feu enterré, cours du pétrole en hausse : ce que l'on sait de la reprise des hostilités (franceinfo, 8 juillet 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://echosplus.com/2026/07/08/frappes-americaines-contre-liran-washington-et-teheran-replongent-dans-laffrontement/",
+        "title": "Frappes américaines contre l'Iran : Washington et Téhéran replongent dans l'affrontement (Echos Plus, 8 juillet 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "sommet_otan_ankara",
+    "date": "2026-07-07",
+    "titre": "Sommet de l'OTAN à Ankara",
+    "description": "Les 7 et 8 juillet, les Alliés réaffirment l'objectif de 5 % du PIB pour la sécurité d'ici 2035, lancent 50 Md€ de projets capacitaires et 70 Md€ d'aide à l'Ukraine en 2026, avec une pression sur les pays en retard. La France doit dire quel effort de défense elle s'engage à fournir.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://nato.int/fr/news-and-events/events/2026/07/overview---2026-nato-summit-in-ankara-",
+        "title": "Sommet de l'OTAN 2026 à Ankara : vue d'ensemble (OTAN)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Conception : l'engagement de dépenses de défense est une décision du joueur (levier depenses.defense)."
+  },
+  {
+    "id": "mondial_demi_finale",
+    "date": "2026-07-14",
+    "titre": "Coupe du monde : la France éliminée par l'Espagne",
+    "description": "Les Bleus de Didier Deschamps s'inclinent 2-0 face à l'Espagne en demi-finale au stade de Dallas (Arlington, Texas). C'est le dernier tournoi de Deschamps : Zinédine Zidane lui succède comme sélectionneur le 1er août.",
+    "categorie": "sport_culture",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://fr.euronews.com/2026/07/14/mondial-2026-entre-la-france-et-lespagne-une-finale-avant-lheure",
+        "title": "Mondial 2026 : entre la France et l'Espagne, une finale avant l'heure (Euronews, 14 juillet 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "loi_urgence_agricole",
+    "date": "2026-07-21",
+    "titre": "Agriculture : une loi d'urgence réclamée",
+    "description": "Après des mois de colère, le monde agricole réclame une loi d'urgence (simplification des normes, pesticides, revenus). Le gouvernement doit décider s'il porte un tel texte et jusqu'où, le volet pesticides étant controversé.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le 21 juillet 2026, le Sénat a définitivement adopté le projet de loi d'urgence agricole. Conception : l'adoption d'un tel texte dépend du joueur."
+  },
+  {
+    "id": "incendies_record",
+    "date": "2026-07-25",
+    "titre": "Incendies : record historique de surfaces brûlées",
+    "description": "Près de 98 000 hectares brûlés depuis janvier selon le ministre de l'Intérieur, dont plus de 40 000 en Gironde (mégafeu) ; feux encore actifs dans les Landes et le Var.",
+    "categorie": "climat",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "region",
+          "id": "75"
+        },
+        "direction": 1,
+        "magnitude": "forte",
+        "forme": "choc",
+        "duree_mois": 3,
+        "note": "Mégafeu de Gironde, Landes."
+      },
+      {
+        "cible": {
+          "kind": "region",
+          "id": "93"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2,
+        "note": "Var."
+      },
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://fr.hespress.com/482826-incendies-en-france-pres-de-98-000-hectares-brules-un-record-historique.html",
+        "title": "Incendies en France : près de 98 000 hectares brûlés, un « record historique » (Hespress/AFP, 25 juillet 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "juillet_record_chaleur",
+    "date": "2026-08-04",
+    "titre": "Juillet 2026, mois le plus chaud jamais mesuré",
+    "description": "Météo-France : moyenne nationale de 24,9 °C (+3,8 °C), record absolu devant août 2003 ; déficit de pluie de près de 70 %, sols au plus bas. Sécheresse durable pour l'agriculture.",
+    "categorie": "climat",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "agriculteurs"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 6,
+        "note": "Sécheresse."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3,
+        "note": "Pertes de production agricole (effet d'offre)."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.linfodurable.fr/juillet-2026-mois-le-plus-chaud-jamais-enregistre-en-france-meteo-france-58434",
+        "title": "Juillet 2026, mois le plus chaud jamais enregistré en France (Météo-France via L'info durable, 4 août 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "cyberattaque_dgfip",
+    "date": "2026-08-13",
+    "titre": "Cyberattaque massive contre le fisc",
+    "description": "Bercy confirme le vol de données fiscales d'environ 350 000 particuliers et 250 000 professionnels (état civil, revenu fiscal de référence, taux de prélèvement), après des intrusions en juin-juillet.",
+    "categorie": "securite",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "popularite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 1
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.journaldunet.com/cybersecurite/1553815-cyberattaque-de-la-dgfip-l-electrochoc-qui-accelere-la-securisation-des-administrations/",
+        "title": "Cyberattaque de la DGFiP : l'électrochoc qui accélère la sécurisation des administrations (JDN)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "censure_reseaux_sociaux",
+    "date": "2026-08-14",
+    "titre": "Réseaux sociaux et moins de 15 ans : le débat revient",
+    "description": "L'interdiction des réseaux sociaux aux moins de 15 ans revient dans le débat public. Un texte en ce sens peut être déposé ; s'il est adopté, il devra passer le contrôle du Conseil constitutionnel.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le chef de l'État a demandé au Premier ministre de remanier le texte et de le soumettre à nouveau. Conception : le texte affiché ne présume pas d'un vote (le joueur n'a peut-être rien fait voter) ; l'échéance n'est qu'un rappel, le sort du texte dépend du joueur."
+  },
+  {
+    "id": "fitch_aout",
+    "date": "2026-08-28",
+    "titre": "Fitch maintient A+, perspective stable",
+    "description": "Fitch confirme la note A+ avec perspective stable malgré des estimations de déficit relevées ; elle pointe un faible potentiel de croissance, un endettement élevé et en hausse et un contexte politique et social qui complique l'assainissement budgétaire.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.lalibre.be/economie/2026/08/28/lagence-de-notation-fitch-maintient-la-note-a-de-la-france-et-sa-perspective-stable-NRDFHYIOH5CSPAOSF7Q277QFOM/",
+        "title": "L'agence de notation Fitch maintient la note A+ de la France et sa perspective stable (La Libre, 28 août 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Maintien : aucun effet."
+  },
+  {
+    "id": "bce_hausse_septembre",
+    "date": "2026-09-10",
+    "titre": "Deuxième hausse des taux de la BCE",
+    "description": "La BCE porte la facilité de dépôt à 2,50 % alors que l'inflation de la zone euro atteint 3,3 % en août, tirée par l'énergie (perturbations à Ormuz).",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 6,
+        "note": "Canal monétaire, non couvert par les multiplicateurs budgétaires du moteur (pas de double compte)."
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 9
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.boursorama.com/bourse/actualites/la-bce-releve-a-nouveau-ses-taux-d-interet-l-inflation-persiste-8646994bbc091afc77809cc582993d85",
+        "title": "La BCE relève à nouveau ses taux d'intérêt, l'inflation persiste (Boursorama/Reuters, 10 septembre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Même limite que bce_hausse_juin : pas de cible pour le taux sans risque."
+  },
+  {
+    "id": "scope_degradation",
+    "date": "2026-09-18",
+    "titre": "Scope abaisse la France à A+",
+    "description": "L'agence Scope Ratings dégrade la note de la France d'AA- à A+ (vendredi 18 septembre au soir) et ramène la perspective de négative à stable : détérioration durable des perspectives budgétaires, dette en hausse, fragmentation politique au-delà de 2027.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "notation",
+          "id": "Scope"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "niveau",
+        "duree_mois": 60,
+        "note": "1 cran (AA- → A+). Permanent jusqu'à une nouvelle action de l'agence : duree_mois = horizon du jeu (60 mois, jusqu'à fin 2030), pas une remontée automatique à la prochaine revue. Barème : bareme.notation.faible = 1 cran (coefficients.json). Effet de marché pondéré par spread_poids_agence_secondaire (0,5) car Scope n'est pas l'une des trois grandes agences (hypothèse)."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.boursedirect.fr/fr/actualites/categorie/economie/scope-ratings-degrade-la-note-de-la-france-boursier-354c60169df9586ba779f274a5311463df2e995e",
+        "title": "Scope Ratings dégrade la note de la France (Boursier.com via Bourse Direct, 21 septembre 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.boersen-zeitung.de/konjunktur-politik/scope-stuft-frankreich-ab",
+        "title": "Börsen-Zeitung — Scope stuft Frankreichs Bonität auf A+ herab (19/09/2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "dbrs_perspective_septembre",
+    "date": "2026-09-18",
+    "titre": "Morningstar DBRS passe la perspective de la France à négative",
+    "description": "Au même moment que la dégradation de Scope, Morningstar DBRS maintient la note de la France à AA mais abaisse sa perspective (trend) de stable à négative. La note AA stable datait de septembre 2025.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "prime_risque"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "niveau",
+        "duree_mois": 12,
+        "note": "Perspective négative = 0 cran (aucun effet notation) + prime de risque faible, le temps de la revue suivante (≈12 mois)."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.boersen-zeitung.de/konjunktur-politik/scope-stuft-frankreich-ab",
+        "title": "Börsen-Zeitung — Scope stuft Frankreich ab ; Morningstar DBRS senkt den Ausblick auf negativ (19/09/2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://dbrs.morningstar.com/research/450424/morningstar-dbrs-changes-trends-on-republic-of-france-to-negative-confirms-credit-ratings-at-aa-high",
+        "title": "Morningstar DBRS — historique : AA (high) perspective négative (mars 2025), abaissée à AA stable le 19/09/2025",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Date exacte de l'action DBRS non confirmée sur dbrs.morningstar.com (communiqué non trouvé) : la Börsen-Zeitung du 19/09/2026 la place au même moment que Scope (vendredi 18/09)."
+  },
+  {
+    "id": "senatoriales",
+    "date": "2026-09-27",
+    "titre": "Sénatoriales : renouvellement de la moitié du Sénat",
+    "description": "Renouvellement de 178 sièges sur 348 par les grands électeurs, issus pour l'essentiel des conseils municipaux élus en mars. Le président du Sénat est élu le 1er octobre.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.senat.fr/senateurs/grp.html",
+        "title": "Liste des sénateurs par groupe politique (Sénat, page mise à jour le 20 octobre 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.franceinfo.fr/elections/senatoriales/resultats-des-elections-senatoriales-2026-le-rn-reussit-a-constituer-un-groupe-au-senat-pour-la-premiere-fois-de-son-histoire_8212448.html",
+        "title": "Résultats des sénatoriales 2026 : le RN réussit à constituer un groupe au Sénat (franceinfo, 27 septembre 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://nosparlementaires.fr/actualites/composition-senat-2026-sieges-par-groupe",
+        "title": "Composition du Sénat 2026 : combien de sièges pour chaque groupe (NosParlementaires)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://www.publicsenat.fr/actualites/institutions/en-direct-suivez-lelection-du-president-du-senat",
+        "title": "Suivez l'élection du président du Sénat (Public Sénat, 1er octobre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : LR reste premier groupe (124 sièges, -7), LR et centristes (63) gardent la majorité (187/348) ; le RN forme pour la première fois un groupe, Union nationale pour les territoires (15 sénateurs, présidé par Edwige Diaz) ; Gérard Larcher est réélu président du Sénat le 1er octobre (203 voix). Conception : le résultat est simulé à partir de l'état politique (grands électeurs issus des municipales)."
+  },
+  {
+    "id": "greve_fonction_publique",
+    "date": "2026-09-29",
+    "titre": "Fonction publique : les syndicats mobilisés sur le point d'indice",
+    "description": "Les huit syndicats de la fonction publique appellent à la grève et à plus de 170 manifestations pour la revalorisation du point d'indice et des moyens budgétaires. Le gouvernement doit arbitrer.",
+    "categorie": "social",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://lepetitjournal.com/expat-mag/societe/greve-dans-la-fonction-publique-plus-de-170-manifestions-attendues-mardi-454713",
+        "title": "Grève dans la fonction publique : plus de 170 manifestations attendues mardi (Le Petit Journal, septembre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : mobilisation contre un nouveau gel du point d'indice. Conception : le gel du point d'indice est une décision du joueur ; les grèves sont générées par le moteur quand la tension dépasse son seuil."
+  },
+  {
+    "id": "mouvement_lyceen",
+    "date": "2026-09-29",
+    "titre": "Mouvement lycéen : blocus et heurts",
+    "description": "Parti le 18 septembre, le mouvement des lycéens (manque de professeurs, classes surchargées, bâtiments dégradés, Parcoursup) s'étend ; 440 interpellations le 29 septembre selon le ministre de l'Intérieur, violences dénoncées et usage de la force contesté.",
+    "categorie": "social",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "group",
+          "id": "etudiants_jeunes"
+        },
+        "direction": -1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "region",
+          "id": "11"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://fr.euronews.com/2026/09/29/blocus-des-lycees-le-ministre-de-leducation-nationale-denonce-des-violences-inqualifiables",
+        "title": "Blocus des lycées : le ministre de l'Éducation nationale dénonce des violences « inqualifiables » (Euronews, 29 septembre 2026)",
+        "accessed": "2026-10-20"
+      },
+      {
+        "url": "https://fr.wikipedia.org/wiki/2026_en_France",
+        "title": "2026 en France (Wikipédia)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "spread_record",
+    "date": "2026-09-30",
+    "titre": "L'écart OAT-Bund au plus haut depuis 2012",
+    "description": "Le 30 septembre, l'écart de taux à 10 ans avec l'Allemagne atteint 120 pb dans la matinée puis 124 pb en fin de séance (décompte Reuters de 17h29, cité par France Épargne), au plus haut depuis 2012 ; l'OAT touche 4,83 % en séance : hausse de 113 pb depuis début juillet, la plus forte sur un trimestre depuis 1987 (Reuters). Charge de la dette revue de +5 Md€ en 2026 et +7 Md€ en 2027.",
+    "categorie": "economie",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.france-epargne.fr/news/lecart-entre-loat-et-le-bund-atteint-120-points-de-base-un-niveau-inedit-depuis-2012.md",
+        "title": "L'écart entre l'OAT et le Bund atteint 120 points de base, un niveau inédit depuis 2012 (France Épargne, 30 septembre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Aucun effet : l'écart OAT-Bund et la charge d'intérêts sont calculés par le moteur (dette, déficit, stabilité, notation, primes de risque exogènes). Sert de point de contrôle pour le calibrage du spread. Point de contrôle : 124 pb à la clôture du 30/09/2026 (Reuters) ; les mesures varient selon le fournisseur et l'obligation de référence (≈128 pb d'après CNBC à 18h39)."
+  },
+  {
+    "id": "plf_2027",
+    "date": "2026-10-01",
+    "titre": "Le PLF 2027 doit être déposé",
+    "description": "Le gouvernement doit déposer au Parlement le projet de loi de finances 2027 : objectif de déficit, hypothèse de croissance, partage de l'effort entre dépenses et impôts.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.lemondedudroit.fr/fiscal/310-finances-publiques/106025-plf-2027-depot-a-l-an.html",
+        "title": "PLF 2027 : dépôt à l'Assemblée nationale (Le Monde du Droit, 1er octobre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : le PLF 2027 visait un déficit de 5,0 % du PIB (contre 5,4 % révisé pour 2026) et 1,0 % de croissance, avec un effort de 54 Md€ porté surtout par les dépenses, sans hausse générale d'impôts, et une surtaxe d'IS des grandes entreprises réduite d'un tiers. Conception : le contenu du PLF 2027 est écrit par le joueur."
+  },
+  {
+    "id": "primaire_glucksmann",
+    "date": "2026-10-11",
+    "titre": "Raphaël Glucksmann remporte la primaire sociale-démocrate",
+    "description": "Glucksmann gagne dès le premier tour (66,2 %) devant Olivier Faure (14,5 %) ; il sera le candidat du PS et de Place publique à la présidentielle 2027.",
+    "categorie": "politique",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la",
+        "title": "Primaire socialiste : vainqueur dès le 1er tour, Raphaël Glucksmann sera le candidat (LCP, 11 octobre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Aucun effet mécanique : vie interne des partis, hors de la main du joueur."
+  },
+  {
+    "id": "mobilisation_17_octobre",
+    "date": "2026-10-17",
+    "titre": "Journée de mobilisation contre la vie chère",
+    "description": "Gilets jaunes, lycéens, étudiants, VTC, Solidaires et une partie de la CGT manifestent contre la vie chère et les prix des carburants : environ 500 actions et 90 cortèges annoncés, forte présence policière.",
+    "categorie": "social",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "tension"
+        },
+        "direction": 1,
+        "magnitude": "moyenne",
+        "forme": "choc",
+        "duree_mois": 2
+      },
+      {
+        "cible": {
+          "kind": "stabilite"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 2
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.ici.fr/infos/societe/mobilisation-du-17-octobre-manifestants-revendications-maintien-de-l-ordre-a-quoi-s-attendre-ce-samedi-9731272",
+        "title": "Mobilisation du 17 octobre : à quoi s'attendre ce samedi ? (ici, octobre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "ormuz_octobre",
+    "date": "2026-10-19",
+    "titre": "Ormuz toujours contesté, le pétrole reste cher",
+    "description": "Malgré le retour des exportations du Golfe (pipelines, escortes américaines), Téhéran revendique le contrôle d'Ormuz ; Trump a rejeté le 25 septembre une proposition iranienne de réouverture. Les stocks mondiaux ont reculé de plus de 500 Mb entre fin février et fin septembre (AIE). La semaine du 5 octobre, le Brent comptant valait en moyenne 130 $, contre 102 $ pour le contrat de décembre.",
+    "categorie": "international",
+    "certitude": "survenu",
+    "type": "exogene",
+    "effets": [
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "inflation"
+        },
+        "direction": 1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      },
+      {
+        "cible": {
+          "kind": "indicator",
+          "id": "croissance_pib"
+        },
+        "direction": -1,
+        "magnitude": "faible",
+        "forme": "choc",
+        "duree_mois": 3
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.boursorama.com/bourse/actualites/malgre-le-deblocage-des-exportations-du-petrole-du-golfe-pourquoi-les-prix-du-brut-restent-eleves-e865e41c2712bfc4ffdd40742f786bd5",
+        "title": "Malgré le déblocage des exportations du pétrole du Golfe, pourquoi les prix du brut restent élevés ? (Boursorama, 19 octobre 2026)",
+        "accessed": "2026-10-20"
+      }
+    ]
+  },
+  {
+    "id": "moodys_octobre",
+    "date": "2026-10-23",
+    "titre": "Revue de la note française par Moody's",
+    "description": "Moody's (Aa3, perspective négative) publie sa revue : maintien, changement de perspective ou dégradation à A1.",
+    "categorie": "economie",
+    "certitude": "programme",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://selectra.info/finance/actualites/marche/moody-note-france-23-octobre-credit-immobilier",
+        "title": "Moody's : revue de la note de la France le 23 octobre (Selectra)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Issue inconnue au 20/10/2026 : aucun effet. À mettre à jour (kind notation, ou prime_risque faible si perspective dégradée) une fois la décision publiée."
+  },
+  {
+    "id": "vote_plfss_2027",
+    "date": "2026-10-27",
+    "titre": "Vote solennel du PLFSS 2027 à l'Assemblée",
+    "description": "Vote solennel sur le projet de loi de financement de la sécurité sociale 2027, puis début de l'examen de la seconde partie du PLF.",
+    "categorie": "politique",
+    "certitude": "programme",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www2.assemblee-nationale.fr/17/la-conference-des-presidents/releve-de-conclusions/reunion-du-mercredi-15-juillet-2026",
+        "title": "Conférence des présidents, réunion du 15 juillet 2026 (Assemblée nationale)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Conception : l'issue du vote dépend du joueur (modèle de vote)."
+  },
+  {
+    "id": "bce_octobre",
+    "date": "2026-10-29",
+    "titre": "Réunion de politique monétaire de la BCE",
+    "description": "Décision de taux de la BCE (28-29 octobre) ; les marchés anticipent une nouvelle hausse d'ici 2027.",
+    "categorie": "economie",
+    "certitude": "programme",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+        "title": "Meeting calendars for the Governing Council (BCE)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Issue inconnue : aucun effet. Le schéma n'a pas de cible pour le taux sans risque (Bund), voir bce_hausse_juin."
+  },
+  {
+    "id": "midterms_usa",
+    "date": "2026-11-03",
+    "titre": "Élections de mi-mandat aux États-Unis",
+    "description": "Renouvellement des 435 sièges de la Chambre, de 35 sièges du Sénat et de 36 gouverneurs ; scrutin perçu comme un test pour Donald Trump.",
+    "categorie": "international",
+    "certitude": "programme",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://lepetitjournal.com/new-york/actualite/les-elections-americaines-de-mi-mandat-en-chiffres-455514",
+        "title": "Les élections américaines de mi-mandat en chiffres (Le Petit Journal)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Élection étrangère, issue inconnue : aucun effet."
+  },
+  {
+    "id": "greve_5_novembre",
+    "date": "2026-11-05",
+    "titre": "Grève interprofessionnelle contre le budget 2027",
+    "description": "L'intersyndicale (CFDT, CGT, FO, Unsa, FSU) appelle à la grève et à manifester sur le budget 2027, pour les services publics et les salaires.",
+    "categorie": "social",
+    "certitude": "programme",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.24matins.fr/greve-du-5-novembre-ce-que-prepare-deja-lintersyndicale-1421874",
+        "title": "Grève du 5 novembre : ce que prépare déjà l'intersyndicale (24matins)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Réel : appel contre les mesures du budget 2027 du gouvernement. Conception : la mobilisation dépend du budget 2027 du joueur ; les grèves sont générées par le moteur selon la tension."
+  },
+  {
+    "id": "vote_plf_2027",
+    "date": "2026-11-17",
+    "titre": "Vote solennel sur l'ensemble du PLF 2027",
+    "description": "Vote de l'Assemblée sur l'ensemble du projet de loi de finances 2027 (éventuellement le 18 novembre) ; recours au 49.3 et motions de censure possibles.",
+    "categorie": "politique",
+    "certitude": "programme",
+    "type": "echeance",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www2.assemblee-nationale.fr/17/la-conference-des-presidents/releve-de-conclusions/reunion-du-mercredi-15-juillet-2026",
+        "title": "Conférence des présidents, réunion du 15 juillet 2026 (Assemblée nationale)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Conception : l'issue du vote (49.3, censure) dépend du joueur (modèle de vote)."
+  },
+  {
+    "id": "sp_novembre",
+    "date": "2026-11-27",
+    "titre": "Revue de la note française par S&P",
+    "description": "S&P (A+, perspective stable) réexamine la note de la France.",
+    "categorie": "economie",
+    "certitude": "programme",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://selectra.info/finance/actualites/marche/moody-note-france-23-octobre-credit-immobilier",
+        "title": "Calendrier des notations de la France : Moody's 23/10, S&P 27/11 ; S&P A+ stable le 29/05/2026 (Selectra, d'après l'AFT)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Issue inconnue : aucun effet tant que la décision n'est pas publiée."
+  },
+  {
+    "id": "sarkozy_appel",
+    "date": "2026-11-30",
+    "titre": "Arrêt d'appel dans l'affaire du financement libyen",
+    "description": "La cour d'appel de Paris rend son arrêt dans le procès de Nicolas Sarkozy ; le parquet général a requis 7 ans de prison, 300 000 € d'amende et 5 ans d'inéligibilité.",
+    "categorie": "politique",
+    "certitude": "programme",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://fr.euronews.com/my-europe/2026/05/27/fin-du-proces-en-appel-de-nicolas-sarkozy-dans-laffaire-libyenne-verdict-attendu-le-30-nov",
+        "title": "Fin du procès en appel de Nicolas Sarkozy : verdict attendu le 30 novembre (Euronews, 27 mai 2026)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Décision judiciaire, issue inconnue : aucun effet."
+  },
+  {
+    "id": "bce_decembre",
+    "date": "2026-12-17",
+    "titre": "Réunion de politique monétaire de la BCE",
+    "description": "Décision de taux de la BCE (16-17 décembre), suivie d'une conférence de presse et de nouvelles projections.",
+    "categorie": "economie",
+    "certitude": "programme",
+    "type": "exogene",
+    "effets": [],
+    "sources": [
+      {
+        "url": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+        "title": "Calendrier des réunions du Conseil des gouverneurs (BCE)",
+        "accessed": "2026-10-20"
+      }
+    ],
+    "note": "Issue inconnue : aucun effet."
+  }
+]

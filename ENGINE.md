@@ -1,0 +1,124 @@
+# Moteur Hexagone : conventions (phase 1)
+
+Contrat de types : `src/types.ts`. Données : `gamedata/*.json` (schémas `src/schemas.ts`, conventions `gamedata/SOURCES.md`).
+Formules des dynamiques : champ `description` de chaque coefficient de `gamedata/coefficients.json`. Référence numérique : `scripts/papersim.cjs`.
+Les règles ci-dessous tranchent les ambiguïtés relevées par la critique de la phase 0.5. En cas de conflit, ce fichier l'emporte.
+
+## 1. Temps et ordre du tick
+
+Un tick = un mois. `endTurn` applique, dans cet ordre, en utilisant les valeurs du mois précédent pour les boucles (spread ↔ stabilité, satisfaction ↔ chômage) :
+
+1. **Événements** du mois (`events-2026.json`, date au mois près) : `exogene` → effets actifs ; `echeance` → simple `TurnEvent` (aucun effet).
+1b. **Événement aléatoire** (§5b) : au plus un par mois.
+2. **Lois** : celles dont `voteLe` = ce mois sont votées (§4) ; adoptées → `promulgueLe` = ce mois ; leurs leviers et effets qualitatifs démarrent. Assemblée dissoute ce mois-ci (mode démocratie) : votes du mois reportés d'un mois (`voteLe` = mois suivant, aucun vote). Seuls comptent les votes de l'Assemblée en place : un texte adopté par une Assemblée dissoute (puis rejeté au Sénat) est revoté par les deux chambres.
+2b. **Législatives anticipées** (§11) si une dissolution a été prononcée ce mois-ci.
+3. **Indexations automatiques** : pensions au 1er janvier (`pensions_indexation_inflation`) ; SMIC au 1er janvier et en cours d'année si l'inflation cumulée depuis la dernière revalorisation dépasse `smic_seuil_revalorisation_inflation`. L'indexation bouge `levers[id].reference`, jamais `delta`.
+4. **Effets actifs** → lignes budgétaires, terme d'offre O, inflation, satisfaction, scores.
+5. **Macro** : croissance (tendance + multiplicateurs × impulsion budgétaire + O + chocs + grèves), chômage (Okun sur l'écart de croissance **hors effets d'offre des leviers** : voir §7a), inflation.
+6. **Finances publiques** : recettes (élasticités au PIB), dépenses, intérêts (taux apparent × dette, refinancement de `part_dette_refinancee_mois` au taux de marché), solde, dette, spread (constante + dette + déficit + stabilité + notations + `prime_risque`).
+7. **Opinion** : satisfaction des groupes → popularité (pondérée part × participation) → intentions de vote.
+8. **Tension** régionale puis nationale → grèves (seuils) ; **stabilité**.
+8b. **Fin de partie anticipée** (§10) : compteurs de mois consécutifs au-delà des seuils.
+9. **Historique** : snapshot. La partie s'arrête après décembre 2030, ou à la défaite.
+
+Normalisations : PIB mensuel = PIB annuel / 12, PIB nominal = somme glissante sur 12 mois, déficit du mois = variation de dette. Voir papersim.
+
+## 2. Leviers
+
+- État : `levers[id] = { reference, delta }`. Valeur affichée = `reference + delta`. `reference` part de `valeur_initiale` et suit les indexations automatiques.
+- Une loi applique `delta += spec.levers[i].delta` (borné par min/max du levier sur la valeur affichée).
+- **Effet d'une variation** Δ (changement de `delta` à la promulgation) : pour chaque effet du levier, un `ActiveEffect` d'amplitude `elasticite × Δ`, démarrant à `promulgation + delai_mois`, avec `rampe_mois`. `niveau` = permanent ; `choc` = décroissance linéaire sur `duree_mois`.
+- Revenir en arrière = nouvelle variation de signe opposé (les chocs de popularité se rejouent en sens inverse : assumé).
+- Montants en Md€ : en euros 2026, multipliés par `PIB nominal(t) / PIB nominal initial` au moment de l'application.
+- `BillSpec.rampMonths` ne s'applique qu'aux effets qualitatifs ; les leviers gardent leurs propres délais et rampes.
+
+## 3. Satisfaction des groupes : une seule voie
+
+- La satisfaction bouge **uniquement** par : le pouvoir d'achat (formule de `satisfaction_poids_pouvoir_achat`), l'emploi, les effets `kind: group` (leviers, lois qualitatives, événements).
+- `groupes_touches` (leviers) et `tags.reactions_groupes` ne touchent **jamais** la satisfaction : ils servent au vote des groupes parlementaires (§4) et au terme « lois impopulaires » de la tension (`tension_poids_lois_impopulaires`) et de la popularité (`popularite_poids_lois_impopulaires`), pendant `tension_lois_duree_mois`. Les réactions d'une loi (leviers + tags) sont d'abord agrégées par groupe (`billGroups` : intensités signées additionnées, une entrée par groupe plafonnée à « forte »).
+- Popularité = moyenne des satisfactions pondérée par part × participation, puis inertie.
+
+## 4. Parlement (heuristique, `src/parliament.ts`)
+
+Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hypothese: true`).
+- Axes de la loi = moyenne des `axes` de ses tags. Pour chaque groupe parlementaire : `s = parlement_poids_axes × (axes · positionnement) + bonus(rapport) + parlement_poids_popularite × (popularité − 0.3)` avec bonus majorité / soutien conditionnel / opposition.
+- `p_pour = σ(k·s)`, `p_contre = σ(−k·s)`, abstention = reste via `parlement_abstention_base`. Au vote, le score reçoit un choc gaussien commun à la chambre (`parlement_incertitude_commune`) et un choc par groupe (`parlement_incertitude_groupe`). Votes = sièges × probabilités, avec dissidence tirée (rng) selon `1 − discipline`.
+- Adoption à l'Assemblée = pour > contre (majorité des exprimés). Le Sénat vote aussi (affiché) ; en cas de désaccord, l'Assemblée a le dernier mot un mois plus tard (CMP simplifiée).
+- **Prévision** (`forecastVote`, prévisualisation §8) : Monte-Carlo de 1000 votes (même fonction que `voteBill`) sur des graines fixes, donc déterministe et indépendant de `state.rng`. Voix = moyennes, probabilité d'adoption = fréquence.
+- **49.3** après un rejet : budget (tag `fiscalite_*`/`austerite_depenses`/`relance_depenses` et coût ≠ 0) illimité, sinon une fois par année civile. Motion de censure votée immédiatement par les groupes hors majorité (opposition et soutien conditionnel : l'opposition seule n'atteint pas 289 sièges) selon `p_contre` ; adoptée si ≥ 289 voix → loi rejetée (`censuree`), choc de stabilité `censure_choc_stabilite` sur `censure_duree_choc_mois`, le gouvernement devient démissionnaire (§11).
+- Le 49.3 est impossible en cohabitation (prérogative du PM), pour un gouvernement démissionnaire et pendant une dissolution (§11).
+- **Malus de cohabitation** : en cohabitation, à l'Assemblée seulement, le score des groupes `majorite` perd `parlement_malus_cohabitation` sur chaque texte du Président (vote et prévision ; le Sénat n'est pas concerné).
+- Mode `decret` : adoption automatique au mois prévu, pas de vote.
+
+## 5. Événements
+
+- Appliqués au tick de leur mois. Tout effet d'événement dure `duree_mois` : `niveau` = constant puis arrêt ; `choc` = décroissance linéaire. Amplitude = barème `bareme.<kind>.<magnitude>` × direction.
+- Correspondance cible → barème : indicator croissance_pib → croissance, chomage_bit → chomage, inflation → inflation, taux_pauvrete → pauvrete ; group → satisfaction ; region / tension → tension ; popularite, stabilite, budget, prime_risque : homonymes ; notation : crans directement (amplitude = direction).
+- Les événements réels s'arrêtent fin 2026 ; les événements aléatoires (§5b) prennent le relais.
+
+## 5b. Événements aléatoires (`gamedata/events-random.json`)
+
+- Modèles : probabilité mensuelle de base × multiplicateur de chaque condition remplie (indicateur national ou `groupe:<id>` comparé à un seuil, valeurs du mois précédent), plafonnée à 0,5. Nuls avant `depuis`, hors des `mois` de saison et pendant `delai_min_mois` après le dernier tirage du modèle (`internals['ev:<id>']`).
+- Chaque mois, **un** tirage `rand(state.rng)` : si `u < Σp`, le modèle retenu est celui où la somme cumulée dépasse `u` (au-delà de Σp = 1, `u` est mis à l'échelle). Le générateur avance donc d'un cran chaque mois, même sans événement.
+- `region` : la région touchée est tirée (second tirage) selon la population ou le carré de la tension ; les effets `region` sans id la visent et son nom s'ajoute au titre.
+- Effets : mêmes règles que §5. `TurnEvent.type = 'aleatoire'`.
+- Jamais en prévisualisation (§8) : `endTurn(state, { aleatoire: false })`.
+- Fréquence (npm run balance) : ≈ 3,3 événements par an sans action ; davantage de crises quand la situation se dégrade (conditions).
+
+## 6. Déterminisme
+
+`mulberry32` initialisé par `seed`, état dans `state.rng`. Aucun `Math.random` ni `Date` dans `src/`. Même état + mêmes actions ⇒ même résultat. Le moteur est pur : chaque fonction renvoie un nouvel état.
+
+## 7. Corrections de la phase 1.1
+
+a. **Okun** : seuls les effets d'offre des **leviers** (`source.kind = 'lever'`, cible `croissance_pib`) sont retirés de la croissance qui alimente Okun. Les chocs de croissance des événements (guerre en Iran, tempêtes…) et les effets qualitatifs des lois sur la croissance passent par Okun et font donc bouger le chômage (avec le retard du lissage sur 6 mois). Raison : un levier d'offre (ex. réforme structurelle) a son propre effet chômage dans le catalogue, alors qu'un choc d'activité exogène détruit des emplois.
+b. **Indexation des pensions** : déjà cumulative depuis la phase 1. Le delta de `retraite.indexation_pensions` s'ajoute à chaque revalorisation du 1er janvier sur l'indice Pen (`Pen ×= 1 + (auto + delta)/100`) ; l'effet budgétaire est `elasticite × 100 × (Pen / Pen_fil_de_l'eau − 1)`, recalculé chaque mois. −1 point ⇒ ≈ 2,9 / 6,0 / 9,3 Md€ courants d'économie en 2027 / 2028 / 2029 (test sur 3 ans). L'effet budgétaire générique du levier n'est pas créé à la promulgation (pas de double compte).
+c. **Croissance potentielle** : interpolation linéaire de `croissance_potentielle` (1,2 %) à `croissance_potentielle_long_terme` (1,0 %) entre juillet 2028 et juillet 2029 (mois 30 à 42), au lieu d'un palier en janvier 2029 ; les moyennes annuelles restent proches du PSMT (≈ 1,2 % en 2028, 1,0 % en 2029).
+d. **SMIC** : la règle compare bien l'IPC simulé (approximation de l'IPC hors tabac des 20 % de ménages les plus modestes) du mois t−2 (publié en t−1, effet au 1er du mois t) à l'indice de la dernière revalorisation (novembre 2025 au départ), seuil 2 %. **Écart de calibrage** : dans la réalité, le seuil a été franchi au printemps 2026 et le SMIC revalorisé au 1er juin 2026 ; dans la simulation (sans action), la hausse de l'indice depuis novembre 2025 culmine à ≈ 1,3 % au printemps et ≈ 1,8 % en octobre, et ne franchit jamais 2 % en 2026 : seule la revalorisation de janvier 2027 (+1,55 %) a lieu. Rien n'est forcé : l'écart vient de l'inflation simulée (choc pétrolier de 2026 sous-estimé par le barème des événements et IPC national au lieu de celui du 1er quintile, plus sensible à l'énergie).
+e. **Choix chiffrés devenus coefficients** (`hypothese: true`) : `censure_duree_choc_mois` (6, durée du choc de stabilité après censure), `part_chomage_aides_sociales` (0,27, part de `aides_sociales` élastique à la conjoncture), `greve_generale_region` (11, région de rattachement de l'événement « grève générale », convention d'affichage).
+
+## 8. Prévisualisation d'une loi (`previewBill`)
+
+- Horizon : `months` arrondi et borné à [6, 60], compté **après l'adoption** : on simule `prepMonths + months` mois, borné au nombre de mois restant avant la fin de la partie (0 si elle est finie). Si la partie finit avant l'adoption (`result.months <= prepMonths`), la loi n'est jamais appliquée dans la fenêtre : écarts nuls, l'interface le signale.
+- Deux simulations par `endTurn` (sans événement aléatoire) depuis une copie de l'état (historique vidé : non lu par le tick) : **sans** la loi, et **avec** la loi ajoutée en brouillon puis promulguée sans vote au mois `date + prepMonths`, juste avant le tick de ce mois (comme en mode décret). Événements programmés, autres lois et générateur aléatoire suivent les mêmes règles des deux côtés ; l'écart inclut les interactions (ex. popularité modifiée avant le vote d'une autre loi).
+- Les tags comptent : une loi sans levier mais dont les tags ont des réactions négatives fait monter la tension (§3), donc l'écart n'est nul que pour une loi sans levier, sans effet qualitatif et sans tag impopulaire.
+- Écarts au dernier mois simulé : tous les indicateurs, lignes budgétaires non nulles (`recettes.x` / `depenses.x`, triées par |écart|), satisfaction de chaque groupe, tension et chômage de chaque région, intentions de vote.
+- `vote` : prévision Assemblée puis Sénat (§4) à l'état courant ; vide en mode décret.
+- Coût : ≈ 20 ms pour 60 mois (test < 100 ms).
+
+
+## 10. Fin de partie anticipée (défaites)
+
+- Trois causes, chacune avec un seuil (coefficients `defaite_*`) : **dette** (spread ≥ `defaite_spread_seuil`, l'État perd l'accès aux marchés), **régime** (stabilité ≤ `defaite_stabilite_seuil`, le Président démissionne), **soulèvement** (tension nationale ≥ `defaite_tension_seuil`).
+- Compteur `internals['def:<cause>']` : +1 par mois au-delà du seuil, remis à 0 dès qu'il repasse. Premier mois : `TurnEvent` `alerte` ; au mois `defaite_mois_consecutifs` : `state.defaite = { cause, date }`, `TurnEvent` `defaite`, et `isOver` devient vrai. Seule la première défaite compte.
+- `engine.dangers(state)` liste les compteurs en cours (bandeau d'alerte de l'interface, contexte du conseiller LLM).
+- Le spread reçoit un terme non linéaire en déficit (`spread_non_lineaire_deficit`, actif au-delà de 6 %), sans quoi aucune dérive budgétaire ne menait à la crise de la dette.
+- Calage (50 graines, `npm run balance`) : aucune défaite sans action ni pour une réforme isolée (retraites, austérité de 20 Md€) ; quelques-unes pour un dérapage de +90 Md€ ou une austérité brutale ; environ deux tiers des parties en cumulant deux réformes brutales ; toujours pour une dérive budgétaire extrême.
+
+## 11. Institutions : gouvernement, censure, dissolution, cohabitation
+
+Code : `src/institutions.ts`. Données : `politics.institutions` (blocs, coalitions, profils). Coefficients `legislatives_*`, `dissolution_*`, `parlement_malus_cohabitation`.
+
+**Règles**
+1. **Gouvernement** : `state.institutions?.gouvernement` (profil, PM, date, démission). Les rapports des groupes restent dans `parliament.assemblee[].rapport` (lus par le vote, la censure et la cohésion qui alimente la stabilité) : nommer un PM réécrit ces rapports, rien d'autre. La discipline des groupes ne change pas.
+2. **Censure adoptée** : le gouvernement devient **démissionnaire**. `deposit` est refusé et le 49.3 impossible ; l'interface désactive « Fin du mois » tant qu'aucun PM n'est nommé. Le moteur ne bloque pas `endTurn` (scripts et prévisualisation restent totaux) : les textes déjà en préparation sont votés avec les rapports en place.
+3. **Nomination** (`nominate`) : seulement si le gouvernement est démissionnaire, pas de remaniement volontaire. Quatre profils nommables (`camp_presidentiel`, `ouverture_gauche`, `ouverture_droite`, `technicien`), rapports donnés par `profils[].rapports` (groupe absent = opposition). `cohabitation` n'est jamais nommable : seul le tick le pose après des législatives.
+4. **Dissolution** (`dissolve`, art. 12) : mode démocratie, partie en cours, aucune dissolution en cours, au moins `dissolution_delai_mois` (12) écoulés depuis le dernier scrutin législatif (juillet 2024 au départ : possible dès janvier 2026). Prononcée au mois t, elle entraîne les deux tours au tick de t (étape 2b). Choc de stabilité `dissolution_choc_stabilite` sur `dissolution_duree_choc_mois` ; votes du mois t reportés d'un mois.
+5. **Sièges** (`scrutin`, pur) : par blocs, à partir de `state.intentions` (formule ci-dessous).
+6. **Issue** (`issue`), dans cet ordre : (a) blocs de `majorite_presidentielle` ≥ 289 (`censure_seuil`) → `majorite` ; (b) sinon première coalition de `coalitions_opposition` ≥ 289 → `cohabitation`, PM automatique ; (c) sinon `sans_majorite`. En (a) et (c), le gouvernement devient démissionnaire (rapports inchangés jusqu'à la nomination) ; si c'était un gouvernement de cohabitation, il passe au profil `technicien` (affaires courantes, rapports de ce profil) : la cohabitation prend fin.
+7. **Cohabitation** : groupes des blocs de la coalition → `majorite`, groupes du bloc `majorite_presidentielle[0]` → `soutien_conditionnel`, autres → `opposition`. À l'Assemblée, malus `parlement_malus_cohabitation` sur les groupes `majorite` (bonus net +0,1, comme un soutien conditionnel : la coalition vote selon les axes) ; 49.3 impossible. Jamais de défaite par cohabitation ; seule une nouvelle dissolution y met fin.
+8. **Effets** : campagne → choc de stabilité (règle 4) ; résultat → choc de popularité `legislatives_effet_popularite × Δsièges du camp présidentiel / 577` (forme choc, `dissolution_duree_choc_mois`) ; la stabilité suit ensuite la nouvelle assise via le terme de cohésion (§1, étape 8), dont l'écart à la cohésion initiale est borné dans [−`stabilite_cohesion_perte_max`, `stabilite_cohesion_gain_max`] : une Assemblée sans majorité coûte l'équivalent de la perte d'un groupe (pas de défaite mécanique), une nomination ne rend pas le pays plus stable qu'avant la censure. Le bloc gouvernemental du modèle d'intentions (`BLOC` de `tick.ts`) reste celui du Président.
+
+**Sièges** : voix `v_b` = Σ intentions des partis du bloc ; score `w_b = (v_b × (barrage ? legislatives_barrage : 1))^legislatives_exposant × exp(legislatives_incertitude × z_b)`, `z_b` gaussien tiré de `state.rng` dans l'ordre des blocs, et pour le camp présidentiel (`majorite_presidentielle[0]`) × `exp(legislatives_prime_popularite × (popularité − popularité initiale))` (popularité du mois précédent) ; part `λ × S_b / ΣS + (1 − λ) × w_b / Σw` (S = sièges sortants du bloc, λ = `legislatives_ancrage_local`) ; sièges du bloc = plus forts restes de `N × part`, N = 577 − sièges des `hors_blocs` (LIOT, NI : inchangés ; les sièges vacants sont pourvus, total 577) ; sièges d'un groupe = plus forts restes au prorata de ses sièges dans `politics.json`. Rapports des groupes inchangés par le scrutin.
+
+**Tick** : étape 2b, après les lois et avant les indexations. Les effets de popularité jouent dès l'étape 4, la stabilité de l'étape 8 lit la nouvelle cohésion. Les intentions utilisées sont celles du mois précédent (l'étape 7 vient après) : la prévision, faite à l'état courant, suit exactement la même loi. Le générateur n'avance en plus qu'au mois du scrutin (déterminisme conservé) ; `previewBill` n'a rien de particulier (même tirage des deux côtés).
+
+Pendant une dissolution, `previewBill` ne donne pas de prévision de vote (`vote` vide) : le texte sera voté par l'Assemblée élue.
+
+**Prévision** (`forecastLegislatives`) : Monte-Carlo de 1000 scrutins sur graines fixes (comme `forecastVote`) : moyenne, 10e et 90e centiles des sièges par bloc, fréquence des issues. Pure, n'avance pas `state.rng`.
+
+**Sauvegardes** : `institutions` est optionnel ; absent (sauvegarde antérieure), `inst()` renvoie `INSTITUTIONS0` (gouvernement Lecornu, `camp_presidentiel`, législatives de juillet 2024). Rien n'est ajouté à `internals`. Les rapports initiaux restent ceux de `rapport_gouvernement` (SOC en soutien conditionnel), pas ceux du profil.
+
+**Calage** (`npm run balance`, dissolution au 13e mois, 50 graines × 4 scénarios) : au départ (popularité ≈ 0,18, `horizons` ≈ 17 %), RN et alliés ≈ 250 sièges, centre ≈ 100, gauche ≈ 100, gauche radicale ≈ 70, droite ≈ 25 ; union des droites ≈ 25 à 30 %, aucune majorité ≈ 70 %, majorité présidentielle ≈ 0. À intentions égales, la popularité déplace le centre : ≈ 75 sièges à 0,10, ≈ 160 (les sortants) à 0,30, majorité présidentielle ≈ 40 % à 0,44 (`legislatives_prime_popularite`). Sièges prévus et obtenus du centre : écart ≈ 1 siège. Après un scrutin qui laisse le gouvernement démissionnaire, chacun des quatre profils joué 12 mois : ≈ 3 % de défaites, stabilité finale 0,28 à 0,34 (ouverture à droite en tête).
+
+**Limites** : pas de remaniement volontaire ; discipline inchangée ; une seule coalition d'opposition, testée dans l'ordre des données (pas de majorité négociée après le scrutin) ; intentions de présidentielle utilisées comme vote législatif (voix centristes sous `horizons`) ; la cohabitation n'est qu'un malus de vote et la perte du 49.3.
