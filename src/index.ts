@@ -40,8 +40,9 @@ function validateBill(state: GameState, spec: BillSpec): string[] {
 
 function addDraft(state: GameState, spec: BillSpec): GameState {
   const s = structuredClone(state);
-  // max + 1 plutôt que length + 1 : id unique même si une loi a été retirée de la liste (ex. prévisualisation).
-  const n = Math.max(0, ...s.bills.map((b) => Number(/^loi-(\d+)$/.exec(b.id)?.[1] ?? 0)));
+  // Dernier numéro attribué gardé dans internals : les projets retirés sont supprimés en fin de mois, un id n'est jamais réutilisé.
+  const n = Math.max(s.internals['loi:dernier'] ?? 0, ...s.bills.map((b) => Number(/^loi-(\d+)$/.exec(b.id)?.[1] ?? 0)));
+  s.internals['loi:dernier'] = n + 1;
   s.bills.push({ id: `loi-${n + 1}`, spec: structuredClone(spec), status: 'brouillon', votes: [] });
   return s;
 }
@@ -62,6 +63,15 @@ function deposit(state: GameState, billId: string): GameState {
   b.status = 'preparation';
   b.deposeLe = { ...s.date };
   b.voteLe = { year: 2026 + Math.floor(m / 12), month: (m % 12) + 1 };
+  return s;
+}
+
+// Amendement : nouveau texte pour un projet en brouillon ou en préparation. Un projet déposé garde sa date de vote.
+function amend(state: GameState, billId: string, spec: BillSpec): GameState {
+  const s = structuredClone(state);
+  const b = s.bills.find((x) => x.id === billId);
+  if (!b || (b.status !== 'brouillon' && b.status !== 'preparation')) return state;
+  b.spec = spec;
   return s;
 }
 
@@ -149,7 +159,7 @@ function choose(state: GameState, choixId: string): { state: GameState; events: 
 }
 
 export const engine: Engine = {
-  newGame, choose, canDeposit, forecastPresidentielle, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
+  newGame, choose, canDeposit, amend, forecastPresidentielle, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
   endTurn: (state) => endTurn(state),
   isOver: (state) => monthIndex(state.date) >= 60 || !!state.defaite,
 };

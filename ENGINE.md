@@ -6,7 +6,7 @@ Les règles ci-dessous tranchent les ambiguïtés relevées par la critique de l
 
 ## 1. Temps et ordre du tick
 
-Un seul projet déposé par mois (`canDeposit`, `deposit` refuse le second) ; les lois de finances (`spec.loiDeFinances`) n'entrent pas dans ce compte. Les brouillons restent illimités.
+Un seul projet déposé par mois (`canDeposit`, `deposit` refuse le second) ; les lois de finances (`spec.loiDeFinances`) n'entrent pas dans ce compte. Les brouillons restent illimités. `amend` remplace le texte d'un projet en brouillon ou en préparation (un projet déposé garde sa date de vote). Un projet retiré disparaît à la fin du mois.
 
 Un tick = un mois. `endTurn` applique, dans cet ordre, en utilisant les valeurs du mois précédent pour les boucles (spread ↔ stabilité, satisfaction ↔ chômage) :
 

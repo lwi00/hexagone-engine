@@ -158,7 +158,10 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   const avant = { ...s.national };
   const I = s.internals;
 
-  // 0. Dilemme resté sans réponse : réponse par défaut (premier choix), avant tout nouveau tirage.
+  // 0. Les projets retirés disparaissent à la fin du mois du retrait (jamais votés, ils n'ont ni effet ni vote).
+  s.bills = s.bills.filter((b) => b.status !== 'retiree');
+
+  // 0b. Dilemme resté sans réponse : réponse par défaut (premier choix), avant tout nouveau tirage.
   if (s.dilemme) out.push(...applyChoice(s, s.dilemme.choix[0].id, t, true));
 
   // 1. Événements du mois

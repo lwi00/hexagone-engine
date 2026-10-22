@@ -231,3 +231,33 @@ describe('un dépôt par mois', () => {
     expect(engine.deposit(s, b).bills.find((x) => x.id === b)!.status).toBe('preparation');
   });
 });
+
+describe('amendement et retrait', () => {
+  const spec = (title: string): BillSpec => ({
+    title, summary: 's', articles: [], levers: [], qualitative: [], tags: ['fiscalite_hausse'], prepMonths: 3, rampMonths: 0, estimatedCost: 1,
+  });
+  test('amend remplace le texte (brouillon, préparation avec la même date de vote), pas après le vote', () => {
+    let s = engine.addDraft(engine.newGame({ seed: 1, mode: 'democratie' }), spec('v1'));
+    const id = s.bills[0].id;
+    s = engine.amend(s, id, spec('v2'));
+    expect(s.bills).toHaveLength(1);
+    expect(s.bills[0].spec.title).toBe('v2');
+    s = engine.deposit(s, id);
+    const voteLe = s.bills[0].voteLe;
+    s = engine.amend(s, id, { ...spec('v3'), prepMonths: 1 });
+    expect(s.bills[0]).toMatchObject({ status: 'preparation', voteLe, spec: { title: 'v3' } });
+    const retiree = engine.withdraw(s, id);
+    expect(engine.amend(retiree, id, spec('v4'))).toBe(retiree);
+  });
+  test('un projet retiré disparaît à la fin du mois', () => {
+    let s = engine.addDraft(engine.newGame({ seed: 1, mode: 'democratie' }), spec('a'));
+    s = engine.addDraft(s, spec('b'));
+    s = engine.withdraw(s, s.bills[0].id);
+    expect(s.bills).toHaveLength(2);
+    s = engine.endTurn(s).state;
+    expect(s.bills.map((b) => b.spec.title)).toEqual(['b']);
+    s = engine.withdraw(s, s.bills[0].id);
+    s = engine.addDraft(engine.endTurn(s).state, spec('c'));
+    expect(s.bills[0].id).toBe('loi-3'); // jamais réutilisé
+  });
+});
