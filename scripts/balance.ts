@@ -2,7 +2,8 @@
 // Sert à régler gamedata/coefficients.json : on lit les tableaux, on ajuste, on relance.
 import { engine } from '../src/index.ts';
 import { parBloc } from '../src/institutions.ts';
-import type { BillSpec, GameState } from '../src/types.ts';
+import { CANDIDATS } from '../src/presidentielle.ts';
+import type { BillSpec, GameState, TurnEvent } from '../src/types.ts';
 
 const loi = (title: string, levers: BillSpec['levers'], tags: string[], qualitative: BillSpec['qualitative'] = []): BillSpec =>
   ({ title, summary: title, articles: [title], levers, qualitative, tags, prepMonths: 1, rampMonths: 6, estimatedCost: 0 });
@@ -24,6 +25,8 @@ const SCENARIOS: Record<string, BillSpec[]> = {
     ['retraites_durcissement', 'austerite_depenses', 'fiscalite_hausse'])],
 };
 
+// Changements de rapport d'un groupe (ENGINE.md §13) : attendu 0 dans les cohortes « au gouvernement » sans loi répétée.
+const nRapports = (ev: TurnEvent[]) => ev.filter((e) => e.kind === 'rapport').length;
 const pct = (x: number) => (100 * x).toFixed(0).padStart(4);
 const f = (x: number, k = 1) => x.toFixed(k).padStart(6);
 
@@ -39,15 +42,17 @@ function joue(lois: BillSpec[], seed: number, mode: 'democratie' | 'decret') {
   for (const spec of lois) { s = engine.addDraft(s, spec); s = engine.deposit(s, s.bills[s.bills.length - 1].id); }
   const snaps: GameState[] = [];
   const greves = new Set<string>();
-  let maxGreves = 0;
+  let maxGreves = 0, bascules = 0;
   while (!engine.isOver(s)) {
-    s = avance(s).state;
+    const r = avance(s);
+    s = r.state;
+    bascules += nRapports(r.report.events);
     snaps.push(s);
     const g = Object.entries(s.regions).filter(([, r]) => r.greve).map(([c]) => c);
     g.forEach((c) => greves.add(c));
     maxGreves = Math.max(maxGreves, g.length);
   }
-  return { s, snaps, greves, maxGreves };
+  return { s, snaps, greves, maxGreves, bascules };
 }
 
 console.log('== Scénarios (mode décret : effet pur des mesures ; seed 1) ==');
@@ -88,16 +93,17 @@ for (const [nom, lois] of Object.entries(SCENARIOS)) {
 console.log('\n== Événements aléatoires et défaites (50 graines, démocratie, 49.3 systématique) ==');
 const causes: Record<string, number> = {};
 for (const [nom, lois] of Object.entries(SCENARIOS)) {
-  let nEv = 0, mois = 0, def = 0, tDef = 0;
+  let nEv = 0, mois = 0, def = 0, tDef = 0, bas = 0;
   for (const k of Object.keys(causes)) delete causes[k];
   for (let seed = 1; seed <= 50; seed++) {
-    const { s, snaps } = joue(lois, seed, 'democratie');
+    const { s, snaps, bascules } = joue(lois, seed, 'democratie');
     mois += snaps.length;
+    bas += bascules;
     // ponytail: les événements aléatoires sont recomptés depuis internals (dernier tirage par modèle) : sous-estime les répétitions
     nEv += snaps.reduce((a, x, i) => a + Object.keys(x.internals).filter((k) => k.startsWith('ev:') && x.internals[k] === i).length, 0);
     if (s.defaite) { def++; tDef += snaps.length; causes[s.defaite.cause] = (causes[s.defaite.cause] ?? 0) + 1; }
   }
-  console.log(`${nom.padEnd(30)} événements/an ${f((12 * nEv) / mois)}   défaites ${String(def).padStart(2)}/50 ${def ? `(mois moyen ${Math.round(tDef / def)}, ${JSON.stringify(causes)})` : ''}`);
+  console.log(`${nom.padEnd(30)} événements/an ${f((12 * nEv) / mois)}   défaites ${String(def).padStart(2)}/50 ${def ? `(mois moyen ${Math.round(tDef / def)}, ${JSON.stringify(causes)})` : ''}   bascules ${bas}`);
 }
 
 console.log('\n== Dissolution au 13e mois (50 graines × 4 scénarios, démocratie) : issue selon la popularité, puis 12 mois ==');
@@ -109,9 +115,12 @@ console.log('\n== Dissolution au 13e mois (50 graines × 4 scénarios, démocrat
   let noms: string[] = [];
   // Gouvernement démissionnaire après le scrutin : chaque profil nommable est joué 12 mois (défaites, stabilité).
   const PROFILS = ['camp_presidentiel', 'ouverture_gauche', 'ouverture_droite', 'technicien'] as const;
-  const P = PROFILS.map(() => ({ def: 0, stab: 0 }));
-  let nP = 0;
-  const douze = (s: GameState) => { for (let i = 0; i < 12 && !engine.isOver(s); i++) s = avance(s).state; return s; };
+  const P = PROFILS.map(() => ({ def: 0, stab: 0, bas: 0 }));
+  let nP = 0, bas = 0;
+  const douze = (s: GameState, b = { n: 0 }) => {
+    for (let i = 0; i < 12 && !engine.isOver(s); i++) { const r = avance(s); s = r.state; b.n += nRapports(r.report.events); }
+    return s;
+  };
   for (const nom of ['Ne rien faire', 'Relance (+20 Md€)', 'SMIC +100 €', 'Austérité brutale']) {
     for (let seed = 1; seed <= 50; seed++) {
       let s = engine.newGame({ seed, mode: 'democratie' });
@@ -125,9 +134,14 @@ console.log('\n== Dissolution au 13e mois (50 graines × 4 scénarios, démocrat
       s = r.state;
       if (engine.pouvoir(s).gouvernement.demissionnaire) {
         nP++;
-        PROFILS.forEach((p, i) => { const x = douze(engine.nominate(s, p).state); P[i].def += x.defaite ? 1 : 0; P[i].stab += x.national.stabilite; });
+        PROFILS.forEach((p, i) => {
+          const b = { n: 0 }, x = douze(engine.nominate(s, p).state, b);
+          P[i].def += x.defaite ? 1 : 0; P[i].stab += x.national.stabilite; P[i].bas += b.n;
+        });
       }
-      s = douze(s); // camp présidentiel si démissionnaire (avance)
+      const b = { n: nRapports(r.report.events) };
+      s = douze(s, b); // camp présidentiel si démissionnaire (avance)
+      bas += b.n;
       const l = L[tranche(pop)], blocs = parBloc(leg.apres);
       noms = blocs.map((b) => b.id);
       l.n++; l.pop += pop; l.hor += hor; l.issues[leg.issue]++;
@@ -141,8 +155,9 @@ console.log('\n== Dissolution au 13e mois (50 graines × 4 scénarios, démocrat
     if (!l.n) return console.log(`${TRANCHES[i].padEnd(8)} ${String(0).padStart(3)}`);
     console.log(`${TRANCHES[i].padEnd(8)} ${String(l.n).padStart(3)} ${pct(l.pop / l.n)} ${f(l.hor / l.n)} ${l.blocs.map((x) => f(x / l.n, 0).padStart(7)).join('')}  ${pct(l.issues.majorite / l.n)}  ${pct(l.issues.cohabitation / l.n)}     ${pct(l.issues.sans_majorite / l.n)}     ${f(l.prevu / l.n, 0)} / ${f(l.obtenu / l.n, 0)}          ${pct(l.stab / l.n)}`);
   });
-  console.log(`Gouvernement démissionnaire après le scrutin (${nP} cas), profil nommé : défaites en 12 mois / stabilité finale`);
-  console.log(PROFILS.map((p, i) => `  ${p.padEnd(18)} ${String(P[i].def).padStart(3)}/${nP} ${pct(P[i].stab / nP)}`).join('\n'));
+  console.log(`bascules (scrutin et 12 mois suivants, toutes tranches) : ${bas}`);
+  console.log(`Gouvernement démissionnaire après le scrutin (${nP} cas), profil nommé : défaites en 12 mois / stabilité finale / bascules`);
+  console.log(PROFILS.map((p, i) => `  ${p.padEnd(18)} ${String(P[i].def).padStart(3)}/${nP} ${pct(P[i].stab / nP)}   ${P[i].bas}`).join('\n'));
 }
 
 console.log('\n== Calage 2026 (sans action, démocratie, seed 1) vs réalité ==');
@@ -160,3 +175,13 @@ console.log(`Première revalorisation du SMIC : ${smic < 0 ? 'aucune' : `${r[smi
 console.log('Tension nationale 2026 :', r.slice(0, 12).map((s) => pct(s.national.tension)).join(''));
 console.log('Popularité 2026        :', r.slice(0, 12).map((s) => pct(s.national.popularite)).join(''));
 console.log('Régions en grève 2026  :', r.slice(0, 12).map((s) => String(Object.values(s.regions).filter((x) => x.greve).length).padStart(4)).join(''));
+
+console.log('\n== Camps (bac à sable, sans action, seed 1) : assise de départ, présidentielle prévue au départ et au 15e mois ==');
+console.log('camp             maj. soutien opp.   victoire départ / avril 2027   bascules');
+for (const camp of [undefined, ...CANDIDATS]) {
+  let s = engine.newGame({ seed: 1, mode: 'bac_a_sable', camp });
+  const a = engine.pouvoir(s).assise, v0 = engine.forecastPresidentielle(s).victoire;
+  let bas = 0;
+  for (let i = 0; i < 15; i++) { const r = avance(s); s = r.state; bas += nRapports(r.report.events); }
+  console.log(`${(camp ?? 'au gouvernement').padEnd(16)} ${String(a.majorite).padStart(4)} ${String(a.soutien_conditionnel).padStart(7)} ${String(a.opposition).padStart(4)}   ${pct(v0)} / ${pct(engine.forecastPresidentielle(s).victoire)}                ${bas}`);
+}

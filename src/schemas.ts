@@ -346,6 +346,11 @@ export const REQUIRED_COEFFICIENTS = [
   'parlement_poids_popularite', 'parlement_poids_accueil_populaire', 'parlement_pente', 'parlement_abstention_base', 'parlement_limite_493',
   'parlement_incertitude_groupe', 'parlement_incertitude_commune',
   'censure_seuil', 'censure_choc_stabilite', 'censure_malus_493',
+  // relations et rapports (ENGINE.md §13)
+  'parlement_relation_majorite', 'parlement_relation_soutien', 'parlement_relation_opposition', 'parlement_relation_seuil_soutien',
+  'parlement_relation_seuil_majorite', 'parlement_relation_hysteresis', 'parlement_relation_retour', 'parlement_relation_par_loi',
+  'parlement_relation_493', 'parlement_relation_poids_popularite', 'parlement_relation_memoire', 'parlement_relation_cout_rupture',
+  'parlement_relation_fidelite', 'parlement_relation_dissolution',
   // fin de partie anticipée (ENGINE.md §10)
   'defaite_mois_consecutifs', 'defaite_spread_seuil', 'defaite_stabilite_seuil', 'defaite_tension_seuil', 'spread_non_lineaire_deficit',
   // institutions (ENGINE.md §11)

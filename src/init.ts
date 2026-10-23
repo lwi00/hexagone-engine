@@ -86,6 +86,33 @@ export const INSTITUTIONS0: Institutions = {
 };
 export const inst = (s: GameState): Institutions => s.institutions ?? INSTITUTIONS0; // sauvegardes antérieures
 
+// Camp et relations (ENGINE.md §13). Champs facultatifs : un état sans camp ni relations se lit avec des valeurs dérivées.
+const D = politics.institutions;
+const BLOC_PARTI = new Map(D.blocs.flatMap((b) => b.parties.map((p) => [p, b.id])));
+// Bloc du camp : celui du parti choisi, sinon le centre (majorite_presidentielle[0]).
+export const campBloc = (s: GameState) => (s.camp && BLOC_PARTI.get(s.camp)) || D.majorite_presidentielle[0];
+// Camp choisi hors du centre : PM fictif, profils génériques. Camp 'horizons' = départ réel, seule la fidélité change.
+export const campAutre = (s: GameState) => campBloc(s) !== D.majorite_presidentielle[0];
+// Centre de bande de chaque rapport : relation d'un état qui n'en a pas (départ, sauvegarde antérieure).
+export const REL0: Record<Rapport, number> = { majorite: C.parlement_relation_majorite, soutien_conditionnel: C.parlement_relation_soutien, opposition: C.parlement_relation_opposition };
+export const relKey = (chambre: 'assemblee' | 'senat', id: string) => (chambre === 'senat' ? `senat_${id}` : id);
+export const relation = (s: GameState, g: { groupId: string; rapport: Rapport }, chambre: 'assemblee' | 'senat' = 'assemblee') =>
+  s.relations?.[relKey(chambre, g.groupId)] ?? REL0[g.rapport];
+// Seuils avec hystérésis : nouveau rapport pour la relation x, un cran au plus.
+const ORDRE: Rapport[] = ['opposition', 'soutien_conditionnel', 'majorite'];
+export function seuil(x: number, r: Rapport): Rapport {
+  const S = [C.parlement_relation_seuil_soutien, C.parlement_relation_seuil_majorite], h = C.parlement_relation_hysteresis, i = ORDRE.indexOf(r);
+  if (i < 2 && x >= S[i] + h) return ORDRE[i + 1];
+  if (i > 0 && x <= S[i - 1] - h) return ORDRE[i - 1];
+  return r;
+}
+// Bande de non-bascule d'un rapport, resserrée de h/2 : une relation posée à la nomination ne bascule pas d'elle-même.
+export function dansBande(x: number, r: Rapport): number {
+  const S = [C.parlement_relation_seuil_soutien, C.parlement_relation_seuil_majorite], h = C.parlement_relation_hysteresis, m = h / 2, i = ORDRE.indexOf(r);
+  const lo = i > 0 ? S[i - 1] - h + m : -1, hi = i < 2 ? S[i] + h - m : 1;
+  return Math.min(hi, Math.max(lo, x));
+}
+
 // Facteur du compte central (PIB nominal potentiel, 1 au milieu de 2026) : sert aussi à convertir les Md€ 2026.
 export const centralFactor = (s: GameState) => Math.exp(s.internals['x.lnYt'] + s.internals['x.lnPd'] - CENTRAGE);
 

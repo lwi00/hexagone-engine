@@ -1192,6 +1192,118 @@
     "justification": "Le gouvernement issu de l'opposition ne porte les textes du Président qu'à contrecœur : le bonus net de la coalition tombe à +0,1, comme un soutien conditionnel, donc son vote suit les axes et un texte opposé à sa ligne échoue."
   },
   {
+    "id": "parlement_relation_majorite",
+    "value": 0.6,
+    "unit": "relation −1..1",
+    "description": "Centre de la bande « majorité » de la relation d'un groupe avec l'exécutif (ENGINE.md §13). Relation absente (état de départ, sauvegarde antérieure) = centre de bande du rapport ; chaque mois, la relation revient vers le centre de bande du rapport en place (parlement_relation_retour).",
+    "hypothese": true,
+    "justification": "Il faut perdre 0,3 pour redescendre en soutien (sortie à 0,3). Un état sans relations redonne exactement les rapports actuels. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_soutien",
+    "value": 0.1,
+    "unit": "relation −1..1",
+    "description": "Centre de la bande « soutien conditionnel » (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "+0,4 pour passer en majorité, −0,4 pour passer dans l'opposition : un allié conditionnel ne bascule ni sur un geste ni sur un mauvais mois. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_opposition",
+    "value": -0.5,
+    "unit": "relation −1..1",
+    "description": "Centre de la bande « opposition » (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Il faut +0,4 pour remonter en soutien (−0,1). (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_seuil_soutien",
+    "value": -0.2,
+    "unit": "relation −1..1",
+    "description": "Frontière opposition | soutien conditionnel (ENGINE.md §13). Le rapport ne change qu'au-delà de cette frontière ± parlement_relation_hysteresis, d'un cran par mois au plus.",
+    "hypothese": true,
+    "justification": "Avec l'hystérésis : montée à −0,1, descente à −0,3. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_seuil_majorite",
+    "value": 0.4,
+    "unit": "relation −1..1",
+    "description": "Frontière soutien conditionnel | majorité (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Avec l'hystérésis : montée à 0,5, descente à 0,3. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_hysteresis",
+    "value": 0.1,
+    "unit": "relation",
+    "description": "Marge de part et d'autre de chaque frontière de rapport (ENGINE.md §13). La moitié sert aussi à resserrer la bande où la relation est posée à une nomination (dansBande).",
+    "hypothese": true,
+    "justification": "Évite les allers-retours mensuels sur la censure, l'assise et la cohésion. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_retour",
+    "value": 0.05,
+    "unit": "par mois",
+    "description": "Retour mensuel de la relation vers le centre de bande du rapport en place : x += retour × (centre − x) (ENGINE.md §13). Équilibre = centre + effet mensuel / retour.",
+    "hypothese": true,
+    "justification": "Demi-vie d'environ 14 mois : un geste isolé s'oublie en un an et demi, un allié gagné se consolide. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_par_loi",
+    "value": 0.15,
+    "unit": "relation par loi",
+    "description": "Par loi promulguée ce mois, la relation d'un groupe varie de cette valeur × fond (position Jev, sinon produit scalaire axes · positionnement, borné à ±1) (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Même échelle que le vote (position Jev ou produit scalaire, même poids parlement_poids_axes). Avec Jev, 3 ou 4 lois rejetées de suite font passer un soutien dans l'opposition (ordre de grandeur des ruptures PS/Renaissance de 2023 à 2025, à vérifier). Avec les tags, l'effet est plus faible : SOC sur les retraites −0,015 par loi, LFI sur le SMIC +0,12. Mesure du banc : aucune bascule sur une loi isolée."
+  },
+  {
+    "id": "parlement_relation_493",
+    "value": 0.1,
+    "unit": "relation par loi",
+    "description": "49.3 subi : la relation d'un groupe de l'Assemblée hors majorité dont le fond est négatif baisse de cette valeur, le mois de la promulgation (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Une loi isolée avec 49.3 laisse SOC vers −0,1 au pire du banc, au-dessus de la sortie à −0,3. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_poids_popularite",
+    "value": 0.07,
+    "unit": "relation par mois et par point 0-1",
+    "description": "Par mois, la relation varie de cette valeur × (popularité − popularité initiale) (ENGINE.md §13) : aucune dérive au départ.",
+    "hypothese": true,
+    "justification": "L'équilibre se décale de 1,4 × Δpop, soit −0,25 au plus vers le bas : la popularité seule ne fait jamais perdre un allié. Mesure du banc : Austérité brutale tombe à environ 1 à 4 % ; avec 0,1, la majorité serait passée à 0,02 de sa sortie. Vers le haut, une popularité ≥ 0,47 rallie l'opposition en soutien."
+  },
+  {
+    "id": "parlement_relation_memoire",
+    "value": 0.5,
+    "unit": "part",
+    "description": "Part de l'écart au centre de bande gardée à une nomination ou à une cohabitation : relation = centre de la nouvelle bande + cette valeur × (relation − centre de l'ancienne bande) (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Les griefs ne s'effacent pas d'un décret de nomination, mais le nouveau gouvernement repart en partie à neuf. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_cout_rupture",
+    "value": 0.2,
+    "unit": "relation par cran",
+    "description": "Nomination : relation retirée par cran de rapport perdu (majorité → opposition = 2 crans) (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Rancune des alliés lâchés (« changer d'alliés coûte en confiance »). Reste inférieur à 0,4 (= centre soutien − (seuil soutien − hystérésis)), vérifié par un test ; la bande resserrée empêche de toute façon une rebascule automatique."
+  },
+  {
+    "id": "parlement_relation_fidelite",
+    "value": 0.15,
+    "unit": "relation",
+    "description": "Camp choisi seulement : les groupes du bloc du camp perdent cette valeur quand une nomination fait entrer en majorité un groupe d'un autre bloc (ENGINE.md §13).",
+    "hypothese": true,
+    "justification": "Le parti punit l'ouverture. 0,6 − 0,15 = 0,45 reste au-dessus de la sortie de majorité (0,3). (Hypothèse de jeu.)"
+  },
+  {
+    "id": "parlement_relation_dissolution",
+    "value": 0.1,
+    "unit": "relation",
+    "description": "Dissolution : choc retiré à la relation des groupes de l'Assemblée qui ne sont pas dans l'opposition (leurs sièges sont remis en jeu) (ENGINE.md §13). Le Sénat n'est pas touché.",
+    "hypothese": true,
+    "justification": "Précédent de juin 2024 (à vérifier). La majorité reste vers 0,43 à 0,5, loin de 0,3, ce qui protège la cohorte de dissolution du banc."
+  },
+  {
     "id": "presidentielle_prime_popularite",
     "value": 3,
     "unit": "log du score par point de popularité 0-1",
@@ -1238,5 +1350,21 @@
     "hypothese": true,
     "description": "Choc commun du second tour (campagne d'entre-deux-tours, débat) : écart-type en points du score du premier finaliste.",
     "justification": "Écart entre les derniers sondages de second tour et le résultat : 2022 Macron 58,5 % pour 56-57 % annoncés ; 2017 66,1 % pour 62-63 %. (Ordres de grandeur, sources à vérifier.)"
+  },
+  {
+    "id": "presidentielle_deplacement_par_loi",
+    "value": 0.03,
+    "unit": "par loi et par axe",
+    "description": "Positionnement du Président (ENGINE.md §13) : chaque loi adoptée hors loi de finances déplace sa position de cette valeur × axe de la loi, sur chaque axe, amorti par (1 − |position|) quand la loi pousse vers l'extrême. Dérivé des lois adoptées, non stocké.",
+    "hypothese": true,
+    "justification": "Au plus 0,024 par loi (axes ≤ 0,8). Douze lois de droite font passer l'économie d'Horizons de 0,36 à environ 0,52 ; distance horizons–lr 0,58. Calage du banc (50 graines, une loi) : 0,06 puis 0,04 donnaient 3 défaites présidentielles de moins sur Relance (la loi rapproche le Président de la gauche, meilleurs reports face au RN), au-delà de la tolérance de ±2 ; 0,03 donne −2 sur Relance et SMIC. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "presidentielle_electeurs_suivent",
+    "value": 0.4,
+    "unit": "part",
+    "description": "Premier tour (ENGINE.md §13) : transfert d'intentions vers le candidat du joueur selon le rapprochement de sa position, δ = cette valeur × (exp(−report_distance × d(p, position)) − exp(−report_distance × d(p, position initiale))). Somme conservée, identité exacte à dérive nulle.",
+    "hypothese": true,
+    "justification": "Une dérive de 0,2 vers LR fait gagner environ 0,5 point pris à LR, sous le bruit de sondage (presidentielle_incertitude 0,12, soit environ ±2 points sur 17 %). Un effet de −7 % pour une dérive de 0,2 a été jugé excessif. (Hypothèse de jeu.)"
   }
 ]

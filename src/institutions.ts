@@ -1,8 +1,9 @@
 // Institutions (ENGINE.md §11) : gouvernement, dissolution, législatives anticipées, cohabitation.
 import type { GameState, Gouvernement, IssueLegislatives, LegislativesForecast, Pouvoir, ProfilPM, Rapport, Sieges, TurnEvent, YearMonth } from './types.ts';
 import { monthIndex, votesSimules } from './types.ts';
-import { C, INIT, inst, politics } from './init.ts';
-import { gauss } from './parliament.ts';
+import { C, INIT, REL0, campAutre, campBloc, dansBande, inst, politics, relKey, relation, seuil } from './init.ts';
+import { billAxes, fond, gauss, senatGroupes } from './parliament.ts';
+import { joueur, positionDe, positionPresident } from './presidentielle.ts';
 
 const D = politics.institutions;
 const PROFILS = new Map(D.profils.map((p) => [p.id as string, p]));
@@ -44,7 +45,7 @@ export function scrutin(s: GameState, rng: number): { assemblee: GameState['parl
     [z, rng] = gauss(rng);
     const v = sum(b.parties.map((p) => s.intentions[p] ?? 0));
     return (v * (b.barrage ? C.legislatives_barrage : 1)) ** C.legislatives_exposant * Math.exp(C.legislatives_incertitude * z)
-      * (b.id === D.majorite_presidentielle[0] ? prime : 1);
+      * (b.id === campBloc(s) ? prime : 1);
   });
   const S = BLOCS.map((b) => sortants(b.groupes));
   const sw = sum(w), sS = sum(S), l = C.legislatives_ancrage_local;
@@ -58,28 +59,151 @@ export function scrutin(s: GameState, rng: number): { assemblee: GameState['parl
   return { assemblee, rng };
 }
 
-// Issue : majorité présidentielle, sinon première coalition d'opposition à la majorité absolue, sinon aucune majorité.
-export function issue(a: Sieges): { issue: IssueLegislatives; coalition?: string } {
+// Majorité présidentielle (§13) : camp choisi hors du centre = son bloc et les autres blocs de la première coalition qui le
+// contient ; sinon celle des données.
+const majPres = (s?: GameState): string[] => {
+  if (!s || !campAutre(s)) return D.majorite_presidentielle;
+  const b = campBloc(s);
+  return [b, ...(D.coalitions_opposition.find((c) => c.blocs.includes(b))?.blocs.filter((x) => x !== b) ?? [])];
+};
+
+// Issue : majorité présidentielle, sinon première coalition d'opposition (sans le bloc du camp) à la majorité absolue, sinon
+// aucune majorité. Sans état : camp réel.
+export function issue(a: Sieges, s?: GameState): { issue: IssueLegislatives; coalition?: string } {
   const m = new Map(parBloc(a).map((b) => [b.id, b.sieges]));
   const tot = (ids: string[]) => sum(ids.map((id) => m.get(id) ?? 0));
-  if (tot(D.majorite_presidentielle) >= C.censure_seuil) return { issue: 'majorite' };
-  const c = D.coalitions_opposition.find((x) => tot(x.blocs) >= C.censure_seuil);
+  if (tot(majPres(s)) >= C.censure_seuil) return { issue: 'majorite' };
+  const cb = s ? campBloc(s) : D.majorite_presidentielle[0];
+  const c = D.coalitions_opposition.find((x) => !x.blocs.includes(cb) && tot(x.blocs) >= C.censure_seuil);
   return c ? { issue: 'cohabitation', coalition: c.id } : { issue: 'sans_majorite' };
 }
 
-// Rapport de chaque groupe au gouvernement : celui du profil, ou en cohabitation coalition → majorité, camp du Président → soutien conditionnel.
-export function rapportDe(g: Gouvernement): (groupId: string) => Rapport {
+// Profils génériques d'un camp choisi hors du centre (§13), sur les sièges initiaux (résultat stable, mis en cache par camp et
+// profil, par bloc). Majorité : bloc du camp (et le bloc voisin pour une ouverture) ; technicien : profil des données, bloc du camp au moins
+// en soutien. Soutien conditionnel : blocs adjacents à la majorité et hors blocs. Plancher : tant que l'opposition compte moins de
+// sièges qu'au départ réel (OPP0), le groupe en soutien le plus éloigné du parti de tête du bloc du camp passe dans l'opposition
+// (même départ pour tous les partis d'un bloc).
+// ponytail: profils approximatifs (voisinage de blocs), à remplacer par des profils d'ouverture sourcés par camp.
+const ORDRE_BLOCS = BLOCS.map((b) => b.id); // droite → gauche : rn, droite, centre, gauche, lfi
+const OPP0 = sum(politics.assemblee.groupes.filter((g) => g.rapport_gouvernement === 'opposition').map((g) => g.sieges));
+const GPOS = new Map(politics.assemblee.groupes.map((g) => [g.id, g.positionnement]));
+const PROFILS_CAMP = new Map<string, Map<string, Rapport>>();
+export function profilCamp(s: GameState, profil: Exclude<ProfilPM, 'cohabitation'>): (id: string) => Rapport {
+  const cle = `${campBloc(s)}:${profil}`;
+  let r = PROFILS_CAMP.get(cle);
+  if (!r) {
+    const i = ORDRE_BLOCS.indexOf(campBloc(s)), cb = campBloc(s);
+    r = new Map<string, Rapport>();
+    if (profil === 'technicien') {
+      const data: Record<string, string | undefined> = PROFILS.get('technicien')?.rapports ?? {};
+      for (const g of politics.assemblee.groupes)
+        r.set(g.id, BLOC_DE.get(g.id) === cb ? 'soutien_conditionnel' : (data[g.id] as Rapport | undefined) ?? 'opposition');
+    } else {
+      const M = (profil === 'ouverture_gauche' ? [i, i + 1] : profil === 'ouverture_droite' ? [i - 1, i] : [i]).filter((k) => k >= 0 && k < ORDRE_BLOCS.length);
+      const adj = [Math.min(...M) - 1, Math.max(...M) + 1].map((k) => ORDRE_BLOCS[k]);
+      for (const g of politics.assemblee.groupes) {
+        const b = BLOC_DE.get(g.id);
+        r.set(g.id, b && M.some((k) => ORDRE_BLOCS[k] === b) ? 'majorite' : !b || adj.includes(b) ? 'soutien_conditionnel' : 'opposition');
+      }
+    }
+    const p = positionDe(BLOCS[i].parties[0]), dist = (id: string) => {
+      const x = GPOS.get(id)!;
+      return Math.hypot(x.economie - p.economie, x.societal - p.societal, x.europe - p.europe);
+    };
+    const opp = () => sum([...S0].filter(([id]) => r!.get(id) === 'opposition').map(([, n]) => n));
+    while (opp() < OPP0) {
+      const soutiens = [...S0.keys()].filter((id) => r!.get(id) === 'soutien_conditionnel');
+      if (!soutiens.length) break;
+      r.set(soutiens.reduce((a, b) => (dist(b) > dist(a) ? b : a)), 'opposition');
+    }
+    PROFILS_CAMP.set(cle, r);
+  }
+  const m = r;
+  return (id) => m.get(id) ?? 'opposition';
+}
+
+// Rapport de chaque groupe au gouvernement : celui du profil (générique pour un camp hors du centre), ou en cohabitation
+// coalition → majorité, bloc du camp → soutien conditionnel.
+export function rapportDe(s: GameState, g: Gouvernement): (groupId: string) => Rapport {
   if (g.profil !== 'cohabitation') {
+    if (campAutre(s)) return profilCamp(s, g.profil);
     const r: Record<string, string | undefined> = PROFILS.get(g.profil)?.rapports ?? {};
     return (id) => (r[id] as Rapport | undefined) ?? 'opposition';
   }
-  const coal = new Set(COALITIONS.get(g.coalition ?? '')?.blocs);
+  const coal = new Set(COALITIONS.get(g.coalition ?? '')?.blocs), cb = campBloc(s);
   return (id) => {
     const b = BLOC_DE.get(id);
-    return b && coal.has(b) ? 'majorite' : b === D.majorite_presidentielle[0] ? 'soutien_conditionnel' : 'opposition';
+    return b && coal.has(b) ? 'majorite' : b === cb ? 'soutien_conditionnel' : 'opposition';
   };
 }
-const appliquer = (s: GameState, g: Gouvernement) => s.parliament.assemblee.forEach((x) => (x.rapport = rapportDe(g)(x.groupId)));
+
+// Relations de tous les groupes (Assemblée, puis Sénat sous senat_<id>) : stockées, sinon centre de bande du rapport (§13).
+const toutesRelations = (s: GameState): Record<string, number> => Object.fromEntries([
+  ...s.parliament.assemblee.map((g) => [g.groupId, relation(s, g)]),
+  ...senatGroupes(s).map((g) => [relKey('senat', g.groupId), relation(s, g, 'senat')]),
+]);
+
+const RANG: Record<Rapport, number> = { opposition: 0, soutien_conditionnel: 1, majorite: 2 };
+// Nomination (choix = true) ou cohabitation issue des urnes (false). Rapports = ceux du profil (jamais filtrés par les seuils).
+// Relation = centre de la nouvelle bande + moitié de l'écart d'avant (mémoire des griefs) − coût de rupture par cran perdu
+// − fidélité (camp choisi : le bloc du camp punit l'entrée d'un autre groupe en majorité), ramenée dans la bande (pas de rebascule).
+function appliquer(s: GameState, g: Gouvernement, choix: boolean) {
+  const nouveau = rapportDe(s, g), rel = toutesRelations(s), cb = campBloc(s);
+  const ouvre = choix && !!s.camp && s.parliament.assemblee.some((x) =>
+    nouveau(x.groupId) === 'majorite' && x.rapport !== 'majorite' && BLOC_DE.get(x.groupId) !== cb);
+  for (const x of s.parliament.assemblee) {
+    const r = nouveau(x.groupId);
+    let v = REL0[r] + C.parlement_relation_memoire * (relation(s, x) - REL0[x.rapport]);
+    if (choix) v -= C.parlement_relation_cout_rupture * Math.max(0, RANG[x.rapport] - RANG[r]);
+    if (ouvre && BLOC_DE.get(x.groupId) === cb) v -= C.parlement_relation_fidelite;
+    rel[x.groupId] = dansBande(v, r);
+    x.rapport = r;
+  }
+  s.relations = rel; // les clés senat_* sont gardées telles quelles
+}
+
+// Étape 7b du tick (ENGINE.md §13) : lois promulguées ce mois (tick, 49.3, previewBill), popularité, retour au centre de bande,
+// puis un cran de rapport au plus. Assemblée gelée en cohabitation (§11.7). Sénat jamais gelé. Sans tirage. Modifie s.
+export function majRelations(s: GameState, t: number, popularite: number): TurnEvent[] {
+  const lois = s.bills.filter((b) => b.status === 'adoptee' && b.promulgueLe && monthIndex(b.promulgueLe) === t);
+  const axes = lois.map((b) => billAxes(b));
+  const gel = inst(s).gouvernement.profil === 'cohabitation';
+  const rel: Record<string, number> = {}, out: TurnEvent[] = [];
+  const pas = (g: { groupId: string; rapport: Rapport }, chambre: 'assemblee' | 'senat') => {
+    let x = relation(s, g, chambre);
+    x += C.parlement_relation_retour * (REL0[g.rapport] - x)
+      + C.parlement_relation_poids_popularite * (popularite - INIT.popularite); // centré : aucune dérive au départ
+    lois.forEach((b, i) => {
+      const f = Math.max(-1, Math.min(1, fond(b, chambre, g.groupId, axes[i])));
+      x += C.parlement_relation_par_loi * f
+        - (chambre === 'assemblee' && b.usage493 && g.rapport !== 'majorite' && f < 0 ? C.parlement_relation_493 : 0);
+    });
+    rel[relKey(chambre, g.groupId)] = x = Math.max(-1, Math.min(1, x));
+    return x;
+  };
+  for (const g of s.parliament.assemblee) {
+    const r = seuil(pas(g, 'assemblee'), g.rapport);
+    if (!gel && r !== g.rapport) { out.push({ kind: 'rapport', chambre: 'assemblee', groupId: g.groupId, avant: g.rapport, apres: r }); g.rapport = r; }
+  }
+  for (const g of senatGroupes(s)) {
+    const r = seuil(pas(g, 'senat'), g.rapport);
+    if (r !== g.rapport) { out.push({ kind: 'rapport', chambre: 'senat', groupId: g.groupId, avant: g.rapport, apres: r }); (s.senat ??= {})[g.groupId] = r; }
+  }
+  s.relations = rel;
+  return out;
+}
+
+// Choix du camp à la création (§13 ; decret et bac à sable). Hors du centre : coalition minoritaire menée par un PM fictif du
+// camp (jamais une cohabitation). Camp 'horizons' : départ réel (Lecornu), seule la fidélité de parti s'ajoute. Modifie s.
+export function choisirCamp(s: GameState, camp: string): GameState {
+  s.camp = camp;
+  if (!campAutre(s)) return s;
+  const gouvernement: Gouvernement = { profil: 'camp_presidentiel', depuis: { year: 2026, month: 1 }, demissionnaire: false }; // PM fictif
+  s.institutions = { ...inst(s), gouvernement };
+  const r = rapportDe(s, gouvernement);
+  s.parliament.assemblee.forEach((x) => (x.rapport = r(x.groupId))); // relations absentes : REL0
+  return s;
+}
 
 export function pouvoir(s: GameState): Pouvoir {
   const i = inst(s), t = monthIndex(s.date);
@@ -89,13 +213,20 @@ export function pouvoir(s: GameState): Pouvoir {
   return {
     ...i, cohabitation: i.gouvernement.profil === 'cohabitation', assise, dissolutionPossible,
     peutDissoudre: votesSimules(s.mode) && !i.dissolution && !s.defaite && t < 60 && t >= monthIndex(dissolutionPossible),
+    joueur: joueur(s), relations: toutesRelations(s), senat: senatGroupes(s),
+    positionnement: positionPresident(s), positionnementInitial: positionDe(joueur(s)), campAutre: campAutre(s),
   };
 }
 
-// Dissolution (art. 12) : législatives au tick de ce mois, choc de stabilité de campagne.
+// Dissolution (art. 12) : législatives au tick de ce mois, choc de stabilité de campagne, choc de relation pour les groupes hors
+// opposition dont les sièges sont remis en jeu (§13 ; Sénat non touché).
 export function dissolve(state: GameState): { state: GameState; events: TurnEvent[] } {
   if (!pouvoir(state).peutDissoudre) return { state, events: [] };
   const s = structuredClone(state);
+  s.relations = Object.fromEntries(Object.entries(toutesRelations(state)).map(([k, v]) => {
+    const g = s.parliament.assemblee.find((x) => x.groupId === k);
+    return [k, g && g.rapport !== 'opposition' ? Math.max(-1, v - C.parlement_relation_dissolution) : v];
+  }));
   s.institutions = { ...inst(s), dissolution: { ...s.date } };
   s.effects.push({ source: { kind: 'event', id: 'dissolution' }, cible: { kind: 'stabilite' }, amplitude: C.dissolution_choc_stabilite, forme: 'choc', debut: monthIndex(s.date), rampe: 0, duree: C.dissolution_duree_choc_mois });
   return { state: s, events: [{ kind: 'dissolution' }] };
@@ -107,7 +238,7 @@ export function nominate(state: GameState, profil: Exclude<ProfilPM, 'cohabitati
   const s = structuredClone(state);
   const gouvernement: Gouvernement = { profil, depuis: { ...s.date }, demissionnaire: false };
   s.institutions = { ...inst(s), gouvernement };
-  appliquer(s, gouvernement);
+  appliquer(s, gouvernement, true);
   return { state: s, events: [{ kind: 'nomination', profil }] };
 }
 
@@ -118,17 +249,17 @@ export function elections(s: GameState, t: number): TurnEvent[] {
   const r = scrutin(s, s.rng);
   s.rng = r.rng;
   s.parliament.assemblee = r.assemblee;
-  const res = issue(r.assemblee), sortant = inst(s).gouvernement;
+  const res = issue(r.assemblee, s), sortant = inst(s).gouvernement;
   // Hors cohabitation : démission, rapports inchangés jusqu'à la nomination ; une cohabitation qui prend fin laisse un
   // gouvernement d'affaires courantes au profil technicien (la coalition battue ne reste pas « majorité »).
   const gouvernement: Gouvernement = res.issue === 'cohabitation'
     ? { profil: 'cohabitation', coalition: res.coalition, depuis: { ...s.date }, demissionnaire: false }
     : sortant.profil === 'cohabitation' ? { profil: 'technicien', depuis: { ...s.date }, demissionnaire: true }
     : { ...sortant, demissionnaire: true };
-  if (res.issue === 'cohabitation' || sortant.profil === 'cohabitation') appliquer(s, gouvernement);
+  if (res.issue === 'cohabitation' || sortant.profil === 'cohabitation') appliquer(s, gouvernement, false);
   s.institutions = { gouvernement, legislatives: { ...s.date } };
   const apres = copie(r.assemblee);
-  const camp = (a: Sieges) => parBloc(a).find((b) => b.id === D.majorite_presidentielle[0])!.sieges;
+  const camp = (a: Sieges) => parBloc(a).find((b) => b.id === campBloc(s))!.sieges;
   s.effects.push({ source: { kind: 'event', id: 'legislatives' }, cible: { kind: 'popularite' }, amplitude: (C.legislatives_effet_popularite * (camp(apres) - camp(avant))) / 577, forme: 'choc', debut: t, rampe: 0, duree: C.dissolution_duree_choc_mois });
   const events: TurnEvent[] = [{ kind: 'legislatives', avant, apres, ...res }];
   if (res.issue === 'cohabitation') events.push({ kind: 'nomination', profil: 'cohabitation', coalition: res.coalition });
@@ -144,7 +275,7 @@ export function forecastLegislatives(state: GameState): LegislativesForecast {
   for (let k = 0; k < LEG_N; k++) {
     const { assemblee } = scrutin(state, (k * 2654435761) >>> 0);
     parBloc(assemblee).slice(0, BLOCS.length).forEach((b, i) => tirages[i].push(b.sieges));
-    n[issue(assemblee).issue]++;
+    n[issue(assemblee, state).issue]++;
   }
   return {
     blocs: BLOCS.map((b, i) => {

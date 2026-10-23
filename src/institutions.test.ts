@@ -230,4 +230,16 @@ describe('institutions (ENGINE.md §11)', () => {
       expect(coefficients.find((c) => c.id === id)?.hypothese).toBe(id !== 'dissolution_delai_mois');
     }
   });
+
+  test('coefficients des relations (§13) présents, requis, hypothèses ; présidentielle facultatifs', () => {
+    for (const c of coefficients.filter((x) => x.id.startsWith('parlement_relation_'))) {
+      expect(REQUIRED_COEFFICIENTS).toContain(c.id);
+      expect(c.hypothese).toBe(true);
+    }
+    expect(coefficients.filter((x) => x.id.startsWith('parlement_relation_'))).toHaveLength(14);
+    for (const id of ['presidentielle_deplacement_par_loi', 'presidentielle_electeurs_suivent']) {
+      expect(REQUIRED_COEFFICIENTS).not.toContain(id);
+      expect(coefficients.find((c) => c.id === id)?.hypothese).toBe(true);
+    }
+  });
 });

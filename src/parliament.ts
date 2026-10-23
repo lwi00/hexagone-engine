@@ -9,7 +9,7 @@ import coefficients from '../gamedata/coefficients.json';
 
 type Coef = z.infer<typeof Coefficient>;
 type Axes = z.infer<typeof Positionnement>;
-type Groupe = { groupId: string; sieges: number; rapport: Rapport };
+export type Groupe = { groupId: string; sieges: number; rapport: Rapport };
 
 // Paramètres parlement_* et censure_* : gamedata/coefficients.json (source unique).
 export const PARLIAMENT_COEFFICIENTS: Coef[] = coefficients.filter((c) => /^(parlement|censure)_/.test(c.id));
@@ -41,13 +41,15 @@ const AN = new Map(politics.assemblee.groupes.map((g) => [g.id, g]));
 const SE = new Map(politics.senat.groupes.map((g) => [g.id, g]));
 type Data = typeof AN;
 const SENAT: Groupe[] = politics.senat.groupes.map((g) => ({ groupId: g.id, sieges: g.sieges, rapport: g.rapport_gouvernement as Rapport }));
+// Sénat dynamique (ENGINE.md §13) : rapports changés dans s.senat, sinon ceux des données.
+export const senatGroupes = (s: GameState): Groupe[] => SENAT.map((g) => ({ ...g, rapport: s.senat?.[g.groupId] ?? g.rapport }));
 
 const accueil = (bill: Bill) => {
   const v = bill.spec.tags.filter((t) => ACCUEIL.has(t)).map((t) => ACCUEIL.get(t)!);
   return v.reduce((s, x) => s + x, 0) / Math.max(1, v.length);
 };
 
-function billAxes(bill: Bill): Axes {
+export function billAxes(bill: Bill): Axes {
   const axes = bill.spec.tags.map((t) => TAGS.get(t)).filter((a): a is Axes => !!a);
   const n = Math.max(1, axes.length);
   const m = (k: keyof Axes) => axes.reduce((s, a) => s + a[k], 0) / n;
@@ -60,13 +62,18 @@ const bonus = (r: Rapport) => ({
   opposition: P.parlement_bonus_opposition,
 })[r];
 
-// Score s d'un groupe : positif = penche pour la loi.
-// Accord sur le fond : position du modèle de décision (spec.positions, ENGINE.md §4b) si elle existe, sinon produit scalaire
-// des axes de la loi et du positionnement du groupe.
-function groupScore(state: GameState, data: Data, axes: Axes, acc: number, g: Groupe, malus = 0, fond?: number): number {
-  const pos = data.get(g.groupId)?.positionnement ?? { economie: 0, societal: 0, europe: 0 };
-  const dot = fond ?? axes.economie * pos.economie + axes.societal * pos.societal + axes.europe * pos.europe;
-  return P.parlement_poids_axes * dot + bonus(g.rapport) + P.parlement_poids_popularite * (state.national.popularite - 0.3)
+// Accord sur le fond (§4, §4b) : position du modèle de décision (spec.positions) si elle existe, sinon produit scalaire des axes
+// de la loi et du positionnement du groupe. Non borné (le vote garde son échelle) ; borné à ±1 pour les relations (§13).
+export function fond(bill: Bill, chambre: 'assemblee' | 'senat', id: string, axes = billAxes(bill)): number {
+  const p = bill.spec.positions?.[`${chambre}_${id}`];
+  if (p !== undefined) return p;
+  const pos = (chambre === 'assemblee' ? AN : SE).get(id)?.positionnement ?? { economie: 0, societal: 0, europe: 0 };
+  return axes.economie * pos.economie + axes.societal * pos.societal + axes.europe * pos.europe;
+}
+
+// Score s d'un groupe : positif = penche pour la loi. f = fond(...).
+function groupScore(state: GameState, acc: number, g: Groupe, malus: number, f: number): number {
+  return P.parlement_poids_axes * f + bonus(g.rapport) + P.parlement_poids_popularite * (state.national.popularite - 0.3)
     + P.parlement_poids_accueil_populaire * acc - malus;
 }
 
@@ -94,7 +101,7 @@ function scores(state: GameState, bill: Bill, groupes: Groupe[], data: Data, mal
   const axes = billAxes(bill);
   const acc = accueil(bill);
   const chambre = data === AN ? 'assemblee' : 'senat';
-  return groupes.map((g) => ({ g, s: groupScore(state, data, axes, acc, g, malus(g), bill.spec.positions?.[`${chambre}_${g.groupId}`]), discipline: data.get(g.groupId)?.discipline ?? 0.9 }));
+  return groupes.map((g) => ({ g, s: groupScore(state, acc, g, malus(g), fond(bill, chambre, g.groupId, axes)), discipline: data.get(g.groupId)?.discipline ?? 0.9 }));
 }
 
 // Incertitude du vote : un choc commun (climat de la séance) et un choc par groupe (négociations, amendements) s'ajoutent au score.
@@ -116,7 +123,7 @@ const malusCohab = (state: GameState) => (g: Groupe) =>
   state.institutions?.gouvernement.profil === 'cohabitation' && g.rapport === 'majorite' ? P.parlement_malus_cohabitation : 0;
 
 export function voteBill(state: GameState, bill: Bill, chambre: 'assemblee' | 'senat'): { result: VoteResult; rng: number } {
-  const groupes = chambre === 'assemblee' ? state.parliament.assemblee : SENAT;
+  const groupes = chambre === 'assemblee' ? state.parliament.assemblee : senatGroupes(state);
   const t = tally(state, bill, groupes, chambre === 'assemblee' ? AN : SE, chambre, chambre === 'assemblee' ? malusCohab(state) : () => 0);
   return { result: { chambre, date: state.date, pour: t.pour, contre: t.contre, abstention: t.abstention, adopte: t.pour > t.contre, parGroupe: t.parGroupe }, rng: t.rng };
 }
@@ -125,7 +132,7 @@ export function voteBill(state: GameState, bill: Bill, chambre: 'assemblee' | 's
 // ponytail: FORECAST_N tirages, erreur type ≈ 1,6 point sur la probabilité ; plus de tirages si l'affichage doit être plus fin.
 const FORECAST_N = 1000;
 export function forecastVote(state: GameState, bill: Bill, chambre: 'assemblee' | 'senat'): VoteForecast {
-  const groupes = chambre === 'assemblee' ? state.parliament.assemblee : SENAT;
+  const groupes = chambre === 'assemblee' ? state.parliament.assemblee : senatGroupes(state);
   const acc = new Map(groupes.map((g) => [g.groupId, { pour: 0, contre: 0, abstention: 0 }]));
   const malus = chambre === 'assemblee' ? malusCohab(state) : () => 0;
   let adopt = 0;

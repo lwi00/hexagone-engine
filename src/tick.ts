@@ -3,11 +3,11 @@ import type { Danger, DefeatCause, GameState, RegionCode, SocialGroup, TurnEvent
 import { monthIndex, votesSimules } from './types.ts';
 import type { z } from 'zod';
 import type { RandomEvents } from './schemas.ts';
-import { C, CENTRAGE, INIT, LEVERS, budget, centralFactor, events, groups, inst, load, politics, randomEvents, regions, save } from './init.ts';
+import { C, CENTRAGE, INIT, LEVERS, budget, campAutre, campBloc, centralFactor, events, groups, inst, load, politics, randomEvents, regions, save } from './init.ts';
 import type { Core, Fin } from './init.ts';
 import { billGroups, promulgate, qualitativeEffect, sumEffects } from './levers.ts';
 import { rand, voteBill } from './parliament.ts';
-import { elections } from './institutions.ts';
+import { elections, majRelations, profilCamp } from './institutions.ts';
 import { presidentielle } from './presidentielle.ts';
 
 const mean = (a: number[]) => a.reduce((x, y) => x + y, 0) / a.length;
@@ -34,11 +34,29 @@ const cohesion = (s: GameState) => Math.min(1, s.parliament.assemblee.reduce((a,
   a + g.sieges * (DISCIPLINE.get(g.groupId) ?? 0) * (g.rapport === 'majorite' ? 1 : g.rapport === 'soutien_conditionnel' ? 0.5 : 0), 0) / 289);
 const COH0 = Math.min(1, politics.assemblee.groupes.reduce((a, g) =>
   a + g.sieges * g.discipline * (g.rapport_gouvernement === 'majorite' ? 1 : g.rapport_gouvernement === 'soutien_conditionnel' ? 0.5 : 0), 0) / 289);
+// Cohésion de référence (§13) : camp choisi hors du centre = cohésion de son départ (sièges initiaux, PM de son camp), sinon COH0.
+// Sans cela, un camp minoritaire démarrerait avec un choc de stabilité.
+const COH_CAMP = new Map<string, number>();
+const coh0 = (s: GameState) => {
+  if (!campAutre(s)) return COH0;
+  if (!COH_CAMP.has(s.camp!)) {
+    const r = profilCamp(s, 'camp_presidentiel');
+    COH_CAMP.set(s.camp!, cohesion({ parliament: { assemblee: politics.assemblee.groupes.map((g) => ({ groupId: g.id, sieges: g.sieges, rapport: r(g.id) })) } } as GameState));
+  }
+  return COH_CAMP.get(s.camp!)!;
+};
 
 // Vote : correspondance des partis de groups.json vers ceux du sondage, bloc gouvernemental.
 const PARTI: Record<string, string> = { renaissance: 'horizons', modem: 'horizons', ps: 'pp' };
 const BLOC = new Set([...politics.assemblee.groupes.filter((g) => g.rapport_gouvernement === 'majorite').flatMap((g) => g.parties), politics.president.party_id]
   .map((p) => PARTI[p] ?? p));
+// Camp choisi (§13) : partis de son bloc ('horizons' : {horizons}, comme BLOC).
+const BLOCS_CAMP = new Map<string, Set<string>>();
+const bloc = (s: GameState) => {
+  if (!s.camp) return BLOC;
+  if (!BLOCS_CAMP.has(s.camp)) BLOCS_CAMP.set(s.camp, new Set(politics.institutions.blocs.find((b) => b.id === campBloc(s))!.parties));
+  return BLOCS_CAMP.get(s.camp)!;
+};
 const VOTE_G = groups.map((g) => {
   const v: Record<string, number> = {};
   for (const r of g.vote.resultats) v[PARTI[r.party_id] ?? r.party_id] = (v[PARTI[r.party_id] ?? r.party_id] ?? 0) + r.pct;
@@ -347,7 +365,7 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   I.pl = C.popularite_inertie * I.pl + (1 - C.popularite_inertie) * popCible;
   const popularite = clamp(I.pl + get('popularite:'));
 
-  const num: Record<string, number> = {}, den: Record<string, number> = {};
+  const num: Record<string, number> = {}, den: Record<string, number> = {}, BLOC = bloc(s);
   for (const { id, v } of VOTE_G) {
     const d = s.groups[id].satisfaction - S0[id];
     let perdu = 0, autres = 0;
@@ -364,6 +382,9 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   const cibleV = Object.fromEntries(Object.entries(V0).map(([p, v0]) => [p, v0 * (den[p] ? num[p] / den[p] : 1)]));
   const totV = Object.values(cibleV).reduce((a, b) => a + b, 0);
   for (const p of Object.keys(V0)) s.intentions[p] = C.vote_inertie * s.intentions[p] + (1 - C.vote_inertie) * (100 * cibleV[p]) / totV;
+
+  // 7b. Relations et rapports (ENGINE.md §13), sur la popularité de ce mois. La cohésion de l'étape 8 lit les nouveaux rapports.
+  out.push(...majRelations(s, t, popularite));
 
   // 8. Tension régionale (lois impopulaires sur tension_lois_duree_mois), grèves, stabilité
   const du = m.u - mr.u;
@@ -391,7 +412,7 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
 
   const sCible = INIT.stabilite - C.stabilite_poids_tension * (tNat - INIT.tension) + C.stabilite_poids_popularite * (popularite - INIT.popularite)
     - C.stabilite_poids_spread * (fin.spread - INIT.spread)
-    + C.stabilite_poids_cohesion_majorite * clamp(cohesion(s) - COH0, -C.stabilite_cohesion_perte_max, C.stabilite_cohesion_gain_max);
+    + C.stabilite_poids_cohesion_majorite * clamp(cohesion(s) - coh0(s), -C.stabilite_cohesion_perte_max, C.stabilite_cohesion_gain_max);
   I.Sl = C.stabilite_inertie * I.Sl + (1 - C.stabilite_inertie) * sCible;
   const stabilite = clamp(I.Sl + get('stabilite:'));
 

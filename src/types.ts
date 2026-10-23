@@ -14,6 +14,7 @@ export const votesSimules = (mode: GameMode) => mode !== 'decret';
 
 // ---------- Institutions (ENGINE.md §11) ----------
 export type Rapport = 'majorite' | 'soutien_conditionnel' | 'opposition';
+export type Axes = { economie: number; societal: number; europe: number }; // positionnement −1..1 (politics.json)
 export type ProfilPM = 'camp_presidentiel' | 'ouverture_gauche' | 'ouverture_droite' | 'technicien' | 'cohabitation';
 export type Sieges = { groupId: string; sieges: number }[];
 export type IssueLegislatives = 'majorite' | 'cohabitation' | 'sans_majorite';
@@ -34,6 +35,11 @@ export type Pouvoir = Institutions & {
   assise: Record<Rapport, number>; // sièges de l'Assemblée selon leur rapport au gouvernement
   peutDissoudre: boolean;
   dissolutionPossible: YearMonth; // premier mois où l'article 12 permet une dissolution
+  joueur: string; // parti candidat à la présidentielle (§12, §13)
+  relations: Record<string, number>; // relation avec l'exécutif, −1..1, mêmes clés que GameState.relations, toujours complet (§13)
+  senat: { groupId: string; sieges: number; rapport: Rapport }[]; // rapports courants du Sénat (§13)
+  positionnement: Axes; positionnementInitial: Axes; // position du Président, déplacée par ses lois (§13)
+  campAutre: boolean; // camp choisi hors du centre : PM fictif, profils génériques (§13)
 };
 export type PresidentielleForecast = {
   premierTour: { partyId: string; pct: number }[]; // moyennes
@@ -141,6 +147,10 @@ export type GameState = {
   defaite?: { cause: DefeatCause; date: YearMonth }; // fin de partie anticipée (ENGINE.md §10)
   institutions?: Institutions; // ENGINE.md §11 ; absent (sauvegarde antérieure) = INSTITUTIONS0
   dilemme?: Dilemme; // ENGINE.md §5c : en attente d'un choix du joueur
+  // ENGINE.md §13 (champs facultatifs, absents d'une partie Réaliste neuve et des sauvegardes antérieures) :
+  camp?: string; // parti des intentions de vote choisi à la création (decret, bac_a_sable) ; absent = « Au gouvernement »
+  relations?: Record<string, number>; // relation avec l'exécutif, −1..1 ; clé groupId (Assemblée) ou senat_<groupId> ; absent = centre de bande du rapport
+  senat?: Record<string, Rapport>; // rapports du Sénat qui ont changé ; absent = rapport_gouvernement de politics.json
 };
 export type Dilemme = {
   id: string; // modèle de gamedata/events-random.json
@@ -167,7 +177,8 @@ export type TurnEvent =
   | { kind: 'legislatives'; avant: Sieges; apres: Sieges; issue: IssueLegislatives; coalition?: string } // soirée électorale
   | { kind: 'nomination'; profil: ProfilPM; coalition?: string }
   | { kind: 'presidentielle'; tour: 1 | 2; resultats: { partyId: string; pct: number }[]; qualifies: [string, string]; joueur: string; elu?: string } // §12
-  | { kind: 'choix'; eventId: string; titre: string; label: string; parDefaut: boolean }; // réponse à un dilemme (§5c)
+  | { kind: 'choix'; eventId: string; titre: string; label: string; parDefaut: boolean } // réponse à un dilemme (§5c)
+  | { kind: 'rapport'; chambre: 'assemblee' | 'senat'; groupId: string; avant: Rapport; apres: Rapport }; // un groupe change de camp (§13)
 
 export type TurnReport = { date: YearMonth; events: TurnEvent[]; avant: Indicators; apres: Indicators };
 
@@ -195,7 +206,7 @@ export type PreviewResult = {
 
 // ---------- API du moteur (implémentée dans src/index.ts) ----------
 export interface Engine {
-  newGame(opts: { seed: number; mode: GameMode }): GameState;
+  newGame(opts: { seed: number; mode: GameMode; camp?: string }): GameState; // camp : §13, ignoré en Réaliste
   // Vérifie un BillSpec contre le catalogue (leviers et tags connus, bornes min/max, pas de cible dérivée). Liste vide = valide.
   validateBill(state: GameState, spec: BillSpec): string[];
   // Ajoute un brouillon. Ne change rien d'autre.
