@@ -50,7 +50,7 @@ function addDraft(state: GameState, spec: BillSpec): GameState {
 // Un dépôt par mois (ENGINE.md §1) ; les lois de finances n'entrent pas dans ce compte (calendrier budgétaire, §5d).
 const sameMonth = (a: YearMonth | undefined, b: YearMonth) => !!a && a.year === b.year && a.month === b.month;
 function canDeposit(state: GameState, spec: BillSpec): boolean {
-  return spec.loiDeFinances !== undefined
+  return state.mode === 'bac_a_sable' || spec.loiDeFinances !== undefined
     || !state.bills.some((x) => x.spec.loiDeFinances === undefined && sameMonth(x.deposeLe, state.date));
 }
 

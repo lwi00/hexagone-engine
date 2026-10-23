@@ -1,6 +1,6 @@
 // Institutions (ENGINE.md §11) : gouvernement, dissolution, législatives anticipées, cohabitation.
 import type { GameState, Gouvernement, IssueLegislatives, LegislativesForecast, Pouvoir, ProfilPM, Rapport, Sieges, TurnEvent, YearMonth } from './types.ts';
-import { monthIndex } from './types.ts';
+import { monthIndex, votesSimules } from './types.ts';
 import { C, INIT, inst, politics } from './init.ts';
 import { gauss } from './parliament.ts';
 
@@ -88,7 +88,7 @@ export function pouvoir(s: GameState): Pouvoir {
   for (const g of s.parliament.assemblee) assise[g.rapport] += g.sieges;
   return {
     ...i, cohabitation: i.gouvernement.profil === 'cohabitation', assise, dissolutionPossible,
-    peutDissoudre: s.mode === 'democratie' && !i.dissolution && !s.defaite && t < 60 && t >= monthIndex(dissolutionPossible),
+    peutDissoudre: votesSimules(s.mode) && !i.dissolution && !s.defaite && t < 60 && t >= monthIndex(dissolutionPossible),
   };
 }
 

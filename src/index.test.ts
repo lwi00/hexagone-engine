@@ -261,3 +261,21 @@ describe('amendement et retrait', () => {
     expect(s.bills[0].id).toBe('loi-3'); // jamais réutilisé
   });
 });
+
+describe('bac à sable', () => {
+  const spec = (title: string): BillSpec => ({
+    title, summary: 's', articles: [], levers: [], qualitative: [], tags: ['fiscalite_hausse'], prepMonths: 1, rampMonths: 0, estimatedCost: 1,
+  });
+  test('votes simulés, dépôts illimités, jamais de défaite', () => {
+    let s = engine.newGame({ seed: 3, mode: 'bac_a_sable' });
+    for (const t of ['a', 'b']) { s = engine.addDraft(s, spec(t)); s = engine.deposit(s, s.bills[s.bills.length - 1].id); }
+    expect(s.bills.every((b) => b.status === 'preparation')).toBe(true);
+    s = engine.endTurn(engine.endTurn(s).state).state;
+    expect(s.bills.every((b) => b.votes.length > 0)).toBe(true);
+    // Dette hors de tout seuil : en mode Réaliste la défaite tombe, pas ici.
+    s.national.dette_publique = 500;
+    for (let i = 0; i < 12; i++) s = engine.endTurn(s).state;
+    expect(s.defaite).toBeUndefined();
+    expect(engine.isOver(s)).toBe(false);
+  });
+});

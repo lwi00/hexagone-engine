@@ -1,6 +1,6 @@
 // Tick mensuel (ENGINE.md §1). Formules : descriptions de gamedata/coefficients.json ; normalisations : scripts/papersim.cjs.
 import type { Danger, DefeatCause, GameState, RegionCode, SocialGroup, TurnEvent, TurnReport } from './types.ts';
-import { monthIndex } from './types.ts';
+import { monthIndex, votesSimules } from './types.ts';
 import type { z } from 'zod';
 import type { RandomEvents } from './schemas.ts';
 import { C, CENTRAGE, INIT, LEVERS, budget, centralFactor, events, groups, inst, load, politics, randomEvents, regions, save } from './init.ts';
@@ -219,8 +219,8 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   const elue = monthIndex(inst(s).legislatives); // seuls comptent les votes de l'Assemblée en place (textes caducs à la dissolution)
   for (const b of s.bills) {
     if (b.status !== 'preparation' || !b.voteLe || monthIndex(b.voteLe) !== t) continue;
-    if (dissoute && s.mode === 'democratie') { b.voteLe = nextMonth(s.date); continue; } // Assemblée dissoute : examen reporté
-    if (s.mode === 'democratie' && !b.votes.some((v) => v.chambre === 'assemblee' && v.adopte && monthIndex(v.date) >= elue)) {
+    if (dissoute && votesSimules(s.mode)) { b.voteLe = nextMonth(s.date); continue; } // Assemblée dissoute : examen reporté
+    if (votesSimules(s.mode) && !b.votes.some((v) => v.chambre === 'assemblee' && v.adopte && monthIndex(v.date) >= elue)) {
       const an = voteBill(s, b, 'assemblee'); s.rng = an.rng;
       const se = voteBill(s, b, 'senat'); s.rng = se.rng;
       b.votes.push(an.result, se.result);
@@ -414,7 +414,7 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
     const k = `def:${d.cause}`, v = d.valeur(s);
     I[k] = (d.auDessus ? v >= d.seuil : v <= d.seuil) ? (I[k] ?? 0) + 1 : 0;
     if (I[k] === 1) out.push({ kind: 'alerte', cause: d.cause, moisRestants: C.defaite_mois_consecutifs - 1 });
-    if (I[k] >= C.defaite_mois_consecutifs && !s.defaite) {
+    if (I[k] >= C.defaite_mois_consecutifs && !s.defaite && s.mode !== 'bac_a_sable') {
       s.defaite = { cause: d.cause, date: { ...s.date } };
       out.push({ kind: 'defaite', cause: d.cause });
     }

@@ -7,7 +7,10 @@ export type RegionCode = (typeof REGION_CODES)[number];
 export type SocialGroup = (typeof SOCIAL_GROUPS)[number];
 
 export type YearMonth = { year: number; month: number }; // month 1..12
-export type GameMode = 'democratie' | 'decret';
+// democratie = mode « Réaliste » (votes, défaites, un dépôt par mois) ; decret = tout est adopté ; bac_a_sable = votes mais
+// ni défaite ni limite de dépôts. L'id « democratie » est gardé pour les sauvegardes existantes.
+export type GameMode = 'democratie' | 'decret' | 'bac_a_sable';
+export const votesSimules = (mode: GameMode) => mode !== 'decret';
 
 // ---------- Institutions (ENGINE.md §11) ----------
 export type Rapport = 'majorite' | 'soutien_conditionnel' | 'opposition';

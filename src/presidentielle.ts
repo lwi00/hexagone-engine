@@ -86,7 +86,7 @@ export function presidentielle(s: GameState, t: number): TurnEvent[] {
 }
 
 function defaite(s: GameState, out: TurnEvent[]): TurnEvent[] {
-  if (!s.defaite) {
+  if (!s.defaite && s.mode !== 'bac_a_sable') {
     s.defaite = { cause: 'presidentielle', date: { ...s.date } };
     out.push({ kind: 'defaite', cause: 'presidentielle' });
   }

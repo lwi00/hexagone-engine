@@ -51,6 +51,7 @@ Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hy
 - Le 49.3 est impossible en cohabitation (prérogative du PM), pour un gouvernement démissionnaire et pendant une dissolution (§11).
 - **Malus de cohabitation** : en cohabitation, à l'Assemblée seulement, le score des groupes `majorite` perd `parlement_malus_cohabitation` sur chaque texte du Président (vote et prévision ; le Sénat n'est pas concerné).
 - Mode `decret` : adoption automatique au mois prévu, pas de vote.
+- Mode `bac_a_sable` : votes comme en `democratie` (mode « Réaliste »), mais aucune défaite (§10, §12) et dépôts illimités (§1).
 
 ## 4b. Positions d'un modèle de décision (`spec.positions`)
 
