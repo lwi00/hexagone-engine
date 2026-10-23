@@ -147,15 +147,44 @@ Script reproductible dans le scratchpad de la session (`papersim.cjs`), équatio
 
 - **Contenu** : 5 modèles (`creer_impot`, `supprimer_impot`, `proportionnelle`, `suppression_493`, `capitalisation`) avec leurs voies (circuit de l'art. 89 pour la proportionnelle et le 49.3), 4 assiettes d'impôt nouveau (taux min/max/défaut, rendement par unité k, érosion η : R(τ) = k·τ·e^(−ητ)), 7 impôts supprimables (ligne, recette 2026, leviers liés), cotisations retraite effectives 2026 (capitalisation). Chaque entrée porte ses effets (format de `levers.json`), groupes touchés, positions des groupes parlementaires (`assemblee_<id>`, `senat_<id>`) et tags requis.
 - **Sources** :
-  - ISF financier : France Stratégie, comité d'évaluation des réformes de la fiscalité du capital (rapport d'octobre 2023) pour la base ISF 2017 (≈ 1 028 Md€, DGFiP) ; érosion d'après Seim (2017) et Jakobsen et al. (2020).
-  - Très hauts patrimoines : Institut de l'entreprise (note de juin 2026, rendement divisé par quatre une fois l'IS imputé) et Public Sénat (arguments pour et contre la taxe Zucman, rejetée le 31 octobre 2025) ; patrimoine ≈ 1 000 Md€ (classement Challenges).
-  - Carbone : I4CE (contribution climat-énergie : revenus 2017 de 5,4 Md€ à 30,5 €/t, exonérations de 6,3 Md€ en 2018) ; CPO 2019.
+  - ISF financier : DGFiP, statistiques ISF 1999-2017 en données ouvertes (https://fgeerolf.com/data/dgfip/isf.html, consultée le 2026-10-23) : actif net imposable 2017 = 1 028,8 Md€, 358 198 foyers, produit net 4,2 Md€ ; patrimoine IFI 2018 = 309,5 Md€ (La finance pour tous, août 2019, d'après la DGFiP), d'où une part non immobilière ≈ 0,65-0,70 ; contrôle par le chiffrage RN de l'amendement I-CF361 au PLF 2026 (IFI + 3 Md€ au moins ; commission des finances de l'Assemblée, 20 octobre 2025, https://www.assemblee-nationale.fr/dyn/opendata/CRCANR5L17S2026PO59048N009.html) ; érosion d'après Seim (2017) et Jakobsen et al. (2020).
+  - Très hauts patrimoines : Institut de l'entreprise (note de juin 2026, rendement divisé par quatre une fois l'IS imputé) et Public Sénat (arguments pour et contre la taxe Zucman, rejetée le 31 octobre 2025) ; patrimoine ≈ 1 000 Md€ (classement Challenges) ; Trésor : 3,5 à 5,5 Md€ après effets de comportement (Sénat, rapport d'information n° 760, 17 juin 2026, https://www.senat.fr/rap/r25-760/r25-760_mono.html).
+  - Carbone : SDES, Chiffres clés du climat 2025 (la taxe carbone à 44,6 €/t couvre 41 % des émissions, https://www.statistiques.developpement-durable.gouv.fr/edition-numerique/chiffres-cles-du-climat/fr/19-la-tarification-du-carbone-dans, consultée le 2026-10-23) × 369 MtCO2e en 2024 (Citepa, Secten juin 2025) ≈ 151 Mt ; recoupé avec I4CE (revenus 2017 de 5,4 Md€ à 30,5 €/t, exonérations de 6,3 Md€ en 2018) ; CPO 2019.
   - Rachats d'actions : La Lettre Vernimmen via FranceTransactions (CAC 40 : 25,5 Md€ en 2024, 30,1 Md€ en 2023 ; 34,8 Md€ en 2025).
   - Impôts supprimables : montants Insee 2025 des notes de `budget.json` × 1,0331 (IFI 2,80 ; TTF 2,58 ; taxe foncière 45,64 ; CVAE 3,87 ; droits de succession 21,75 Md€), IS et IR = lignes de `budget.json`. Effets = élasticités des leviers liés ÷ leur élasticité budgétaire.
-  - Capitalisation : COR, rapport annuel de juin 2025 (méthodologie, ressources du système).
+  - Capitalisation : COR, rapport annuel de juin 2026, partie 2, chapitre 2, tableau 2.2 (https://www.cor-retraites.fr/sites/default/files/2026-06/RA_Part2_Chap2.pdf, consulté le 2026-10-23) : cotisations 2025 hors contribution d'équilibre 277,0 Md€, dont salariés 100,9 et employeurs hors opérateurs de l'État 154,6 ; 250 retenu ≈ salariés + employeurs (255,5).
 - **Conventions** : voir « Réformes » dans les conventions communes (élasticités par Md€ 2026 de recette en plus, `groupes_touches` dans le sens d > 0).
-- **Estimations** (`estimate: true` partout) : base de l'ISF financier (≈ 900 Md€ = 1 028 × 0,65 × 1,4) ; assiette carbone nette ≈ 150 MtCO2 (**ordre de grandeur, à sourcer** : non trouvée telle quelle) ; rachats ≈ 30 Md€/an (moyenne 2023-2025) ; cotisations retraite effectives ≈ 250 Md€ (**à sourcer** dans les ressources par nature du COR, fourchette 230-300) ; positions des groupes estimées d'après les programmes 2022-2024 et les débats de 2025 (**à sourcer**). Érosions η : hypothèses (`hypothese: true`).
+- **Estimations** (`estimate: true` partout) : base de l'ISF financier (≈ 940 Md€ = 1 028,8 × 0,65 × 1,4 ; la revalorisation 1,4 est estimée) ; assiette carbone nette ≈ 150 MtCO2 (41 % × 369 Mt) ; rachats ≈ 30 Md€/an (moyenne 2023-2025) ; cotisations retraite effectives ≈ 250 Md€ (salariés + employeurs 2025) ; intensités des positions des groupes estimées d'après les programmes 2022-2024 et les débats du PLF 2026 (amendements et votes cités dans les notes). Érosions η : hypothèses (`hypothese: true`).
 - **Limites** : rendement statique indexé sur le compte central (pas d'élasticité conjoncturelle propre) ; érosion × taux max ≤ 2 (1,75 pour les très hauts patrimoines à 5 %, au-delà du maximum de Laffer à 2,9 %) ; la proportionnelle est classée constitutionnelle par choix de jeu (`"voies": []` pour revenir à la loi ordinaire, art. 34).
+
+## tags.json (`conseil`) et coefficients `conseil_*` — Conseil constitutionnel (ENGINE.md §15)
+
+- **Contenu** : exposition des mesures qualitatives au contrôle de constitutionnalité pour 4 tags (`immigration_restriction` 0,5 ; `securite_justice` 0,35 ; `redistribution` et `fiscalite_hausse` 0,15), 9 coefficients `conseil_*` (`hypothese: true`). Aucun chiffre de saisine ni de taux de censure observé n'est repris : toutes les valeurs sont des hypothèses de jeu.
+- **Références juridiques** (Légifrance et conseil-constitutionnel.fr ; citées de mémoire, à revérifier en ligne avant publication) :
+  - Constitution du 4 octobre 1958, art. 61 (al. 2 : saisine par 60 députés ou 60 sénateurs ; al. 3 : délai d'un mois, promulgation suspendue) et art. 62 (une disposition déclarée inconstitutionnelle ne peut être promulguée) ;
+  - LOLF (loi organique n° 2001-692 du 1er août 2001), art. 34 : contenu des lois de finances, fondement de la censure des cavaliers budgétaires ;
+  - 79-110 DC du 24 décembre 1979 (loi de finances pour 1980) : censure totale pour vice de procédure, suivie d'une loi spéciale ;
+  - 2003-469 DC du 26 mars 2003 : le Conseil n'est pas compétent pour contrôler une révision constitutionnelle ;
+  - 2012-662 DC du 29 décembre 2012 (loi de finances pour 2013) : contribution exceptionnelle de 75 % censurée (égalité devant les charges publiques) ;
+  - 2019-780 DC du 4 avril 2019 (loi visant à renforcer et garantir le maintien de l'ordre public) : interdiction administrative de manifester censurée ;
+  - 2021-817 DC du 20 mai 2021 (loi pour une sécurité globale préservant les libertés) : plusieurs articles censurés ;
+  - 2023-849 DC du 28 décembre 2023 (loi de financement de la sécurité sociale pour 2024) : cavaliers sociaux censurés ;
+  - 2023-863 DC du 25 janvier 2024 (loi pour contrôler l'immigration, améliorer l'intégration) : large censure partielle, surtout des cavaliers législatifs.
+- **Choix de jeu** : seuil de saisine sur l'accord de fond des groupes, cavaliers à 0,7, censure totale de base 0,5 %, partage forte / moyenne / faible des mesures, risque confiscatoire au-delà du maximum de Laffer du modèle (1/η) : voir les justifications dans `coefficients.json`.
+
+## Coefficients `bilan_*` — score de fin de mandat (ENGINE.md §16)
+
+- **Contenu** : 26 coefficients (poids des six rubriques, points de note par écart à janvier 2026, parcours institutionnel, plafonds après une défaite), tous `hypothese: true`.
+- **Choix de jeu** : aucune source. Le score n'imite aucun indicateur officiel ; la référence est l'état de janvier 2026 (note 50). Calage : l'inaction menée à terme vaut environ 45 à 47 (banc, section « Bilan de fin de mandat »).
+
+## Législatives de juin 2029 (ENGINE.md §17) — aucune donnée nouvelle
+
+- **Contenu** : aucune donnée ni aucun coefficient nouveau ; l'échéance se déduit de `politics.institutions.dernieres_legislatives` (juillet 2024). Le scrutin réutilise le modèle et les coefficients `legislatives_*` du §11.
+- **Références juridiques** (Légifrance ; citées de mémoire, à revérifier en ligne avant publication) :
+  - code électoral, art. LO121 : les pouvoirs de l'Assemblée nationale expirent le troisième mardi de juin de la cinquième année qui suit son élection (Assemblée élue en juillet 2024 : 19 juin 2029) ;
+  - code électoral, art. LO122 : sauf dissolution, les élections générales ont lieu dans les soixante jours qui précèdent l'expiration des pouvoirs ;
+  - Constitution, art. 12 : pas de nouvelle dissolution dans l'année qui suit les élections ; aucune interdiction avant une échéance normale (dissolution du 21 avril 1997, moins d'un an avant l'échéance de mars 1998).
+
 
 ---
 

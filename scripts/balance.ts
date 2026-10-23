@@ -6,7 +6,9 @@ import { CANDIDATS } from '../src/presidentielle.ts';
 import { forecastVote } from '../src/parliament.ts';
 import { ASSIETTE, IMPOT, describeReforme, rendement } from '../src/reformes.ts';
 import { C, politics } from '../src/init.ts';
-import type { BillSpec, GameState, Reforme, TurnEvent } from '../src/types.ts';
+import { decider, risqueConseil, saisine } from '../src/conseil.ts';
+import { monthIndex } from '../src/types.ts';
+import type { Bill, BillSpec, GameState, Reforme, TurnEvent } from '../src/types.ts';
 
 const loi = (title: string, levers: BillSpec['levers'], tags: string[], qualitative: BillSpec['qualitative'] = []): BillSpec =>
   ({ title, summary: title, articles: [title], levers, qualitative, tags, prepMonths: 1, rampMonths: 6, estimatedCost: 0 });
@@ -249,4 +251,128 @@ console.log('\n== Réformes (décret, 50 graines, contre « Ne rien faire ») ==
   const oui = (pop: number, c: number) => 100 / (1 + Math.exp(-(C.referendum_poids_popularite * (pop - C.referendum_pivot) + C.referendum_poids_consignes * c)));
   console.log('recoupements (popularité, consignes → oui simulé / réel) : ' + ([['1969', 0.45, -0.3, '47,6'], ['1992', 0.3, 0.4, '51,0'], ['2000', 0.5, 0.8, '73,2'], ['2005', 0.35, 0.3, '45,3']] as const)
     .map(([y, p, c, r]) => `${y} (${p}, ${c}) → ${oui(p, c).toFixed(0)} / ${r}`).join(' ; '));
+}
+
+console.log('\n== Conseil constitutionnel (démocratie, 50 graines) ==');
+{
+  // Par scénario (joue, 49.3 systématique) : texte saisi, issue, délai entre le dernier vote et la promulgation.
+  console.log('scénario                       saisis  conforme partielle totale   délai vote → promulgation (mois)');
+  let nSaisis = 0, nAdoptees = 0;
+  for (const [nom, lois] of Object.entries(SCENARIOS)) {
+    if (!lois.length) continue;
+    const n = { saisis: 0, conforme: 0, partielle: 0, totale: 0, delai: 0, promulguees: 0 };
+    for (let seed = 1; seed <= 50; seed++) {
+      const b = joue(lois, seed, 'democratie').s.bills[0];
+      if (b.saisine) n.saisis++;
+      if (b.saisine || b.status === 'adoptee') nAdoptees++; // adoption définitive (censure totale comprise)
+      if (b.saisine?.issue) n[b.saisine.issue]++;
+      if (b.promulgueLe && b.votes.length) { n.promulguees++; n.delai += monthIndex(b.promulgueLe) - monthIndex(b.votes.at(-1)!.date); }
+    }
+    nSaisis += n.saisis;
+    console.log(`${nom.padEnd(30)} ${pct(n.saisis / 50)} %  ${String(n.conforme).padStart(8)} ${String(n.partielle).padStart(9)} ${String(n.totale).padStart(6)}   ${n.promulguees ? f(n.delai / n.promulguees, 2) : '     -'}`);
+  }
+  // Batterie synthétique à l'état initial : risque prévu (risqueConseil, 49.3 si l'Assemblée rejetterait probablement le texte)
+  // contre fréquence observée sur 50 graines de décision (decider, graine dérivée de chaque partie).
+  const q = (intensite: 'faible' | 'moyenne' | 'forte', justification: string): BillSpec['qualitative'][number] => ({ cible: { kind: 'tension' }, direction: 1, intensite, justification });
+  const BATTERIE: [string, BillSpec][] = [
+    ['Immigration (mesure forte)', loi('Immigration', [{ id: 'depenses.securite', delta: 1 }], ['immigration_restriction', 'securite_justice'], [q('forte', 'Rétention administrative allongée')])],
+    ['Sécurité (mesure moyenne)', loi('Sécurité', [{ id: 'depenses.securite', delta: 1 }], ['securite_justice'], [q('moyenne', 'Drones de surveillance')])],
+    ['Loi de finances + cavalier', { ...loi('Loi de finances', [{ id: 'depenses.defense', delta: 2 }, { id: 'regulation.taux_livret_a', delta: 0.5 }], ['fiscalite_hausse']), loiDeFinances: 2027 }],
+    ['Impôt très hauts patrimoines 4 %', { ...loi('Impôt', [], ['redistribution']), reforme: { modele: 'creer_impot', assiette: 'tres_hauts_patrimoines', taux: 4 } }],
+    ...Object.entries(SCENARIOS).filter(([, l]) => l.length).map(([nom, l]) => [nom, l[0]] as [string, BillSpec]),
+  ];
+  const s0 = engine.newGame({ seed: 1, mode: 'democratie' });
+  console.log('texte (seed 1)                       saisine          prévu partielle totale   observé partielle totale   exposé');
+  let obsP = 0, obsT = 0, obsT1 = 0, n1 = 0;
+  for (const [nom, spec] of BATTERIE) {
+    const bill: Bill = { id: 'loi-1', spec, status: 'preparation', votes: [] };
+    const usage493 = forecastVote(s0, bill, 'assemblee').probabiliteAdoption < 0.5;
+    const r = risqueConseil(s0, { ...bill, usage493 });
+    const o = { partielle: 0, totale: 0 };
+    for (let seed = 1; seed <= 50; seed++) {
+      const s = engine.newGame({ seed, mode: 'democratie' });
+      const b: Bill = { ...structuredClone(bill), usage493 };
+      const sa = saisine(s, b);
+      if (!sa) continue;
+      b.saisine = sa;
+      s.bills.push(b);
+      const ev = decider(s, b, 0).find((e) => e.kind === 'conseil');
+      if (ev?.kind === 'conseil' && ev.issue !== 'conforme') o[ev.issue]++;
+    }
+    obsP += o.partielle / 50 / BATTERIE.length; obsT += o.totale / 50 / BATTERIE.length;
+    if (!(r.partielle === 0 && r.articles.length)) { obsT1 += o.totale / 50; n1++; } // hors texte dont l'article exposé est tout le texte
+    const sais = r.saisine ? `${r.saisine.chambre === 'assemblee' ? 'AN' : 'Sénat'} ${r.saisine.sieges}${usage493 ? ' (49.3)' : ''}` : 'aucune';
+    console.log(`${nom.padEnd(36)} ${sais.padEnd(16)} ${pct(r.partielle)} %  ${pct(r.totale)} %   ${pct(o.partielle / 50)} %   ${pct(o.totale / 50)} %   ${r.articles.map((a) => `${a.label} (${pct(a.p).trim()} %)`).join(' ; ') || '-'}`);
+  }
+  console.log(`contrôle : saisis ${pct(nSaisis / nAdoptees).trim()} % des lois du banc définitivement adoptées (cible 40-50 %) ; batterie : partielles ${pct(obsP).trim()} % (cible 10-15 %), `
+    + `totales ${(100 * obsT).toFixed(1)} %, ${(100 * obsT1 / n1).toFixed(1)} % hors texte à article unique exposé (cible < 2 %)`);
+}
+
+// Bilan de fin de mandat (ENGINE.md §16) : lecture seule, aucun effet sur les sections précédentes.
+console.log('\n== Bilan de fin de mandat (50 graines) ==');
+{
+  const RUB = ['finances', 'emploi', 'pouvoir_achat', 'cohesion', 'popularite', 'institutions'];
+  console.log(`${'scénario'.padEnd(42)} score  min  max   fin.  empl.  p.ach.  coh.   pop.   inst.   mentions`);
+  let horsPlafond = 0, impur = 0, inaction = 0;
+  const ligne = (nom: string, fins: GameState[]) => {
+    const bs = fins.map((s) => {
+      const avant = JSON.stringify(s), b = engine.bilan(s);
+      if (JSON.stringify(s) !== avant) impur++;
+      if (b.plafond !== undefined && b.score > b.plafond) horsPlafond++;
+      return b;
+    });
+    const moy = (a: number[]) => a.reduce((x, y) => x + y, 0) / a.length, sc = bs.map((b) => b.score);
+    const mentions: Record<string, number> = {};
+    for (const b of bs) mentions[b.mention] = (mentions[b.mention] ?? 0) + 1;
+    console.log(`${nom.padEnd(42)} ${f(moy(sc))} ${String(Math.min(...sc)).padStart(4)} ${String(Math.max(...sc)).padStart(4)}`
+      + RUB.map((id) => f(moy(bs.map((b) => b.rubriques.find((r) => r.id === id)!.note)))).join(' ') + `   ${JSON.stringify(mentions)}`);
+    return moy(sc);
+  };
+  for (const [nom, lois] of Object.entries(SCENARIOS))
+    ligne(`${nom} (démocratie)`, Array.from({ length: 50 }, (_, k) => joue(lois, k + 1, 'democratie').s));
+  inaction = ligne('Ne rien faire (bac à sable)', Array.from({ length: 50 }, (_, k) => {
+    let s = engine.newGame({ seed: k + 1, mode: 'bac_a_sable' });
+    while (!engine.isOver(s)) s = engine.endTurn(s).state;
+    return s;
+  }));
+  console.log(`contrôle : inaction en bac à sable ${inaction.toFixed(1)} (cible 45-50) ; défaites au-dessus de leur plafond : ${horsPlafond} ; états modifiés par bilan() : ${impur}`);
+}
+
+// Législatives de juin 2029 (ENGINE.md §17) : parties qui arrivent au début de juin 2029 (t = 41), issue du scrutin, puis défaites
+// de juin 2029 à la fin du mandat avec et sans scrutin. « Sans » : même état au début de juin, dernier scrutin posé en janvier 2026
+// (échéance repoussée en juin 2031, hors partie) ; le moteur n'est pas touché.
+console.log('\n== Législatives de juin 2029 (50 graines) ==');
+{
+  const ECHEANCE = 41;
+  console.log(`${'scénario'.padEnd(30)} t=41  maj. cohab. sans  centre prévu/obtenu  stab 40 / fin   défaites t≥41 avec scrutin / sans`);
+  const cas: [string, BillSpec[], 'democratie' | 'bac_a_sable'][] = [
+    ['Ne rien faire', SCENARIOS['Ne rien faire'], 'democratie'], ['Relance (+20 Md€)', SCENARIOS['Relance (+20 Md€)'], 'democratie'],
+    ['SMIC +100 €', SCENARIOS['SMIC +100 €'], 'democratie'], ['Dérapage (+90 Md€, TVA −5)', SCENARIOS['Dérapage (+90 Md€, TVA −5)'], 'democratie'],
+    ['Ne rien faire (bac à sable)', [], 'bac_a_sable'],
+  ];
+  const fin = (s: GameState) => { while (!engine.isOver(s)) s = avance(s).state; return s; };
+  for (const [nom, lois, mode] of cas) {
+    let n = 0, prevu = 0, obtenu = 0, stab40 = 0, stabFin = 0;
+    const iss: Record<string, number> = { majorite: 0, cohabitation: 0, sans_majorite: 0 }, avec: Record<string, number> = {}, sans: Record<string, number> = {};
+    for (let seed = 1; seed <= 50; seed++) {
+      let s = engine.newGame({ seed, mode });
+      for (const spec of lois) { s = engine.addDraft(s, spec); s = engine.deposit(s, s.bills[s.bills.length - 1].id); }
+      while (!engine.isOver(s) && monthIndex(s.date) < ECHEANCE) s = avance(s).state;
+      if (engine.isOver(s)) continue;
+      n++; stab40 += s.history.at(-1)!.national.stabilite;
+      prevu += engine.forecastLegislatives(s).blocs.find((b) => b.id === 'centre')!.sieges;
+      const r = avance(s), l = r.report.events.find((e) => e.kind === 'legislatives');
+      if (l?.kind !== 'legislatives' || !l.normales) throw new Error('législatives de juin 2029 absentes');
+      iss[l.issue]++;
+      obtenu += parBloc(l.apres).find((b) => b.id === 'centre')!.sieges;
+      const a = fin(r.state), b = fin({ ...s, institutions: { ...s.institutions!, legislatives: { year: 2026, month: 1 } } });
+      stabFin += a.national.stabilite;
+      if (a.defaite) avec[a.defaite.cause] = (avec[a.defaite.cause] ?? 0) + 1;
+      if (b.defaite) sans[b.defaite.cause] = (sans[b.defaite.cause] ?? 0) + 1;
+    }
+    const tot = (o: Record<string, number>) => Object.values(o).reduce((x, y) => x + y, 0);
+    console.log(`${nom.padEnd(30)} ${String(n).padStart(4)}  ${String(iss.majorite).padStart(4)} ${String(iss.cohabitation).padStart(6)} ${String(iss.sans_majorite).padStart(5)}`
+      + `  ${f(prevu / Math.max(1, n), 0)} / ${f(obtenu / Math.max(1, n), 0)}       ${pct(stab40 / Math.max(1, n))} / ${pct(stabFin / Math.max(1, n))}`
+      + `      ${tot(avec)} ${JSON.stringify(avec)} / ${tot(sans)} ${JSON.stringify(sans)}`);
+  }
 }

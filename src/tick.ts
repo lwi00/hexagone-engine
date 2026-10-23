@@ -7,8 +7,9 @@ import { C, CENTRAGE, INIT, LEVERS, budget, campAutre, campBloc, centralFactor, 
 import type { Core, Fin } from './init.ts';
 import { billGroups, promulgate, qualitativeEffect, sumEffects } from './levers.ts';
 import { rand, voteBill, voteCongres } from './parliament.ts';
-import { addMonths, elections, majRelations, profilCamp, resoudreReferendum } from './institutions.ts';
+import { addMonths, echeanceLegislatives, elections, majRelations, profilCamp, resoudreReferendum } from './institutions.ts';
 import { montantsReformes } from './reformes.ts';
+import { decisions, poser } from './conseil.ts';
 import { presidentielle } from './presidentielle.ts';
 
 const mean = (a: number[]) => a.reduce((x, y) => x + y, 0) / a.length;
@@ -156,6 +157,12 @@ export function premierMardiOctobre(y: number): number {
   return 1 + ((2 - dow + 7) % 7);
 }
 
+// Troisième mardi de juin (code électoral, LO121 : fin des pouvoirs de l'Assemblée). Sakamoto, T[5] = 3 ; 2029 → 19.
+export function troisiemeMardiJuin(y: number): number {
+  const dow = (y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + 3 + 1) % 7; // 1er juin, 0 = dimanche
+  return 15 + ((2 - dow + 7) % 7);
+}
+
 // Réponse à un dilemme (ENGINE.md §5c) : effets du choix à partir du mois t, dilemme levé. Modifie s.
 export function applyChoice(s: GameState, choixId: string, t: number, parDefaut = false): TurnEvent[] {
   const d = s.dilemme;
@@ -229,6 +236,14 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
         + `Le Parlement dispose ensuite de 70 jours pour l'adopter (Constitution, art. 47) : vote de l'Assemblée en novembre, adoption définitive en décembre. Sans loi de finances au 31 décembre, l'État fonctionne sous loi spéciale.` });
   }
 
+  // 1a. Échéance des législatives (ENGINE.md §17) : annonce trois mois avant. Aucun effet, aucun tirage.
+  const echeance = echeanceLegislatives(s);
+  if (t === monthIndex(echeance) - 3 && !s.defaite && !inst(s).dissolution) {
+    out.push({ kind: 'event', id: `legislatives_${echeance.year}_annonce`, type: 'echeance', titre: `Législatives en juin ${echeance.year}`,
+      description: `L'Assemblée élue en juillet ${echeance.year - 5} arrive au terme de son mandat le mardi ${troisiemeMardiJuin(echeance.year)} juin (code électoral, art. LO121) : `
+        + `les deux tours auront lieu en juin, à une date fixée par décret. Les textes non adoptés seront examinés par la nouvelle Assemblée.` });
+  }
+
   // 1b. Un événement aléatoire au plus : un tirage décide s'il y en a un et lequel (probabilités cumulées).
   if (opts.aleatoire !== false) {
     const cands = TEMPLATES.map((e) => ({ e, p: randomProba(s, e, t) })).filter((c) => c.p > 0);
@@ -262,10 +277,12 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
 
   // 2. Lois arrivées au vote
   const dissoute = !!s.institutions?.dissolution;
+  // Législatives ordinaires ce mois (§17) : jamais en prévisualisation (tirage), comme la présidentielle.
+  const normales = !dissoute && !s.defaite && opts.aleatoire !== false && t === monthIndex(echeance);
   const elue = monthIndex(inst(s).legislatives); // seuls comptent les votes de l'Assemblée en place (textes caducs à la dissolution)
   for (const b of s.bills) {
-    if (b.status !== 'preparation' || !b.voteLe || monthIndex(b.voteLe) !== t) continue;
-    if (dissoute && votesSimules(s.mode)) { b.voteLe = nextMonth(s.date); continue; } // Assemblée dissoute : examen reporté
+    if (b.status !== 'preparation' || !b.voteLe || monthIndex(b.voteLe) !== t || b.saisine) continue;
+    if ((dissoute || normales) && votesSimules(s.mode)) { b.voteLe = nextMonth(s.date); continue; } // Assemblée dissoute ou en campagne : examen reporté
     if (b.voie && votesSimules(s.mode)) { // révision constitutionnelle (ENGINE.md §14)
       if (circuit(s, b, t, opts.aleatoire !== false, out)) { promulgate(s, b, t); out.push({ kind: 'promulgation', billId: b.id }); }
       continue;
@@ -278,10 +295,15 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
       if (!an.result.adopte) { b.status = 'rejetee'; continue; }
       if (!se.result.adopte) { b.voteLe = nextMonth(s.date); continue; } // CMP simplifiée : dernier mot à l'Assemblée le mois suivant
     }
-    promulgate(s, b, t);
-    out.push({ kind: 'promulgation', billId: b.id });
+    // Adoption définitive : saisine du Conseil constitutionnel (§15), sinon promulgation. Jamais de saisine en décret.
+    if (!poser(s, b, out)) { promulgate(s, b, t); out.push({ kind: 'promulgation', billId: b.id }); }
   }
-  if (dissoute) out.push(...elections(s, t)); // 2b. Législatives anticipées (ENGINE.md §11)
+  // 2a. Décisions du Conseil constitutionnel (ENGINE.md §15) : une loi de finances votée ce mois est décidée dans ce tick.
+  out.push(...decisions(s, t));
+  if (dissoute || normales) out.push(...elections(s, t, normales)); // 2b. Législatives anticipées (§11) ou ordinaires (§17)
+  // Cohésion de référence après juin 2029 (§17) : fixée au premier gouvernement en fonction (étape 7). Une dissolution l'efface.
+  if (normales) s.internals['coh:attente'] = 1;
+  if (dissoute) { delete s.internals['coh:attente']; delete s.internals['coh:ref']; }
 
   // 2c. 31 décembre sans loi de finances pour l'année suivante : loi spéciale (ENGINE.md §5d).
   const lsId = `loi_speciale_${s.date.year + 1}`;
@@ -447,9 +469,12 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   I.gen = generale ? 1 : 0;
   I.I = generale ? 1 : intensite;
 
+  // Législatives ordinaires (§17) : la cohésion d'après-scrutin devient la référence (jamais au-dessus de coh0), pour qu'un
+  // scrutin normal ne compte pas comme une crise de majorité ; dès que le gouvernement n'est plus démissionnaire.
+  if (I['coh:attente'] && !inst(s).gouvernement.demissionnaire) { I['coh:ref'] = Math.min(coh0(s), cohesion(s)); delete I['coh:attente']; }
   const sCible = INIT.stabilite - C.stabilite_poids_tension * (tNat - INIT.tension) + C.stabilite_poids_popularite * (popularite - INIT.popularite)
     - C.stabilite_poids_spread * (fin.spread - INIT.spread)
-    + C.stabilite_poids_cohesion_majorite * clamp(cohesion(s) - coh0(s), -C.stabilite_cohesion_perte_max, C.stabilite_cohesion_gain_max);
+    + C.stabilite_poids_cohesion_majorite * clamp(cohesion(s) - (I['coh:ref'] ?? coh0(s)), -C.stabilite_cohesion_perte_max, C.stabilite_cohesion_gain_max);
   I.Sl = C.stabilite_inertie * I.Sl + (1 - C.stabilite_inertie) * sCible;
   const stabilite = clamp(I.Sl + get('stabilite:'));
 

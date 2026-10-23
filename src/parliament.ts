@@ -30,6 +30,10 @@ export function gauss(a: number): [number, number] {
   return [Math.sqrt(-2 * Math.log(1 - u)) * Math.cos(2 * Math.PI * v), a2];
 }
 
+// Graine dérivée de la partie (§15 décision du Conseil, §17 législatives de juin 2029) : tirage reproductible qui n'avance pas
+// state.rng, donc ne décale aucun tirage existant (même motif que forecastVote : graines k × 2654435761).
+export const graine = (s: GameState, ...cles: number[]) => cles.reduce((h, k) => Math.imul(h ^ k, 2654435761) >>> 0, s.seed >>> 0);
+
 const sigma = (x: number) => 1 / (1 + Math.exp(-x));
 const TAGS = new Map(tags.map((t) => [t.id, t.axes as Axes]));
 const INTENSITE = { faible: 1, moyenne: 2, forte: 3 };
@@ -74,8 +78,9 @@ export function fond(bill: Bill, chambre: 'assemblee' | 'senat', id: string, axe
 }
 
 // Score s d'un groupe : positif = penche pour la loi. f = fond(...).
-function groupScore(state: GameState, acc: number, g: Groupe, malus: number, f: number): number {
-  return P.parlement_poids_axes * f + bonus(g.rapport) + P.parlement_poids_popularite * (state.national.popularite - 0.3)
+// Révision constitutionnelle (§14) : le bonus de rapport est réduit de parlement_revision_malus_bonus (on ne suit pas son camp sur la Constitution).
+function groupScore(state: GameState, acc: number, g: Groupe, malus: number, f: number, revision = false): number {
+  return P.parlement_poids_axes * f + bonus(g.rapport) * (revision ? 1 - P.parlement_revision_malus_bonus : 1) + P.parlement_poids_popularite * (state.national.popularite - 0.3)
     + P.parlement_poids_accueil_populaire * acc - malus;
 }
 
@@ -103,7 +108,8 @@ function scores(state: GameState, bill: Bill, groupes: Groupe[], data: Data, mal
   const axes = billAxes(bill);
   const acc = accueil(bill);
   const chambre = data === AN ? 'assemblee' : 'senat';
-  return groupes.map((g) => ({ g, s: groupScore(state, acc, g, malus(g), fond(bill, chambre, g.groupId, axes)), discipline: data.get(g.groupId)?.discipline ?? 0.9 }));
+  const revision = constitutionnel(bill.spec);
+  return groupes.map((g) => ({ g, s: groupScore(state, acc, g, malus(g), fond(bill, chambre, g.groupId, axes), revision), discipline: data.get(g.groupId)?.discipline ?? 0.9 }));
 }
 
 // Incertitude du vote : un choc commun (climat de la séance) et un choc par groupe (négociations, amendements) s'ajoutent au score.
@@ -182,6 +188,7 @@ export const isBudget = (bill: Bill) =>
 // du PM), pour un gouvernement démissionnaire et pendant une dissolution (ENGINE.md §11). Jamais sur une révision constitutionnelle,
 // ni une fois le 49.3 supprimé par une réforme (§14).
 export function can493(state: GameState, bill: Bill): boolean {
+  if (bill.saisine) return false; // texte déféré ou jugé par le Conseil constitutionnel (§15)
   if (bill.voie || constitutionnel(bill.spec)) return false;
   if (bill.spec.reforme && obstacleReforme(state, bill.spec, bill.id)) return false; // doublon déposé après un rejet (§14)
   const r = regles(state).sans493;

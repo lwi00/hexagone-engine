@@ -11,9 +11,12 @@ Un seul projet déposé par mois (`canDeposit`, `deposit` refuse le second) ; le
 Un tick = un mois. `endTurn` applique, dans cet ordre, en utilisant les valeurs du mois précédent pour les boucles (spread ↔ stabilité, satisfaction ↔ chômage) :
 
 1. **Événements** du mois (`events-2026.json`, date au mois près) : `exogene` → effets actifs ; `echeance` → simple `TurnEvent` (aucun effet).
+1a. **Échéances** : rentrée budgétaire en septembre (§5d) ; trois mois avant l'échéance normale des législatives (mars 2029), annonce du scrutin de juin (§17), sans effet ni tirage.
 1b. **Événement aléatoire** (§5b) : au plus un par mois.
-2. **Lois** : celles dont `voteLe` = ce mois sont votées (§4) ; adoptées → `promulgueLe` = ce mois ; leurs leviers et effets qualitatifs démarrent. Assemblée dissoute ce mois-ci (mode démocratie) : votes du mois reportés d'un mois (`voteLe` = mois suivant, aucun vote). Seuls comptent les votes de l'Assemblée en place : un texte adopté par une Assemblée dissoute (puis rejeté au Sénat) est revoté par les deux chambres.
-2b. **Législatives anticipées** (§11) si une dissolution a été prononcée ce mois-ci.
+2. **Lois** : celles dont `voteLe` = ce mois sont votées (§4) ; adoptées → `promulgueLe` = ce mois ; leurs leviers et effets qualitatifs démarrent. Assemblée dissoute ce mois-ci, ou législatives ordinaires ce mois-ci (§17) (mode démocratie) : votes du mois reportés d'un mois (`voteLe` = mois suivant, aucun vote). Seuls comptent les votes de l'Assemblée en place : un texte adopté par une Assemblée dissoute (puis rejeté au Sénat) est revoté par les deux chambres.
+   Adoption définitive (hors décret et hors révision constitutionnelle) : si 60 députés ou sénateurs au moins y sont fortement opposés, **saisine du Conseil constitutionnel** (§15) au lieu de la promulgation : le texte reste `preparation` jusqu'à la décision (un mois plus tard, le même mois pour une loi de finances).
+2a. **Décisions du Conseil constitutionnel** (§15) dues ce mois-ci : conforme ou censure partielle → promulgation (texte réduit) ; censure totale → `rejetee`. Pas de report pendant une dissolution ; une loi de finances votée ce mois est décidée dans ce tick.
+2b. **Législatives** : anticipées (§11) si une dissolution a été prononcée ce mois-ci ; ordinaires (§17) au mois de l'échéance (juin 2029), hors défaite et hors prévisualisation.
 3. **Indexations automatiques** : pensions au 1er janvier (`pensions_indexation_inflation`) ; SMIC au 1er janvier et en cours d'année si l'inflation cumulée depuis la dernière revalorisation dépasse `smic_seuil_revalorisation_inflation`. L'indexation bouge `levers[id].reference`, jamais `delta`.
 4. **Effets actifs** → lignes budgétaires, terme d'offre O, inflation, satisfaction, scores.
 5. **Macro** : croissance (tendance + multiplicateurs × impulsion budgétaire + O + chocs + grèves), chômage (Okun sur l'écart de croissance **hors effets d'offre des leviers** : voir §7a), inflation.
@@ -48,7 +51,7 @@ Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hy
 - `p_pour = σ(k·s)`, `p_contre = σ(−k·s)`, abstention = reste via `parlement_abstention_base`. Au vote, le score reçoit un choc gaussien commun à la chambre (`parlement_incertitude_commune`) et un choc par groupe (`parlement_incertitude_groupe`). Votes = sièges × probabilités, avec dissidence tirée (rng) selon `1 − discipline`.
 - Adoption à l'Assemblée = pour > contre (majorité des exprimés). Le Sénat vote aussi (affiché ; rapports courants lus par `senatGroupes(state)`, dynamiques depuis le §13) ; en cas de désaccord, l'Assemblée a le dernier mot un mois plus tard (CMP simplifiée).
 - **Prévision** (`forecastVote`, prévisualisation §8) : Monte-Carlo de 1000 votes (même fonction que `voteBill`) sur des graines fixes, donc déterministe et indépendant de `state.rng`. Voix = moyennes, probabilité d'adoption = fréquence.
-- **49.3** après un rejet : budget (tag `fiscalite_*`/`austerite_depenses`/`relance_depenses` et coût ≠ 0) illimité, sinon une fois par année civile. Motion de censure votée immédiatement par les groupes hors majorité (opposition et soutien conditionnel : l'opposition seule n'atteint pas 289 sièges) selon `p_contre` ; adoptée si ≥ 289 voix → loi rejetée (`censuree`), choc de stabilité `censure_choc_stabilite` sur `censure_duree_choc_mois`, le gouvernement devient démissionnaire (§11).
+- **49.3** après un rejet : budget (tag `fiscalite_*`/`austerite_depenses`/`relance_depenses` et coût ≠ 0) illimité, sinon une fois par année civile. Motion de censure votée immédiatement par les groupes hors majorité (opposition et soutien conditionnel : l'opposition seule n'atteint pas 289 sièges) selon `p_contre` ; adoptée si ≥ 289 voix → loi rejetée (`censuree`), choc de stabilité `censure_choc_stabilite` sur `censure_duree_choc_mois`, le gouvernement devient démissionnaire (§11). Censure rejetée : saisine du Conseil constitutionnel presque systématique (seuil de fond 0, §15), sinon promulgation immédiate ; `can493` est faux sur un texte déféré ou jugé par le Conseil.
 - Le 49.3 est impossible en cohabitation (prérogative du PM), pour un gouvernement démissionnaire et pendant une dissolution (§11), sur une révision constitutionnelle et après une suppression du 49.3 par réforme (`can493`, §14). Un impôt créé ou supprimé, tagué `fiscalite_*`, compte comme texte budgétaire (§14).
 - **Malus de cohabitation** : en cohabitation, à l'Assemblée seulement, le score des groupes `majorite` perd `parlement_malus_cohabitation` sur chaque texte du Président (vote et prévision ; le Sénat n'est pas concerné).
 - Mode `decret` : adoption automatique au mois prévu, pas de vote.
@@ -85,11 +88,14 @@ Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hy
 
 - Chaque septembre (2026 à 2029), une échéance rappelle que le PLF de l'année suivante doit être déposé au plus tard le premier mardi d'octobre (LOLF, art. 39) et que le Parlement a 70 jours pour l'adopter (Constitution, art. 47).
 - Un projet porte `spec.loiDeFinances = année` (écran budgétaire de l'interface). Déposé entre septembre et novembre, il est voté par l'Assemblée en novembre (vote solennel réel : mi-novembre), ce qui laisse décembre pour la navette ou le 49.3.
+- Une loi de finances déférée au Conseil constitutionnel (§15) est décidée le mois de son adoption (étape 2a, avant le test de la loi spéciale) ; une censure totale en décembre mène donc à la loi spéciale (précédent : 79-110 DC, loi de finances pour 1980).
 - Au tick de décembre, après les votes : sans loi de finances **adoptée** pour l'année suivante, l'État passe sous **loi spéciale** (cas réels : 2025, 2026) : chocs faibles de stabilité (6 mois), de prime de risque (6 mois) et de popularité (3 mois).
 
 ## 6. Déterminisme
 
 `mulberry32` initialisé par `seed`, état dans `state.rng`. Aucun `Math.random` ni `Date` dans `src/`. Même état + mêmes actions ⇒ même résultat. Le moteur est pur : chaque fonction renvoie un nouvel état.
+
+Deux mécaniques tirent sur une graine dérivée `graine(s, …)` (rand de parliament.ts) au lieu de state.rng : la décision du Conseil (§15) et le scrutin de juin 2029 (§17). Ces tirages sont fonction de (seed, mois, loi). Ils ne décalent aucun tirage de state.rng et sont identiques en prévisualisation. C'est le seul assouplissement de la règle « aléa = state.rng ».
 
 ## 7. Corrections de la phase 1.1
 
@@ -106,7 +112,9 @@ e. **Choix chiffrés devenus coefficients** (`hypothese: true`) : `censure_duree
 - Les tags comptent : une loi sans levier mais dont les tags ont des réactions négatives fait monter la tension (§3), donc l'écart n'est nul que pour une loi sans levier, sans effet qualitatif et sans tag impopulaire.
 - Écarts au dernier mois simulé : tous les indicateurs, lignes budgétaires non nulles (`recettes.x` / `depenses.x`, triées par |écart|), satisfaction de chaque groupe, tension et chômage de chaque région, intentions de vote.
 - `vote` : prévision Assemblée puis Sénat (§4) à l'état courant ; vide en mode décret.
+- `conseil` (§15, hors décret, dissolution et révision) : saisine probable (49.3 supposé si P(adoption à l'Assemblée) < 0,5 et 49.3 possible), probabilités de censure partielle et totale, articles exposés. Limite : la trajectoire « avec » suppose la loi adoptée au mois prévu, sans délai ni censure ; les lois déjà déférées sont décidées de la même façon des deux côtés (graine dérivée).
 - Réformes (§14) : `circuit` (révision constitutionnelle hors décret et hors dissolution : probabilités Congrès et référendum de bout en bout, oui moyen) ; `legislatives` (proportionnelle : prévision des législatives sans et avec la règle) ; adoption d'une révision au mois du Congrès (`prepMonths + 1`) ; lignes budgétaires des impôts créés comprises.
+- Pas de législatives de juin 2029 en prévisualisation (§17) : comme la présidentielle, le scrutin ordinaire n'a lieu que dans un tick normal (sinon une cohabitation pourrait n'apparaître que d'un côté). Les votes du mois de l'échéance ne sont pas reportés non plus.
 - Coût : ≈ 20 ms pour 60 mois (test < 100 ms).
 
 
@@ -115,6 +123,7 @@ e. **Choix chiffrés devenus coefficients** (`hypothese: true`) : `censure_duree
 - Trois causes, chacune avec un seuil (coefficients `defaite_*`) : **dette** (spread ≥ `defaite_spread_seuil`, l'État perd l'accès aux marchés), **régime** (stabilité ≤ `defaite_stabilite_seuil`, le Président démissionne), **soulèvement** (tension nationale ≥ `defaite_tension_seuil`).
 - Compteur `internals['def:<cause>']` : +1 par mois au-delà du seuil, remis à 0 dès qu'il repasse. Premier mois : `TurnEvent` `alerte` ; au mois `defaite_mois_consecutifs` : `state.defaite = { cause, date }`, `TurnEvent` `defaite`, et `isOver` devient vrai. Seule la première défaite compte.
 - `engine.dangers(state)` liste les compteurs en cours (bandeau d'alerte de l'interface, contexte du conseiller LLM).
+- Fin de partie (`isOver`, dans `src/bilan.ts` : mois 60 atteint ou défaite) : l'interface ouvre la fenêtre de fin de mandat avec le bilan et le score (§16), plafonné après une défaite.
 - Le spread reçoit un terme non linéaire en déficit (`spread_non_lineaire_deficit`, actif au-delà de 6 %), sans quoi aucune dérive budgétaire ne menait à la crise de la dette.
 - Calage (50 graines, `npm run balance`) : aucune défaite sans action ni pour une réforme isolée (retraites, austérité de 20 Md€) ; quelques-unes pour un dérapage de +90 Md€ ou une austérité brutale ; environ deux tiers des parties en cumulant deux réformes brutales ; toujours pour une dérive budgétaire extrême.
 
@@ -126,7 +135,7 @@ Code : `src/institutions.ts`. Données : `politics.institutions` (blocs, coaliti
 1. **Gouvernement** : `state.institutions?.gouvernement` (profil, PM, date, démission). Les rapports des groupes restent dans `parliament.assemblee[].rapport` (lus par le vote, la censure et la cohésion qui alimente la stabilité) : nommer un PM réécrit les rapports et les relations (§13). Entre deux nominations, les rapports suivent les relations (§13). La discipline des groupes ne change pas.
 2. **Censure adoptée** : le gouvernement devient **démissionnaire**. `deposit` est refusé et le 49.3 impossible ; l'interface désactive « Fin du mois » tant qu'aucun PM n'est nommé. Le moteur ne bloque pas `endTurn` (scripts et prévisualisation restent totaux) : les textes déjà en préparation sont votés avec les rapports en place.
 3. **Nomination** (`nominate`) : seulement si le gouvernement est démissionnaire, pas de remaniement volontaire. Quatre profils nommables (`camp_presidentiel`, `ouverture_gauche`, `ouverture_droite`, `technicien`), rapports donnés par `profils[].rapports` (groupe absent = opposition). `cohabitation` n'est jamais nommable : seul le tick le pose après des législatives.
-4. **Dissolution** (`dissolve`, art. 12) : mode démocratie, partie en cours, aucune dissolution en cours, au moins `dissolution_delai_mois` (12) écoulés depuis le dernier scrutin législatif (juillet 2024 au départ : possible dès janvier 2026). Prononcée au mois t, elle entraîne les deux tours au tick de t (étape 2b). Choc de stabilité `dissolution_choc_stabilite` sur `dissolution_duree_choc_mois` ; votes du mois t reportés d'un mois.
+4. **Dissolution** (`dissolve`, art. 12) : mode démocratie, partie en cours, aucune dissolution en cours, au moins `dissolution_delai_mois` (12) écoulés depuis le dernier scrutin législatif (juillet 2024 au départ : possible dès janvier 2026). Prononcée au mois t, elle entraîne les deux tours au tick de t (étape 2b). Choc de stabilité `dissolution_choc_stabilite` sur `dissolution_duree_choc_mois` ; votes du mois t reportés d'un mois. Compteur `internals['n:dissolutions']` (+1, lu par le bilan, §16). Sans dissolution, l'Assemblée va au bout de son mandat : **législatives ordinaires** de juin 2029 (§17) ; `pouvoir().prochainesLegislatives` donne l'échéance (dérivée de la date du dernier scrutin).
 5. **Sièges** (`scrutin`, pur) : par blocs, à partir de `state.intentions` (formule ci-dessous).
 6. **Issue** (`issue(a, s?)`), dans cet ordre : (a) blocs de `majPres(s)` ≥ 289 (`censure_seuil`) → `majorite` (camp réel : `majorite_presidentielle` ; camp choisi hors du centre : §13) ; (b) sinon première coalition de `coalitions_opposition` sans le bloc du camp ≥ 289 → `cohabitation`, PM automatique ; (c) sinon `sans_majorite`. En (a) et (c), le gouvernement devient démissionnaire (rapports inchangés jusqu'à la nomination) ; si c'était un gouvernement de cohabitation, il passe au profil `technicien` (affaires courantes, rapports de ce profil) : la cohabitation prend fin.
 7. **Cohabitation** : groupes des blocs de la coalition → `majorite`, groupes du bloc du camp (`campBloc(s)`, par défaut `majorite_presidentielle[0]`) → `soutien_conditionnel`, autres → `opposition`. Les rapports de l'Assemblée ne suivent plus les relations jusqu'à la fin de la cohabitation (§13). À l'Assemblée, malus `parlement_malus_cohabitation` sur les groupes `majorite` (bonus net +0,1, comme un soutien conditionnel : la coalition vote selon les axes) ; 49.3 impossible. Jamais de défaite par cohabitation ; seule une nouvelle dissolution y met fin.
@@ -153,6 +162,7 @@ Pendant une dissolution, `previewBill` ne donne pas de prévision de vote (`vote
 - Positionnement du joueur mobile (§13) : déplacé par ses lois adoptées ; au premier tour, des électeurs le suivent (transfert à somme conservée), au second tour les reports se calculent depuis sa position courante.
 - Premier tour : score = intention × prime de popularité du sortant (`presidentielle_prime_popularite`, seulement pour le joueur) × exp(`presidentielle_incertitude` × z), z tiré par candidat ; normalisé à 100. Les deux premiers sont qualifiés ; scores gardés dans `internals['pres:<parti>']`.
 - Second tour : chaque finaliste garde ses voix ; `presidentielle_report_part` des voix de chaque éliminé se reporte, partagée selon exp(−`presidentielle_report_distance` × distance des positionnements), le poids vers un finaliste « barrage » étant multiplié par `presidentielle_barrage` (sauf pour les électeurs de son bloc) ; choc commun de `presidentielle_incertitude_t2` points.
+- `internals['pres:reelu']` : 0 si le joueur est éliminé ou battu, 1 s'il est élu, bac à sable compris (bilan, §16 ; sans tirage).
 - Joueur éliminé ou battu : défaite `presidentielle` (fin de partie, §10). Réélu : état de grâce (chocs de popularité moyen et de stabilité faible sur 6 mois). L'Assemblée n'est pas renouvelée : la dissolution reste possible (§11).
 - `forecastPresidentielle` : 1 000 tirages sur graines fixes à l'état courant (intentions et popularité figées) : premier tour moyen, probabilités de qualification et de victoire, adversaire probable.
 
@@ -234,6 +244,8 @@ Code : `src/reformes.ts` (catalogue, règles, montants, effets ; pur, sans tirag
 | `congres` | Assemblée puis Sénat au mois du vote ; Congrès le mois suivant | texte identique : un rejet d'une chambre → `rejetee` (veto du Sénat, ni CMP ni dernier mot) ; Congrès = Assemblée et Sénat réunis (`voteCongres` : deux tirages de chambre), adopté si `5 × pour ≥ 3 × (pour + contre)` (3/5 des suffrages exprimés, constante de la Constitution) |
 | `referendum` | Assemblée puis Sénat ; scrutin `referendum_campagne_mois` (2) plus tard | oui > 50 % ; un seul tirage gaussien |
 
+**Vote sur le fond** : sur une révision (`constitutionnel(spec)`, chambres et Congrès, prévisions comprises), le bonus de rapport du §4 est multiplié par `1 − parlement_revision_malus_bonus` (1 : aucun bonus, le groupe vote selon `fond`, la popularité et l'accueil). Banc (seed 1, état initial) : Congrès 3 % sur la suppression du 49.3 (31 % avec le bonus, le bloc central suivant le gouvernement malgré −0,8), 25 % sur la proportionnelle (78 %) ; Sénat 26 % et 31 %. Lois ordinaires inchangées.
+
 L'étape se déduit des votes (`circuit`, tick) : tous les votes comptent, sans filtre de législature : un texte voté par les deux chambres survit à une dissolution (précédent de 1973) ; pendant une dissolution, l'étape est reportée d'un mois comme les autres votes. Pas de 49.3 sur une révision. Les nouveaux tirages (Congrès, référendum) ne concernent que les textes qui ont une `voie`.
 
 **Référendum** (`referendumOui`) : `oui = 100 σ(poids_popularite × (popularité − pivot) + poids_consignes × consignes + incertitude × z)`, consignes = moyenne, pondérée par les sièges de l'Assemblée, de `clamp(fond + relation, −1, 1)`.
@@ -269,4 +281,103 @@ Recoupements (banc, consignes approximatives, z = 0) : 1969 (popularité 0,45, c
 - pas de référendum de l'art. 11, pas de blocage des voies constitutionnelles en cohabitation ;
 - prévisualisation au délai du Congrès (un référendum arriverait `referendum_campagne_mois − 1` mois plus tard) ;
 - proportionnelle en circuit constitutionnel par choix de jeu : en droit, elle relève de la loi ordinaire (art. 34, loi de 1985) ; `"voies": []` dans `reformes.json` suffit pour y revenir ;
-- Congrès sur la suppression du 49.3 ≈ 30 % au départ (banc) : le bonus de majorité (§4) fait suivre le bloc central malgré son opposition sur le fond ;
+
+## 15. Conseil constitutionnel (`src/conseil.ts`)
+
+Contrôle a priori des lois votées (Constitution, art. 61 al. 2 et 3, art. 62). Mode Réaliste et bac à sable ; jamais en décret ni sur une révision constitutionnelle (le Conseil n'est pas compétent : 2003-469 DC).
+
+**Saisine** (`saisine(s, b)`, pure, sans tirage), à l'adoption définitive (tick étape 2) ou après un 49.3 dont la censure est rejetée (`use493`) :
+- groupes hors majorité dont `fond(b, chambre, groupe)` < seuil ; seuil = `conseil_seuil_opposition` (−0,4, « fortement opposé ») pour une loi ordinaire, 0 pour une loi de finances ou un texte passé par 49.3 (saisine quasi systématique en pratique) ;
+- Assemblée d'abord, puis Sénat ; saisine si les sièges des groupes retenus atteignent 60 (art. 61 al. 2, constante constitutionnelle) ;
+- `bill.saisine = { chambre, groupes, sieges, decisionLe }`, événement `saisine` ; le texte reste (ou redevient, après un 49.3) `preparation`, sans retrait, amendement ni 49.3 ;
+- `decisionLe` : mois suivant (art. 61 al. 3) ; même mois pour une loi de finances (le Conseil statue fin décembre ; décidée dans le tick, pas de loi spéciale à tort). Au dernier tick (décembre 2030, t = 59), `decisions` décide tout texte encore déféré : une loi votée (ou passée par 49.3) ce mois-là n'attend pas 2031, où la partie est finie.
+
+État initial (seed 1) : Retraites, SMIC, Immigration, Climat et Compétitivité saisis ; Relance, Défense et Dérapage non ; Austérité et Austérité brutale saisies après leur 49.3.
+
+**Articles exposés** (`articles(b)`, pur) :
+- loi de finances : cavaliers budgétaires (LOLF art. 34), p = `conseil_p_cavalier` (0,7), pour chaque levier sans effet `budget` (aujourd'hui `energie.trve`, `travail.duree_legale`, `regulation.taux_livret_a`) et chaque mesure qualitative hors budget ;
+- loi ordinaire : mesures qualitatives selon e = exposition maximale de ses tags (`tags[].conseil` : `immigration_restriction` 0,5 et `securite_justice` 0,35 pour atteinte aux libertés ; `redistribution` et `fiscalite_hausse` 0,15 pour rupture d'égalité) : forte → e, moyenne → e × `conseil_part_moyenne` (0,4), faible → 0. Les leviers d'une loi ordinaire ne sont jamais exposés (pouvoir général d'appréciation du Parlement) : les textes du banc, faits de leviers seuls, ne perdent aucun effet ;
+- impôt créé (`creer_impot`) : caractère confiscatoire, p = `conseil_p_confiscatoire` × clamp((τη − 1)/0,5, 0, 1), η = érosion de l'assiette. Aucun risque sous le maximum de Laffer 1/η, donc aucun taux par défaut exposé ; seul `tres_hauts_patrimoines` au-delà de 2,86 % l'est (0,6 à partir de 4,3 %).
+
+**Probabilités** (`risqueConseil(s, b)`, pure, partagée par la décision, la prévisualisation et le banc) : n = max(1, leviers + mesures + réforme) ; `totale = conseil_totale_base + conseil_totale_pente × Σp/n` ; `partielle = (1 − totale)(1 − Π(1 − p))`. Articles retirés lors d'une censure partielle : ceux à p ≥ max(p)/2 ; s'ils couvrent les n articles de fond, la censure est totale. Écart volontaire à la spécification : ce cas étant déterministe, sa part partielle est reportée dans `totale` (même tirage, même issue), pour que l'aperçu annonce ce que fera la décision (un impôt seul à 4 % : totale ≈ 51 %).
+
+**Décision** (`decider`, étape 2a) : un seul tirage `rand(graine(s, 15, t, n° de la loi))` (§6), identique en tick normal et en prévisualisation, `s.rng` intact. u < totale → censure totale ; u < totale + partielle → censure partielle ; sinon conforme. Pas de report pendant une dissolution (le Conseil est indépendant de l'Assemblée).
+- **Conforme** : popularité + `conseil_popularite_conforme` (« victoire » légère), promulgation.
+- **Partielle** : `spec` réduite (leviers, mesures ou réforme retirés), `saisine.censures` rempli (motif, libellé, élément retiré), promulgation du texte réduit (`promulgate` ne lit que `spec` ; les tags restent : `billGroups` et positionnement inchangés) ; popularité `bareme.popularite.faible × retirés / n` (négatif) ; relations des groupes de l'Assemblée hors opposition − `conseil_relation_censure`.
+- **Totale** : `rejetee`, `saisine.issue = 'totale'`, aucune promulgation ; popularité −« moyenne », stabilité −« faible » ; relations hors opposition − 2 × `conseil_relation_censure`.
+- Chocs : source `event` `conseil:<billId>`, forme choc, `conseil_duree_choc_mois`. Relations bornées à −1 (comme `dissolve`) ; les seuils du §13 jouent à l'étape 7b. Événements `conseil { issue, censures }` puis `promulgation`.
+- Retard d'un mois : effets, rampes, `tension_lois_duree_mois`, relations (§13) et malus 49.3 partent au mois de la décision ; le delta des leviers est calculé à la valeur courante.
+
+| Coefficient | Valeur | Rôle |
+|---|---|---|
+| `conseil_seuil_opposition` | −0,4 | fond sous lequel un groupe défère une loi ordinaire |
+| `conseil_p_cavalier` | 0,7 | risque d'un cavalier budgétaire |
+| `conseil_part_moyenne` | 0,4 | part de l'exposition pour une mesure moyenne |
+| `conseil_p_confiscatoire` | 0,6 | risque maximal d'un impôt confiscatoire |
+| `conseil_totale_base` | 0,005 | censure totale de base (vice de procédure) |
+| `conseil_totale_pente` | 0,1 | hausse avec l'exposition moyenne |
+| `conseil_popularite_conforme` | 0,005 | victoire d'une loi validée |
+| `conseil_relation_censure` | 0,05 | camouflet pour les groupes qui ont porté le texte |
+| `conseil_duree_choc_mois` | 6 | durée des chocs |
+
+**Calage du banc** (section « Conseil constitutionnel ») : lois du banc saisies 29 % des fois sur 50 graines (100 % des adoptions définitives d'Austérité, Retraites, SMIC et Austérité brutale, presque jamais Relance, Défense, Dérapage : la censure de 49.3 en abat beaucoup avant) ; délai vote → promulgation 1 mois pour un texte saisi. Batterie synthétique : immigration (mesure forte) partielle ≈ 49 %, totale ≈ 3 % ; sécurité (moyenne) 14 % et 1 % ; loi de finances avec cavalier 67 % et 4 % ; impôt à 4 % : totale ≈ 51 % (article unique) ; lois du banc : 0,5 % de totale par saisine. Fréquences observées sur 50 graines conformes au risque prévu.
+
+**Garantie du banc** : sans saisine, rien ne change (aucun tirage de `state.rng`, la décision tire sur une graine dérivée). Sorties identiques : Scénarios (décret), Votes (10 graines), Calage 2026, Camps, colonnes décret des Réformes. Écarts : défaites en démocratie des textes saisis (promulgation un mois plus tard, d'où un autre enchaînement d'événements aléatoires : ±2 sur 50, Austérité brutale 41 → 43 dont 5 soulèvements), dissolution au 13e mois (popularité décalée), défaites des réformes en démocratie (±2).
+
+**Limites** : pas de QPC ; pas de saisine d'office des lois organiques ; leviers d'une loi ordinaire jamais censurés ; réserves d'interprétation non modélisées ; la saisine ne dépend que du fond (pas de calcul tactique de l'opposition) ; trajectoire de prévisualisation sans délai ni censure.
+
+## 16. Bilan et score de fin de mandat (`src/bilan.ts`)
+
+`engine.bilan(state): Bilan` : score 0-100, mention, six rubriques notées 0-100 et trois faits marquants au plus. Pur : aucun tirage, aucune écriture (test et banc : JSON de l'état identique avant et après). `provisoire = !isOver(s)` : l'onglet Sondages l'affiche en cours de partie (repliable), la fenêtre de fin de mandat et la carte de partage à la fin. Choix de jeu, sans source : les coefficients `bilan_*` sont des hypothèses de jeu.
+
+**Références** : D = national de janvier 2026 (`newGame({ seed: 1 })`, indépendant de la graine et du camp, calculé une fois) ; satisfaction de départ = moyenne simple des `satisfaction_initiale` ; F = national courant ; moyH = moyenne sur `s.history`. Historique vide (partie neuve) : toutes les notes et le score valent 50, aucun fait.
+
+**Deux écritures dans l'état**, sans tirage : `internals['n:dissolutions']` (+1 par `dissolve`, clé absente = 0) et `internals['pres:reelu']` (§12). Clé `pres:reelu` absente (sauvegarde antérieure) : réélection déduite (mois ≥ juin 2027, pas de défaite, hors bac à sable).
+
+| Rubrique | Note (bornée à 0-100, k = `bilan_k_*`) |
+|---|---|
+| Finances publiques | 50 − k_dette × Δdette − k_deficit × Δdéficit |
+| Emploi et croissance | 50 − k_chomage × Δchômage + k_croissance × (moyH croissance − `croissance_potentielle_long_terme`) |
+| Pouvoir d'achat | 50 + k_satisfaction × Δsatisfaction moyenne − k_inflation × max(0, moyH inflation − `cible_inflation_bce`) − k_pauvrete × Δpauvreté |
+| Cohésion | 50 − k_tension × Δtension + k_stabilite × Δstabilité |
+| Popularité | 50 + k_popularite × Δpopularité |
+| Parcours institutionnel | `bilan_institutions_base` + `bilan_pts_loi` × min(`bilan_lois_max`, lois adoptées hors loi de finances) + `bilan_pts_reelection` × réélu − `bilan_pts_censure` × gouvernements renversés − `bilan_pts_conseil_totale` × censures totales − `bilan_pts_conseil_partielle` × censures partielles (§15) − `bilan_pts_dissolution` × dissolutions |
+
+Δ = F − D. Score = round(Σ `bilan_poids_*` × note), poids de somme 1 (finances et emploi 0,2, les autres 0,15). Plafond : `bilan_plafond_defaite` (35) après une défaite dette, régime ou soulèvement, `bilan_plafond_presidentielle` (45) après une présidentielle perdue. Chaque rubrique porte une phrase chiffrée (« Dette 125,0 % du PIB (+9,3), déficit 6,3 % (+1,2) »).
+
+**Mention** (première règle vérifiée ; seuils de libellé codés en dur, pas de dynamique) : défaite → Banqueroute, Crise de régime, Le pays dans la rue, Mandat sans lendemain ; score ≥ 75 → Quinquennat historique ; ≥ 62 avec au moins 3 lois ou une réforme → Quinquennat réformateur ; finances ≥ 65 et popularité < 40 → Rigueur impopulaire ; emploi ≥ 65 et finances < 35 → Relance à crédit ; cohésion < 30 → Mandat de crise ; au plus une loi → Mandat d'attente ; score ≥ 50 → Mandat de gestion ; sinon Mandat contrasté.
+
+**Faits marquants** : les 3 de plus fort poids, puis triés par date. Défaite (100), réélection de mai 2027 (90), gouvernement renversé sur un texte (75), réforme adoptée (70), référendum gagné ou perdu (70), législatives anticipées (ou de juin 2029, §17), avec « cohabitation » si c'est le profil en cours (65), loi censurée en totalité par le Conseil (60), première grève générale (premier mois avec tension ≥ `seuil_tension_greve_generale`, 55), chômage ramené à X % si Δ ≤ −1 (50), dette à X % du PIB si Δ ≥ +10 (50), censure partielle (30).
+
+**Interface** : fenêtre de fin de mandat (App.tsx `FinDeMandat`, à la place de l'ancienne fenêtre de défaite) avec score, mention, rubriques, faits et « Partager mon quinquennat » ; bilan provisoire repliable en tête de l'onglet Sondages ; carte de partage (Share.tsx) avec les six rubriques notées /100 à la place des indicateurs quand la partie est finie. Pas d'image OG côté serveur (aucune route, il faudrait une dépendance) : la carte reste dessinée dans le navigateur.
+
+**Calage du banc** (section « Bilan de fin de mandat », 50 graines) : « Ne rien faire » en bac à sable 46,3 (44 à 49 ; finances 36, emploi 52, pouvoir d'achat 50, cohésion 38, popularité 49, institutions 54), toutes en « Mandat d'attente ». Écart au prototype (institutions ≈ 55, score ≈ 47) : le prototype supposait la réélection ; en bac à sable sans action, 12 parties sur 50 seulement sont réélues. Avec `bilan_institutions_base` = 40, l'inaction valait 45,4 avant les législatives de juin 2029, puis 44,6 avec elles (le scrutin fait perdre de la cohésion, donc de la stabilité : note de cohésion 43 → 38) ; la base est portée à 50 (note neutre, comme les autres rubriques), d'où 46,3, dans la cible 45-50. En démocratie, les scénarios du banc se tiennent entre 41 (Austérité brutale, dont 8 défaites plafonnées à 35) et 46 : la plupart des parties s'arrêtent à la présidentielle (plafond 45), et une loi isolée ne change que quelques points (Dérapage : finances 27, emploi 73). Aucune défaite au-dessus de son plafond ; aucun état modifié par `bilan()`.
+
+**Garantie du banc** : lecture seule ; les deux écritures nouvelles (`n:dissolutions`, `pres:reelu`) ne sont lues que par le bilan. Le bilan ne change aucune autre section du banc (les écarts de ces sections viennent du §17).
+
+**Limites** : réélection inconnue avant mai 2027 dans le bilan provisoire (comptée 0) ; notes relatives à janvier 2026, pas à une trajectoire contrefactuelle sans action (l'inaction ne vaut pas 50) ; le score ne regarde que l'état final et les moyennes de croissance et d'inflation (une crise passée et résorbée ne pèse que par les faits marquants) ; pas de classement en ligne.
+
+## 17. Législatives de juin 2029 (`src/institutions.ts`, `src/tick.ts`)
+
+**Échéance** : `echeanceLegislatives(s)` = juin de l'année du dernier scrutin + 5. Les pouvoirs de l'Assemblée expirent le troisième mardi de juin de la cinquième année qui suit son élection (code électoral, art. LO121) et le scrutin a lieu dans les 60 jours qui précèdent (LO122). Rien n'est stocké : l'échéance se déduit de `institutions.legislatives`. Assemblée de juillet 2024 : juin 2029 (t = 41). Après une dissolution, l'échéance tombe en 2031 ou plus tard, donc hors partie : jamais de double scrutin. `Pouvoir.prochainesLegislatives` l'expose (interface, contexte du conseiller).
+
+**Tick**
+- Étape 1a : au mois échéance − 3 (mars 2029), hors défaite et hors dissolution en cours, échéance `legislatives_2029_annonce` (« Législatives en juin 2029 », date du 3e mardi de juin par `troisiemeMardiJuin`, 19 juin 2029). Aucun effet, aucun tirage.
+- Étape 2 : au mois de l'échéance (`normales` = pas de dissolution, pas de défaite, tick normal), les votes du mois sont reportés d'un mois comme pendant une dissolution (mode démocratie), circuit des révisions compris. Les décisions du Conseil constitutionnel (2a) ne sont pas reportées.
+- Étape 2b : `elections(s, t, true)`. Le scrutin tire sur la graine dérivée `graine(s, 17, t)` (§6) : `state.rng` n'avance pas, les législatives anticipées restent inchangées au bit près. Mêmes règles que des législatives anticipées (§11 : sièges, issue, démission ou cohabitation, choc de popularité, `legislatives` = juin 2029), sans le choc de stabilité de campagne (posé par `dissolve` seulement) ni le choc de relation. Événement `legislatives` avec `normales: true`.
+- Cohésion de référence : un scrutin ordinaire n'est pas une crise de majorité. Au premier mois où le gouvernement n'est plus démissionnaire (nomination, cohabitation ou décret : dès le tick du scrutin), `internals['coh:ref']` = min(`coh0`, cohésion) remplace `coh0` dans le terme de cohésion de la stabilité (étape 8) jusqu'à la fin ; `internals['coh:attente']` marque l'attente. Une dissolution efface les deux clés (législatives anticipées inchangées). Sauvegarde sans ces clés : `coh0`, comme avant.
+- Mode décret : le scrutin a lieu (sièges, choc de popularité, date), mais le gouvernement sortant reste, sans démission ni cohabitation, et sans événement de nomination.
+- Après le scrutin, l'article 12 interdit une dissolution jusqu'en juin 2030 (automatique : `dissolutionPossible` suit `legislatives`).
+- Cohérence avec 2027 : présidentielle perdue en Réaliste ou en décret, la partie est finie (pas de scrutin) ; en bac à sable, le scrutin a toujours lieu ; une cohabitation en cours suit la logique du §11 (une majorité présidentielle donne un gouvernement technicien démissionnaire).
+
+**Pas de gel de dissolution** avant l'échéance : écart volontaire au cahier des charges. La règle n'existe pas en droit (l'article 12 ne joue qu'après un scrutin ; dissolution du 21 avril 1997, onze mois avant l'échéance de 1998) et serait inutile, puisque l'échéance se recalcule après une dissolution. Le remède tiendrait en une ligne dans `pouvoir()`.
+
+**Interface et prompts** : « Soirée électorale (législatives de juin 2029) : … » ; ligne « Prochaines législatives : juin 2029 » dans l'onglet Pouvoir (si l'échéance est à venir et tombe avant la fin de la partie) ; avis « Législatives à la fin du mois : votes du mois reportés » (sans « votes du mois reportés » en décret) au mois de l'échéance ; le narrateur reçoit `normales`, le conseiller `prochaines_legislatives` (PROMPT_VERSION 7). Bilan (§16) : fait marquant « Législatives de juin 2029 ».
+
+**Coefficients** : aucun nouveau (ceux du §11). `bilan_institutions_base` est porté de 40 à 50 (§16) pour garder l'inaction en bac à sable dans la cible du bilan.
+
+**Calage du banc** (section « Législatives de juin 2029 », 50 graines) : en démocratie, 12 à 13 parties sur 50 atteignent juin 2029 sans action, ou avec Relance ou SMIC (les autres s'arrêtent à la présidentielle) : 9 à 10 sans majorité, 2 à 4 cohabitations, centre prévu 98-99 et obtenu 98-101 sièges, stabilité 0,33 en mai 2029 et 0,31-0,32 en fin de partie, aucune défaite de plus qu'avec le scrutin repoussé. En bac à sable sans action : 39 sans majorité et 11 cohabitations (prototype : 37 et 13 ; la graine dérivée et le report des votes changent les tirages). Dérapage (+90 Md€) atteint 2029 dans 20 parties : sans la cohésion de référence, 10 finissaient en crise de régime après le scrutin (la perte de cohésion d'une Assemblée sans majorité, bornée à 0,05, faisait passer sa stabilité, déjà minée par le spread, sous `defaite_stabilite_seuil`), ce que le cahier des charges excluait (« 0 défaite de plus ») ; avec elle, aucune (stabilité de fin 0,23). Idem pour « supprimer ir » et « supprimer taxe_fonciere » dans la colonne démocratie des Réformes (plus aucune défaite de régime).
+
+**Garantie** : sans scrutin en juin 2029 (dissolution antérieure, défaite, prévisualisation), la sortie est identique au bit près, puisque la graine dérivée ne touche pas `state.rng`. Les écarts du banc par rapport au bilan (§16) : Défaites (Austérité : événements/an 2,6 → 2,5 ; Dérapage inchangé, 30), Réformes en démocratie (inchangées), Bilan (cohésion des parties qui atteignent 2029, base institutions). Scénarios décret, Votes, Dissolution au 13e mois (arrêtée au mois 25), Calage 2026, Camps, colonnes décret des Réformes et Conseil constitutionnel : identiques.
+
+**Limites** : date du scrutin au mois près (pas de deux tours datés) ; pas de législatives en prévisualisation ; pas de campagne (choc de stabilité, relations) ; les textes non votés passent simplement à la nouvelle Assemblée (pas de caducité) ; une seule échéance possible dans la partie.

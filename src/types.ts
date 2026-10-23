@@ -36,6 +36,7 @@ export type Pouvoir = Institutions & {
   assise: Record<Rapport, number>; // sièges de l'Assemblée selon leur rapport au gouvernement
   peutDissoudre: boolean;
   dissolutionPossible: YearMonth; // premier mois où l'article 12 permet une dissolution
+  prochainesLegislatives: YearMonth; // échéance normale : juin de la 5e année après le dernier scrutin (code électoral, LO121 ; §17)
   joueur: string; // parti candidat à la présidentielle (§12, §13)
   relations: Record<string, number>; // relation avec l'exécutif, −1..1, mêmes clés que GameState.relations, toujours complet (§13)
   senat: { groupId: string; sieges: number; rapport: Rapport }[]; // rapports courants du Sénat (§13)
@@ -108,6 +109,15 @@ export type Bill = {
   // Révision constitutionnelle (§14) : voie fixée au dépôt hors décret ; un texte en cours de circuit reste 'preparation'.
   voie?: 'congres' | 'referendum';
   referendum?: { date: YearMonth; oui: number; adopte: boolean };
+  // Conseil constitutionnel (§15) : absent = jamais déféré (sauvegardes antérieures comprises). Pendant l'examen, la loi reste
+  // 'preparation' (voteLe passé) ; censure totale = 'rejetee' et issue 'totale' ; censure partielle = 'adoptee', texte réduit.
+  saisine?: {
+    chambre: 'assemblee' | 'senat'; groupes: string[]; sieges: number; // auteurs (60 au moins, Constitution art. 61 al. 2)
+    decisionLe: YearMonth;
+    issue?: 'conforme' | 'partielle' | 'totale'; // absent = examen en cours
+    censures?: { motif: 'cavalier' | 'libertes' | 'egalite'; label: string;
+      levier?: { id: string; delta: number }; mesure?: BillSpec['qualitative'][number]; reforme?: Reforme }[]; // retirés du texte
+  };
 };
 
 // ---------- Effets actifs (leviers, lois qualitatives, événements) ----------
@@ -183,6 +193,8 @@ export type TurnEvent =
   | { kind: 'event'; id: string; titre: string; description: string; type: 'exogene' | 'echeance' | 'aleatoire' }
   | { kind: 'vote'; billId: string; result: VoteResult }
   | { kind: 'promulgation'; billId: string }
+  | { kind: 'saisine'; billId: string; chambre: 'assemblee' | 'senat'; groupes: string[]; sieges: number } // §15
+  | { kind: 'conseil'; billId: string; issue: 'conforme' | 'partielle' | 'totale'; censures: string[] } // §15 : libellés retirés
   | { kind: 'referendum'; billId: string; oui: number; adopte: boolean } // §14
   | { kind: 'censure'; billId: string; adoptee: boolean }
   | { kind: 'indexation'; leverId: string; ancienne: number; nouvelle: number }
@@ -190,7 +202,7 @@ export type TurnEvent =
   | { kind: 'alerte'; cause: DefeatCause; moisRestants: number } // premier mois au-delà d'un seuil de défaite
   | { kind: 'defaite'; cause: DefeatCause }
   | { kind: 'dissolution' }
-  | { kind: 'legislatives'; avant: Sieges; apres: Sieges; issue: IssueLegislatives; coalition?: string } // soirée électorale
+  | { kind: 'legislatives'; avant: Sieges; apres: Sieges; issue: IssueLegislatives; coalition?: string; normales?: true } // soirée électorale (normales : juin 2029, §17)
   | { kind: 'nomination'; profil: ProfilPM; coalition?: string }
   | { kind: 'presidentielle'; tour: 1 | 2; resultats: { partyId: string; pct: number }[]; qualifies: [string, string]; joueur: string; elu?: string } // §12
   | { kind: 'choix'; eventId: string; titre: string; label: string; parDefaut: boolean } // réponse à un dilemme (§5c)
@@ -220,7 +232,16 @@ export type PreviewResult = {
   vote: VoteForecast[]; // vide en mode décret et pendant une dissolution
   circuit?: { congres: number; referendum: number; oui: number }; // révision constitutionnelle (§14) : probabilités de bout en bout, oui moyen en %
   legislatives?: { sans: LegislativesForecast; avec: LegislativesForecast }; // proportionnelle (§14)
+  // Conseil constitutionnel (§15) : saisine probable (null = aucune) et probabilités de censure, sans tirage.
+  conseil?: { saisine: { chambre: 'assemblee' | 'senat'; groupes: string[]; sieges: number } | null; partielle: number; totale: number;
+    articles: { label: string; motif: string; p: number }[] };
 };
+
+// ---------- Bilan de fin de mandat (ENGINE.md §16) ----------
+// Score 0-100, moyenne pondérée de six rubriques notées 0-100 (50 = état de janvier 2026), plafonné après une défaite.
+export type Bilan = { score: number; provisoire: boolean; mention: string; plafond?: number;
+  rubriques: { id: 'finances' | 'emploi' | 'pouvoir_achat' | 'cohesion' | 'popularite' | 'institutions'; label: string; note: number; detail: string }[];
+  faits: { date: YearMonth; texte: string }[] }; // 3 au plus, par date
 
 // ---------- API du moteur (implémentée dans src/index.ts) ----------
 export interface Engine {
@@ -239,6 +260,7 @@ export interface Engine {
   // Avance d'un mois (ordre du tick : ENGINE.md).
   endTurn(state: GameState): { state: GameState; report: TurnReport };
   isOver(state: GameState): boolean; // après décembre 2030, ou défaite
+  bilan(state: GameState): Bilan; // score et bilan (§16), provisoire en cours de partie ; pur, sans tirage
   dangers(state: GameState): Danger[]; // conditions de défaite en cours (au moins un mois)
   // months : 6..60, borné à la fin de la partie. Pur, déterministe, ne modifie pas state.
   previewBill(state: GameState, spec: BillSpec, months: number): PreviewResult;

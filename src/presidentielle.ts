@@ -101,7 +101,7 @@ export function presidentielle(s: GameState, t: number): TurnEvent[] {
     CANDIDATS.forEach((p) => { I[`pres:${p}`] = r.pct[p]; });
     const f = finalistes(r.pct);
     const out: TurnEvent[] = [{ kind: 'presidentielle', tour: 1, resultats: tri(r.pct), qualifies: f, joueur: c.j }];
-    if (!f.includes(c.j)) return defaite(s, out);
+    if (!f.includes(c.j)) { I['pres:reelu'] = 0; return defaite(s, out); } // bilan (§16), bac à sable compris
     return out;
   }
   if (!CANDIDATS.some((p) => I[`pres:${p}`] !== undefined)) return []; // premier tour absent (sauvegarde antérieure à cette version)
@@ -110,6 +110,7 @@ export function presidentielle(s: GameState, t: number): TurnEvent[] {
   const r = tour2(pct1, f, s.rng, c);
   s.rng = r.rng;
   const elu = r.pct[f[0]] >= r.pct[f[1]] ? f[0] : f[1];
+  I['pres:reelu'] = elu === c.j ? 1 : 0; // bilan (§16), bac à sable compris ; absent = déduit (bilan.ts)
   const out: TurnEvent[] = [{ kind: 'presidentielle', tour: 2, resultats: tri(r.pct), qualifies: f, joueur: c.j, elu }];
   if (elu !== c.j) return defaite(s, out);
   // Réélu : état de grâce.

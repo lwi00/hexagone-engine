@@ -209,6 +209,8 @@ export const PolicyTag = z.object({
   axes: Positionnement, // direction d'une loi portant ce tag sur chaque axe
   reactions_groupes: z.array(z.object({ group: SocialGroup, direction: z.union([z.literal(1), z.literal(-1)]), intensite: z.enum(['faible', 'moyenne', 'forte']) })),
   justification: z.string(),
+  // Exposition des mesures qualitatives au contrôle de constitutionnalité (ENGINE.md §15) ; absent = 0.
+  conseil: z.object({ exposition: z.number().min(0).max(1), motif: z.enum(['libertes', 'egalite']), justification: z.string() }).optional(),
 });
 export const Tags = z.array(PolicyTag).min(8);
 
@@ -385,6 +387,14 @@ export const REQUIRED_COEFFICIENTS = [
   // réformes (ENGINE.md §14)
   'reforme_satisfaction_max', 'referendum_poids_popularite', 'referendum_pivot', 'referendum_poids_consignes', 'referendum_incertitude',
   'referendum_campagne_mois', 'referendum_duree_choc_mois', 'referendum_echec_relation',
+  // Conseil constitutionnel (ENGINE.md §15)
+  'conseil_seuil_opposition', 'conseil_p_cavalier', 'conseil_part_moyenne', 'conseil_p_confiscatoire', 'conseil_totale_base',
+  'conseil_totale_pente', 'conseil_popularite_conforme', 'conseil_relation_censure', 'conseil_duree_choc_mois',
+  // bilan de fin de mandat (ENGINE.md §16)
+  'bilan_poids_finances', 'bilan_poids_emploi', 'bilan_poids_pouvoir_achat', 'bilan_poids_cohesion', 'bilan_poids_popularite', 'bilan_poids_institutions',
+  'bilan_k_dette', 'bilan_k_deficit', 'bilan_k_chomage', 'bilan_k_croissance', 'bilan_k_satisfaction', 'bilan_k_inflation', 'bilan_k_pauvrete',
+  'bilan_k_tension', 'bilan_k_stabilite', 'bilan_k_popularite', 'bilan_institutions_base', 'bilan_pts_loi', 'bilan_lois_max', 'bilan_pts_reelection',
+  'bilan_pts_censure', 'bilan_pts_conseil_totale', 'bilan_pts_conseil_partielle', 'bilan_pts_dissolution', 'bilan_plafond_defaite', 'bilan_plafond_presidentielle',
   // barème qualitatif faible | moyenne | forte (SPEC 3.2), par type de cible
   ...BAREME_KINDS.flatMap((k) => ['faible', 'moyenne', 'forte'].map((m) => `bareme.${k}.${m}`)),
 ];

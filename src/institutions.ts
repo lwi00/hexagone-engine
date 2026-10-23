@@ -2,7 +2,7 @@
 import type { Bill, GameState, Gouvernement, IssueLegislatives, LegislativesForecast, Pouvoir, ProfilPM, Rapport, Sieges, TurnEvent, YearMonth } from './types.ts';
 import { monthIndex, votesSimules } from './types.ts';
 import { C, INIT, REL0, campAutre, campBloc, dansBande, inst, politics, relKey, relation, seuil } from './init.ts';
-import { FORECAST_N, billAxes, fond, gauss, senatGroupes, voteBill, voteCongres } from './parliament.ts';
+import { FORECAST_N, billAxes, fond, gauss, graine, senatGroupes, voteBill, voteCongres } from './parliament.ts';
 import { qualitativeEffect } from './levers.ts';
 import { regles } from './reformes.ts';
 import { joueur, positionDe, positionPresident } from './presidentielle.ts';
@@ -18,6 +18,10 @@ export const addMonths = (d: YearMonth, n: number): YearMonth => {
   const m = monthIndex(d) + n;
   return { year: 2026 + Math.floor(m / 12), month: (((m % 12) + 12) % 12) + 1 };
 };
+// Échéance normale des législatives (ENGINE.md §17) : les pouvoirs de l'Assemblée expirent le 3e mardi de juin de la 5e année
+// (code électoral, LO121), scrutin dans les 60 jours qui précèdent (LO122). Dérivée, rien de stocké : Assemblée de 2024 → juin 2029
+// (t = 41) ; après une dissolution, 2031 ou plus tard (hors partie : jamais de double scrutin).
+export const echeanceLegislatives = (s: GameState): YearMonth => ({ year: inst(s).legislatives.year + 5, month: 6 });
 
 // Plus forts restes : répartit total (entier) au prorata des poids.
 function repartir(total: number, poids: number[]): number[] {
@@ -152,7 +156,7 @@ export function rapportDe(s: GameState, g: Gouvernement): (groupId: string) => R
 }
 
 // Relations de tous les groupes (Assemblée, puis Sénat sous senat_<id>) : stockées, sinon centre de bande du rapport (§13).
-const toutesRelations = (s: GameState): Record<string, number> => Object.fromEntries([
+export const toutesRelations = (s: GameState): Record<string, number> => Object.fromEntries([
   ...s.parliament.assemblee.map((g) => [g.groupId, relation(s, g)]),
   ...senatGroupes(s).map((g) => [relKey('senat', g.groupId), relation(s, g, 'senat')]),
 ]);
@@ -225,7 +229,7 @@ export function pouvoir(s: GameState): Pouvoir {
   const assise: Record<Rapport, number> = { majorite: 0, soutien_conditionnel: 0, opposition: 0 };
   for (const g of s.parliament.assemblee) assise[g.rapport] += g.sieges;
   return {
-    ...i, cohabitation: i.gouvernement.profil === 'cohabitation', assise, dissolutionPossible,
+    ...i, cohabitation: i.gouvernement.profil === 'cohabitation', assise, dissolutionPossible, prochainesLegislatives: echeanceLegislatives(s),
     peutDissoudre: votesSimules(s.mode) && !i.dissolution && !s.defaite && t < 60 && t >= monthIndex(dissolutionPossible),
     joueur: joueur(s), relations: toutesRelations(s), senat: senatGroupes(s),
     positionnement: positionPresident(s), positionnementInitial: positionDe(joueur(s)), campAutre: campAutre(s), regles: regles(s),
@@ -242,6 +246,7 @@ export function dissolve(state: GameState): { state: GameState; events: TurnEven
     return [k, g && g.rapport !== 'opposition' ? Math.max(-1, v - C.parlement_relation_dissolution) : v];
   }));
   s.institutions = { ...inst(s), dissolution: { ...s.date } };
+  s.internals['n:dissolutions'] = (s.internals['n:dissolutions'] ?? 0) + 1; // bilan (§16) : clé absente = 0
   s.effects.push({ source: { kind: 'event', id: 'dissolution' }, cible: { kind: 'stabilite' }, amplitude: C.dissolution_choc_stabilite, forme: 'choc', debut: monthIndex(s.date), rampe: 0, duree: C.dissolution_duree_choc_mois });
   return { state: s, events: [{ kind: 'dissolution' }] };
 }
@@ -256,27 +261,30 @@ export function nominate(state: GameState, profil: Exclude<ProfilPM, 'cohabitati
   return { state: s, events: [{ kind: 'nomination', profil }] };
 }
 
-// Étape 2b du tick : législatives anticipées. Modifie s (déjà copié par le tick).
-export function elections(s: GameState, t: number): TurnEvent[] {
+// Étape 2b du tick : législatives anticipées, ou ordinaires de juin 2029 (normales, §17). Modifie s (déjà copié par le tick).
+// Ordinaires : tirage sur une graine dérivée (s.rng intact, §6) ; anticipées : s.rng, inchangées au bit près.
+export function elections(s: GameState, t: number, normales = false): TurnEvent[] {
   const copie = (a: Sieges): Sieges => a.map(({ groupId, sieges }) => ({ groupId, sieges }));
   const avant = copie(s.parliament.assemblee);
-  const r = scrutin(s, s.rng);
-  s.rng = r.rng;
+  const r = scrutin(s, normales ? graine(s, 17, t) : s.rng);
+  if (!normales) s.rng = r.rng;
   s.parliament.assemblee = r.assemblee;
-  const res = issue(r.assemblee, s), sortant = inst(s).gouvernement;
+  const res = issue(r.assemblee, s), sortant = inst(s).gouvernement, decret = !votesSimules(s.mode);
   // Hors cohabitation : démission, rapports inchangés jusqu'à la nomination ; une cohabitation qui prend fin laisse un
   // gouvernement d'affaires courantes au profil technicien (la coalition battue ne reste pas « majorité »).
-  const gouvernement: Gouvernement = res.issue === 'cohabitation'
+  // Décret (§17) : le gouvernement sortant reste, ni démission ni cohabitation ; sièges, choc de popularité et date s'appliquent.
+  const gouvernement: Gouvernement = decret ? sortant
+    : res.issue === 'cohabitation'
     ? { profil: 'cohabitation', coalition: res.coalition, depuis: { ...s.date }, demissionnaire: false }
     : sortant.profil === 'cohabitation' ? { profil: 'technicien', depuis: { ...s.date }, demissionnaire: true }
     : { ...sortant, demissionnaire: true };
-  if (res.issue === 'cohabitation' || sortant.profil === 'cohabitation') appliquer(s, gouvernement, false);
+  if (!decret && (res.issue === 'cohabitation' || sortant.profil === 'cohabitation')) appliquer(s, gouvernement, false);
   s.institutions = { gouvernement, legislatives: { ...s.date } };
   const apres = copie(r.assemblee);
   const camp = (a: Sieges) => parBloc(a).find((b) => b.id === campBloc(s))!.sieges;
   s.effects.push({ source: { kind: 'event', id: 'legislatives' }, cible: { kind: 'popularite' }, amplitude: (C.legislatives_effet_popularite * (camp(apres) - camp(avant))) / 577, forme: 'choc', debut: t, rampe: 0, duree: C.dissolution_duree_choc_mois });
-  const events: TurnEvent[] = [{ kind: 'legislatives', avant, apres, ...res }];
-  if (res.issue === 'cohabitation') events.push({ kind: 'nomination', profil: 'cohabitation', coalition: res.coalition });
+  const events: TurnEvent[] = [{ kind: 'legislatives', avant, apres, ...res, ...(normales ? { normales: true as const } : {}) }];
+  if (res.issue === 'cohabitation' && !decret) events.push({ kind: 'nomination', profil: 'cohabitation', coalition: res.coalition });
   return events;
 }
 

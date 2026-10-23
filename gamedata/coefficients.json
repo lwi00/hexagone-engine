@@ -963,6 +963,14 @@
     "justification": "L'opposition penche contre mais s'abstient largement sur un texte neutre. Calage au 1er janvier 2026 (popularité 0,18) : soutien à l'agriculture adopté ≈ 286-194, austérité rejetée ≈ 183-294, immigration/sécurité adoptée contre la gauche, redistribution rejetée par la droite."
   },
   {
+    "id": "parlement_revision_malus_bonus",
+    "value": 1,
+    "unit": "part du bonus de rapport",
+    "description": "Part du bonus de rapport (majorité, soutien conditionnel, opposition) retirée du score s sur une révision constitutionnelle (réforme à voies, ENGINE.md §14) : s = … + bonus × (1 − malus).",
+    "hypothese": true,
+    "justification": "Une révision se vote sur le fond : le camp présidentiel n'a jamais suivi le gouvernement contre ses convictions sur la Constitution (révisions de 2008 adoptée à une voix près au Congrès, de 2016 sur la déchéance abandonnée faute d'accord des chambres, de 2018-2019 jamais inscrite). Calage au 1er janvier 2026 (banc, section circuit) : 1 retire tout le bonus ; Congrès sur la suppression du 49.3 ≈ 3 % (31 % sans malus, alors que le bloc central y est opposé, −0,8 à −0,4), sur la proportionnelle ≈ 25 % (78 % sans malus). 0,75 donnerait 6 % et 38 %."
+  },
+  {
     "id": "parlement_poids_popularite",
     "value": 0.5,
     "unit": "score par point de popularité",
@@ -1430,5 +1438,285 @@
     "description": "Baisse de la relation de chaque groupe (Assemblée et Sénat) avec l'exécutif après un référendum perdu, bornée à −1 (§13, §14).",
     "hypothese": true,
     "justification": "Même ampleur que parlement_relation_dissolution : les seuils §13 peuvent faire basculer un groupe proche de sa frontière le mois suivant. Hypothèse."
+  },
+  {
+    "id": "conseil_seuil_opposition",
+    "value": -0.4,
+    "unit": "accord sur le fond −1..1",
+    "description": "Seuil de saisine du Conseil constitutionnel (§15) : un groupe hors majorité défère une loi ordinaire si fond(b, chambre, groupe) est sous ce seuil (« fortement opposé ») ; 60 députés ou 60 sénateurs au moins (Constitution, art. 61 al. 2). Le seuil vaut 0 pour une loi de finances ou un texte adopté par 49.3.",
+    "hypothese": true,
+    "justification": "Hypothèse. Calé à l'état initial pour 4 lois sur 7 du banc et environ 40-50 % sur une batterie plus large ; à porter à −0,45 si le banc dépasse 50 %. Saisine quasi systématique des lois de finances et des textes passés par 49.3 en pratique."
+  },
+  {
+    "id": "conseil_p_cavalier",
+    "value": 0.7,
+    "unit": "probabilité",
+    "description": "Risque de censure d'un cavalier budgétaire (LOLF, art. 34) dans une loi de finances : levier sans effet budgétaire ou mesure qualitative hors budget (§15).",
+    "hypothese": true,
+    "justification": "Hypothèse. Les cavaliers sont censurés presque à chaque loi de finances (décisions DC de décembre ; 2023-849 DC du 28 décembre 2023 pour les cavaliers de la loi de financement de la sécurité sociale pour 2024)."
+  },
+  {
+    "id": "conseil_part_moyenne",
+    "value": 0.4,
+    "unit": "part de l'exposition",
+    "description": "Part de l'exposition du tag (tags[].conseil) retenue pour une mesure qualitative d'intensité moyenne (forte : 1 ; faible : 0) (§15).",
+    "hypothese": true,
+    "justification": "Hypothèse, choix de jeu : les censures pour atteinte aux libertés visent surtout les dispositions les plus fortes (2021-817 DC, 2023-863 DC)."
+  },
+  {
+    "id": "conseil_p_confiscatoire",
+    "value": 0.6,
+    "unit": "probabilité",
+    "description": "Risque maximal de censure d'un impôt créé (réforme creer_impot) au-delà du maximum de Laffer 1/η, pour rupture d'égalité devant les charges publiques et caractère confiscatoire (§15). Formule : p × clamp((τη − 1)/0,5, 0, 1).",
+    "hypothese": true,
+    "justification": "Hypothèse. Décision 2012-662 DC (taxe à 75 %). Aucun taux par défaut n'est exposé : seul tres_hauts_patrimoines au-dessus de 2,86 % l'est (0,6 à partir de 4,3 %)."
+  },
+  {
+    "id": "conseil_totale_base",
+    "value": 0.005,
+    "unit": "probabilité",
+    "description": "Probabilité de base d'une censure totale d'une loi déférée (vice de procédure) (§15).",
+    "hypothese": true,
+    "justification": "Hypothèse. Les censures totales sont rares (79-110 DC du 24 décembre 1979, loi de finances pour 1980). Elle laisse les lois du banc, faites de leviers seuls, à 0,5 % par saisine."
+  },
+  {
+    "id": "conseil_totale_pente",
+    "value": 0.1,
+    "unit": "probabilité par unité d'exposition",
+    "description": "Hausse de la censure totale avec l'exposition moyenne des articles du texte (Σp/n) (§15).",
+    "hypothese": true,
+    "justification": "Hypothèse. Un texte entièrement exposé (immigration, mesure forte) monte à environ 5,5 %. Cible : moins de 2 % de censures totales sur l'ensemble."
+  },
+  {
+    "id": "conseil_popularite_conforme",
+    "value": 0.005,
+    "unit": "popularité 0..1",
+    "description": "Choc de popularité (« victoire ») quand une loi déférée est déclarée conforme, sur conseil_duree_choc_mois (§15).",
+    "hypothese": true,
+    "justification": "Hypothèse : la moitié de bareme.popularite.faible. À mettre à 0 si la section Défaites du banc s'écarte de plus de 2 sur 50 de la référence."
+  },
+  {
+    "id": "conseil_relation_censure",
+    "value": 0.05,
+    "unit": "relation −1..1",
+    "description": "Recul de la relation des groupes de l'Assemblée hors opposition après une censure partielle effective (deux fois ce recul après une censure totale), borné à −1 (§13, §15).",
+    "hypothese": true,
+    "justification": "Hypothèse : le camouflet pour ceux qui ont porté le texte. La moitié de parlement_relation_dissolution, sans bascule par lui-même."
+  },
+  {
+    "id": "conseil_duree_choc_mois",
+    "value": 6,
+    "unit": "mois",
+    "description": "Durée des chocs de popularité et de stabilité après une décision du Conseil constitutionnel (§15).",
+    "hypothese": true,
+    "justification": "Hypothèse : même durée que censure_duree_choc_mois et referendum_duree_choc_mois."
+  },
+  {
+    "id": "bilan_poids_finances",
+    "value": 0.2,
+    "unit": "part du score",
+    "description": "Poids de la rubrique finances publiques (dette, déficit) dans le score de fin de mandat (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : les six poids somment à 1."
+  },
+  {
+    "id": "bilan_poids_emploi",
+    "value": 0.2,
+    "unit": "part du score",
+    "description": "Poids de la rubrique emploi et croissance (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : avec les finances, les deux rubriques économiques pèsent 40 % du score."
+  },
+  {
+    "id": "bilan_poids_pouvoir_achat",
+    "value": 0.15,
+    "unit": "part du score",
+    "description": "Poids de la rubrique pouvoir d'achat (satisfaction, inflation, pauvreté) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : les six poids somment à 1."
+  },
+  {
+    "id": "bilan_poids_cohesion",
+    "value": 0.15,
+    "unit": "part du score",
+    "description": "Poids de la rubrique cohésion (tension, stabilité) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : les six poids somment à 1."
+  },
+  {
+    "id": "bilan_poids_popularite",
+    "value": 0.15,
+    "unit": "part du score",
+    "description": "Poids de la rubrique popularité (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : les six poids somment à 1."
+  },
+  {
+    "id": "bilan_poids_institutions",
+    "value": 0.15,
+    "unit": "part du score",
+    "description": "Poids de la rubrique parcours institutionnel (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : les six poids somment à 1."
+  },
+  {
+    "id": "bilan_k_dette",
+    "value": 1,
+    "unit": "points de note par point de PIB",
+    "description": "Points de note retirés par point de PIB de dette en plus depuis janvier 2026 (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : avec l'inaction (+9,3 points) et bilan_k_deficit, la note finances vaut environ 36."
+  },
+  {
+    "id": "bilan_k_deficit",
+    "value": 4,
+    "unit": "points de note par point de PIB",
+    "description": "Points de note retirés par point de PIB de déficit en plus depuis janvier 2026 (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : inaction : déficit de 5,1 à 6,3 % du PIB."
+  },
+  {
+    "id": "bilan_k_chomage",
+    "value": 8,
+    "unit": "points de note par point",
+    "description": "Points de note gagnés par point de chômage en moins depuis janvier 2026 (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : inaction : −0,2 point, note emploi d'environ 52."
+  },
+  {
+    "id": "bilan_k_croissance",
+    "value": 15,
+    "unit": "points de note par point",
+    "description": "Points de note par point de croissance moyenne (sur la partie) au-dessus de croissance_potentielle_long_terme (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : une croissance moyenne de 2 % (1 point au-dessus du potentiel) rapporte 15 points."
+  },
+  {
+    "id": "bilan_k_satisfaction",
+    "value": 200,
+    "unit": "points de note par unité 0-1",
+    "description": "Points de note par unité de satisfaction moyenne des groupes sociaux gagnée depuis le départ (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : +0,05 de satisfaction moyenne donne +10 ; inaction : stable, note 50."
+  },
+  {
+    "id": "bilan_k_inflation",
+    "value": 10,
+    "unit": "points de note par point",
+    "description": "Points de note retirés par point d'inflation moyenne (sur la partie) au-dessus de cible_inflation_bce (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : une inflation sous la cible n'est pas pénalisée (inaction : 1,6 %)."
+  },
+  {
+    "id": "bilan_k_pauvrete",
+    "value": 5,
+    "unit": "points de note par point",
+    "description": "Points de note retirés par point de taux de pauvreté en plus depuis le départ (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : un point de pauvreté en plus coûte 5 points."
+  },
+  {
+    "id": "bilan_k_tension",
+    "value": 100,
+    "unit": "points de note par unité 0-1",
+    "description": "Points de note retirés par unité de tension nationale en plus depuis le départ (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : +0,1 de tension donne −10."
+  },
+  {
+    "id": "bilan_k_stabilite",
+    "value": 100,
+    "unit": "points de note par unité 0-1",
+    "description": "Points de note gagnés par unité de stabilité gagnée depuis le départ (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : inaction : stabilité de 0,38 à 0,31, note cohésion environ 43."
+  },
+  {
+    "id": "bilan_k_popularite",
+    "value": 150,
+    "unit": "points de note par unité 0-1",
+    "description": "Points de note par unité de popularité gagnée depuis le départ (0,18) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : une popularité finale de 0,51 donne la note 100."
+  },
+  {
+    "id": "bilan_institutions_base",
+    "value": 50,
+    "unit": "points de note",
+    "description": "Note de base du parcours institutionnel (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : note neutre (50) comme les autres rubriques, sans loi ni réélection. Porté de 40 à 50 avec les législatives de juin 2029 (§17) : en bac à sable, 12 parties sur 50 seulement sont réélues et le scrutin de 2029 fait perdre de la cohésion (stabilité) ; à 40, l'inaction tombait à 44,6, sous la cible 45-50 ; à 50, elle vaut environ 46."
+  },
+  {
+    "id": "bilan_pts_loi",
+    "value": 3,
+    "unit": "points par loi",
+    "description": "Points par loi adoptée hors loi de finances, dans la limite de bilan_lois_max lois (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : huit lois rapportent 24 points au plus."
+  },
+  {
+    "id": "bilan_lois_max",
+    "value": 8,
+    "unit": "lois",
+    "description": "Nombre maximal de lois comptées dans le parcours institutionnel (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : multiplier les textes ne suffit pas à faire un bon bilan."
+  },
+  {
+    "id": "bilan_pts_reelection",
+    "value": 15,
+    "unit": "points de note",
+    "description": "Bonus si le joueur a été réélu en mai 2027 (internals pres:reelu, ou déduit pour une ancienne sauvegarde) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : la réélection est le premier verdict des urnes sur le mandat."
+  },
+  {
+    "id": "bilan_pts_censure",
+    "value": 8,
+    "unit": "points par censure",
+    "description": "Malus par gouvernement renversé par une motion de censure (loi au statut « censuree ») (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : un gouvernement renversé est un échec du parcours institutionnel."
+  },
+  {
+    "id": "bilan_pts_conseil_totale",
+    "value": 6,
+    "unit": "points par loi",
+    "description": "Malus par loi censurée en totalité par le Conseil constitutionnel (§15) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : camouflet plus lourd que la censure partielle."
+  },
+  {
+    "id": "bilan_pts_conseil_partielle",
+    "value": 2,
+    "unit": "points par loi",
+    "description": "Malus par censure partielle effective du Conseil constitutionnel (§15) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : les censures partielles sont courantes : malus léger."
+  },
+  {
+    "id": "bilan_pts_dissolution",
+    "value": 5,
+    "unit": "points par dissolution",
+    "description": "Malus par dissolution prononcée (compteur internals n:dissolutions, clé absente = 0) (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : une dissolution est un aveu de blocage."
+  },
+  {
+    "id": "bilan_plafond_defaite",
+    "value": 35,
+    "unit": "points de score",
+    "description": "Score maximal après une défaite pour dette, régime ou soulèvement (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : une partie perdue reste sous l'inaction menée à terme (≈ 47)."
+  },
+  {
+    "id": "bilan_plafond_presidentielle",
+    "value": 45,
+    "unit": "points de score",
+    "description": "Score maximal après une présidentielle perdue (ENGINE.md §16).",
+    "hypothese": true,
+    "justification": "Choix de jeu : plus haut que les autres défaites : un échec électoral n'est pas une crise du pays."
   }
 ]

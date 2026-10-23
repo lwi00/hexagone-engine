@@ -207,11 +207,11 @@
         "date": "2026-12",
         "estimate": true,
         "source": {
-          "url": "https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/fs-2023-rapport-isf-quatrieme_rapport_complet_17octobre_avis.pdf",
-          "title": "France Stratégie – Comité d'évaluation des réformes de la fiscalité du capital, quatrième rapport (octobre 2023)",
+          "url": "https://fgeerolf.com/data/dgfip/isf.html",
+          "title": "DGFiP – Statistiques de l'impôt de solidarité sur la fortune 1999-2017 (données ouvertes, Licence Ouverte 2.0), compilées par F. Geerolf",
           "accessed": "2026-10-23"
         },
-        "note": "Base taxable ≈ 900 Md€ : base ISF 2017 ≈ 1 028 Md€ (DGFiP, citée par le comité) × part financière ≈ 0,65 × revalorisation des actifs ≈ 1,4 depuis 2017. Ordre de grandeur : la base ISF et la part financière sont à relever dans le rapport, non lues en entier."
+        "note": "Base taxable ≈ 900-940 Md€ : actif net imposable ISF 2017 = 1 028,8 Md€ (358 198 foyers, DGFiP) × part non immobilière ≈ 0,65 (patrimoine IFI 2018 = 309,5 Md€, soit ≈ 30 % de la base ISF ; La finance pour tous, août 2019, d'après la DGFiP) × revalorisation des actifs financiers ≈ 1,4 depuis 2017 : ≈ 940 Md€, k = 9 retenu (écart < 5 %). Contrôle : à 0,5 %, R ≈ 4,2 Md€, du même ordre que le chiffrage RN de l'amendement I-CF361 au PLF 2026 (IFI + 3 Md€ au moins, soit ≈ 5 Md€) et que le produit net de l'ISF 2017 (4,2 Md€ après plafonnement, DGFiP)."
       },
       "erosion": {
         "value": 0.15,
@@ -303,7 +303,7 @@
         "senat_crce_k": 0.9,
         "senat_gest": 0.8
       },
-      "note": "Positions estimées (retour de l'ISF demandé par la gauche ; RN favorable à un impôt sur la fortune financière depuis 2022), ordre de grandeur, à sourcer."
+      "note": "Positions d'après l'examen du PLF 2026 en commission des finances de l'Assemblée (20 octobre 2025) : impôt sur la fortune financière du RN (amendement I-CF361, J.-P. Tanguy) et rétablissement d'un impôt sur la fortune par LFI (I-CF871, I-CF326), tous rejetés. Compte rendu : https://www.assemblee-nationale.fr/dyn/opendata/CRCANR5L17S2026PO59048N009.html. Intensités estimées."
     },
     {
       "id": "tres_hauts_patrimoines",
@@ -327,7 +327,7 @@
           "title": "Institut de l'entreprise – Note sur la taxe Zucman (juin 2026)",
           "accessed": "2026-10-23"
         },
-        "note": "Patrimoine des ≈ 1 800 foyers au-delà de 100 M€ ≈ 1 000 Md€ (classement Challenges, après imputation de l'IR) : k = 10 Md€ par point en statique. Rendement au défaut (2 %) ≈ 9,9 Md€, entre Zucman (≈ 20 Md€, sans réaction ni imputation de l'IS) et les critiques (≈ 5 Md€ : Institut de l'entreprise, juin 2026, IS imputé ; CAE). Débat : https://www.publicsenat.fr/actualites/economie/taxe-zucman-quels-sont-les-arguments-pour-et-les-arguments-contre"
+        "note": "Patrimoine des ≈ 1 800 foyers au-delà de 100 M€ ≈ 1 000 Md€ (classement Challenges, après imputation de l'IR) : k = 10 Md€ par point en statique. Rendement au défaut (2 %) ≈ 9,9 Md€, entre Zucman (≈ 20 Md€, sans réaction ni imputation de l'IS) et les critiques (≈ 5 Md€ : Institut de l'entreprise, juin 2026, IS imputé ; CAE). Débat : https://www.publicsenat.fr/actualites/economie/taxe-zucman-quels-sont-les-arguments-pour-et-les-arguments-contre Le Trésor estime le rendement après effets de comportement entre 3,5 et 5,5 Md€ (note citée par le Sénat, rapport d'information n° 760, 17 juin 2026, https://www.senat.fr/rap/r25-760/r25-760_mono.html) : k (statique) reste ≈ 10 ; l'écart porte sur l'érosion η (hypothèse)."
       },
       "erosion": {
         "value": 0.35,
@@ -420,11 +420,11 @@
         "date": "2026-12",
         "estimate": true,
         "source": {
-          "url": "https://www.i4ce.org/wp-content/uploads/2022/07/0326-i4ce2924-PC56-ContribuClimatEnergieFrance_V5-1.pdf",
-          "title": "I4CE – La contribution climat-énergie en France : fonctionnement, revenus et exonérations",
+          "url": "https://www.statistiques.developpement-durable.gouv.fr/edition-numerique/chiffres-cles-du-climat/fr/19-la-tarification-du-carbone-dans",
+          "title": "SDES – Chiffres clés du climat, édition 2025, fiche « La tarification du carbone » (la taxe carbone à 44,6 €/t couvre 41 % des émissions)",
           "accessed": "2026-10-23"
         },
-        "note": "Assiette ≈ 150 MtCO2 hors SEQE et hors exonérations (transport, bâtiment, agriculture ; CPO 2019 et I4CE) : 1 €/t ≈ 0,15 Md€. Ordre de grandeur, à sourcer : l'assiette nette 2026 n'a pas été trouvée telle quelle (I4CE donne les revenus 2017 de la contribution, 5,4 Md€ à 30,5 €/t)."
+        "note": "Assiette ≈ 150 MtCO2 : 41 % des émissions couvertes par la taxe carbone (SDES 2025) × 369 MtCO2e d'émissions territoriales 2024 (Citepa, Secten juin 2025) ≈ 151 Mt ; 1 €/t ≈ 0,15 Md€. Cohérent avec I4CE (revenus 2017 de 5,4 Md€ à 30,5 €/t, soit ≈ 177 Mt avant la baisse des émissions depuis) : https://www.i4ce.org/wp-content/uploads/2022/07/0326-i4ce2924-PC56-ContribuClimatEnergieFrance_V5-1.pdf"
       },
       "erosion": {
         "value": 0.002,
@@ -1084,11 +1084,11 @@
       "date": "2026-12",
       "estimate": true,
       "source": {
-        "url": "https://www.cor-retraites.fr/sites/default/files/2025-06/M%C3%A9thodologie_RA.pdf",
-        "title": "COR – Rapport annuel de juin 2025, méthodologie (ressources du système de retraite)",
+        "url": "https://www.cor-retraites.fr/sites/default/files/2026-06/RA_Part2_Chap2.pdf",
+        "title": "COR – Rapport annuel de juin 2026, partie 2, chapitre 2 « Les ressources du système de retraite », tableau 2.2 (structure des ressources en 2025)",
         "accessed": "2026-10-23"
       },
-      "note": "Cotisations retraite EFFECTIVES (salariés, employeurs privés et publics hors cotisations imputées de l'État employeur) : des fonds ne capitalisent que des cotisations versées. Fourchette 230-300 Md€ ; 250 retenu, la ventilation par nature n'ayant pas été lue telle quelle (ordre de grandeur, à sourcer dans les ressources par nature du rapport du COR)."
+      "note": "Cotisations retraite EFFECTIVES (des fonds ne capitalisent que des cotisations versées). COR, ressources 2025 : cotisations hors contribution d'équilibre 277,0 Md€, dont salariés 100,9, employeurs hors opérateurs de l'État 154,6, opérateurs de l'État 7,1, non-salariés 14,5 ; contribution d'équilibre de l'État employeur (cotisations imputées) 49,3, exclue. 250 retenu ≈ cotisations des salariés et de leurs employeurs (255,5 Md€ en 2025), écart < 20 % avec le total 2026 (≈ 285 Md€ en incluant non-salariés et opérateurs)."
     },
     "note": "Les fonds réduisent les pensions par répartition seulement après l'horizon du jeu ; seul le déficit de transition est simulé."
   }

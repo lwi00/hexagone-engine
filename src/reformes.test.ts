@@ -7,7 +7,7 @@ import { REQUIRED_COEFFICIENTS } from './schemas.ts';
 import { centralFactor } from './init.ts';
 import { billGroups } from './levers.ts';
 import { can493, isBudget } from './parliament.ts';
-import { forecastLegislatives, referendumOui, resoudreReferendum, scrutin } from './institutions.ts';
+import { forecastCircuit, forecastLegislatives, referendumOui, resoudreReferendum, scrutin } from './institutions.ts';
 import { ASSIETTE, effetsReforme, montantsReformes, regles, rendement } from './reformes.ts';
 import events from '../gamedata/events-2026.json';
 import budget from '../gamedata/budget.json';
@@ -237,6 +237,15 @@ describe('circuit constitutionnel', () => {
     const d = engine.endTurn(pass(start('decret'), texte(1, 1), 'congres')).state.bills[0];
     expect(d).toMatchObject({ status: 'adoptee', votes: [] });
     expect(d.voie).toBeUndefined();
+  });
+
+  test('vote sur le fond : sans bonus de majorité, le Congrès rejette la suppression du 49.3 au départ', () => {
+    const s = start('democratie');
+    const circuit = (r: Reforme) => forecastCircuit(s, { id: 'x', spec: spec(r, ['institutions_democratie_directe']), status: 'preparation', votes: [] }).congres;
+    expect(circuit(P493)).toBeLessThanOrEqual(0.05);
+    const pr = circuit({ modele: 'proportionnelle', seuil: 5, prime: 0 });
+    expect(pr).toBeGreaterThanOrEqual(0.1);
+    expect(pr).toBeLessThanOrEqual(0.4);
   });
 
   test('dissolution à l\'étape finale : report, puis Congrès sans revote des chambres', () => {

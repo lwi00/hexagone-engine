@@ -9,6 +9,8 @@ import { applyChoice, dangers, endTurn } from './tick.ts';
 import { CANDIDATS, forecastPresidentielle } from './presidentielle.ts';
 import { can493, forecastVote, isBudget, voteCensure } from './parliament.ts';
 import { ASSIETTE, IMPOT, MODELE, cle, constitutionnel, defReforme, obstacleReforme, regles } from './reformes.ts';
+import { poser, risqueConseil } from './conseil.ts';
+import { bilan, isOver } from './bilan.ts';
 
 function validateBill(state: GameState, spec: BillSpec, billId?: string): string[] {
   const parsed = BillSpec.safeParse(spec);
@@ -94,6 +96,7 @@ function amend(state: GameState, billId: string, spec: BillSpec): GameState {
   const s = structuredClone(state);
   const b = s.bills.find((x) => x.id === billId);
   if (!b || (b.status !== 'brouillon' && b.status !== 'preparation')) return state;
+  if (b.saisine && !b.saisine.issue) return state; // texte voté, devant le Conseil constitutionnel (§15)
   // Réforme déposée (§14) : ni changement de modèle ou de circuit en cours de route, ni amendement après le premier vote.
   if (b.status === 'preparation' && (b.spec.reforme || spec.reforme)
     && (b.votes.length > 0 || (b.spec.reforme && cle(b.spec.reforme)) !== (spec.reforme && cle(spec.reforme)))) return state;
@@ -105,6 +108,7 @@ function withdraw(state: GameState, billId: string): GameState {
   const s = structuredClone(state);
   const b = s.bills.find((x) => x.id === billId);
   if (!b || (b.status !== 'brouillon' && b.status !== 'preparation')) return state;
+  if (b.saisine && !b.saisine.issue) return state; // texte voté, devant le Conseil constitutionnel (§15)
   b.status = 'retiree';
   return s;
 }
@@ -124,7 +128,7 @@ function use493(state: GameState, billId: string): { state: GameState; events: T
     b.status = 'censuree';
     s.institutions = { ...inst(s), gouvernement: { ...inst(s).gouvernement, demissionnaire: true } }; // nomination obligatoire (§11)
     s.effects.push({ source: { kind: 'bill', id: b.id }, cible: { kind: 'stabilite' }, amplitude: C.censure_choc_stabilite, forme: 'choc', debut: t, rampe: 0, duree: C.censure_duree_choc_mois });
-  } else {
+  } else if (!poser(s, b, events)) { // saisine quasi systématique après un 49.3 (seuil 0, §15)
     promulgate(s, b, t);
     events.push({ kind: 'promulgation', billId });
   }
@@ -168,6 +172,10 @@ function previewBill(state: GameState, spec: BillSpec, months: number): PreviewR
   budget.sort((x, y) => Math.abs(y.ecart) - Math.abs(x.ecart));
   const bill = { id, spec, status: 'preparation' as const, votes: [] };
   const votes = state.mode !== 'decret' && !inst(state).dissolution;
+  const vote = votes ? [forecastVote(state, bill, 'assemblee'), forecastVote(state, bill, 'senat')] : [];
+  // Conseil constitutionnel (§15) : saisine et censure probables, 49.3 supposé si l'Assemblée rejetterait probablement le texte.
+  // La trajectoire « avec » reste celle d'une loi promulguée sans saisine au mois tVote.
+  const rc = votes && !constitutionnel(spec) ? risqueConseil(state, { ...bill, usage493: vote[0].probabiliteAdoption < 0.5 && can493(state, bill) }) : null;
   let legislatives: PreviewResult['legislatives'];
   if (spec.reforme?.modele === 'proportionnelle') {
     const r = addDraft(state, spec);
@@ -183,7 +191,8 @@ function previewBill(state: GameState, spec: BillSpec, months: number): PreviewR
     }),
     intentions: Object.keys(sans.intentions).map((p) => ({ partyId: p, ecart: avec.intentions[p] - sans.intentions[p] })),
     // Assemblée dissoute : le texte sera voté par l'Assemblée élue à la fin du mois, aucune prévision.
-    vote: votes ? [forecastVote(state, bill, 'assemblee'), forecastVote(state, bill, 'senat')] : [],
+    vote,
+    ...(rc && { conseil: { ...rc, articles: rc.articles.map(({ label, motif, p }) => ({ label, motif, p })) } }),
     ...(votes && constitutionnel(spec) && { circuit: forecastCircuit(state, bill) }),
     ...(legislatives && { legislatives }),
   };
@@ -203,5 +212,5 @@ export const engine: Engine = {
   },
   choose, canDeposit, amend, forecastPresidentielle, validateBill, addDraft, deposit, withdraw, use493, previewBill, dangers, pouvoir, dissolve, nominate, forecastLegislatives,
   endTurn: (state) => endTurn(state),
-  isOver: (state) => monthIndex(state.date) >= 60 || !!state.defaite,
+  isOver, bilan, // fin de partie et score de fin de mandat (§16)
 };
