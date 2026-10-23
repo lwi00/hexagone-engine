@@ -49,7 +49,7 @@ Paramètres : coefficients `parlement_*` (à ajouter dans coefficients.json, `hy
 - Adoption à l'Assemblée = pour > contre (majorité des exprimés). Le Sénat vote aussi (affiché ; rapports courants lus par `senatGroupes(state)`, dynamiques depuis le §13) ; en cas de désaccord, l'Assemblée a le dernier mot un mois plus tard (CMP simplifiée).
 - **Prévision** (`forecastVote`, prévisualisation §8) : Monte-Carlo de 1000 votes (même fonction que `voteBill`) sur des graines fixes, donc déterministe et indépendant de `state.rng`. Voix = moyennes, probabilité d'adoption = fréquence.
 - **49.3** après un rejet : budget (tag `fiscalite_*`/`austerite_depenses`/`relance_depenses` et coût ≠ 0) illimité, sinon une fois par année civile. Motion de censure votée immédiatement par les groupes hors majorité (opposition et soutien conditionnel : l'opposition seule n'atteint pas 289 sièges) selon `p_contre` ; adoptée si ≥ 289 voix → loi rejetée (`censuree`), choc de stabilité `censure_choc_stabilite` sur `censure_duree_choc_mois`, le gouvernement devient démissionnaire (§11).
-- Le 49.3 est impossible en cohabitation (prérogative du PM), pour un gouvernement démissionnaire et pendant une dissolution (§11).
+- Le 49.3 est impossible en cohabitation (prérogative du PM), pour un gouvernement démissionnaire et pendant une dissolution (§11), sur une révision constitutionnelle et après une suppression du 49.3 par réforme (`can493`, §14). Un impôt créé ou supprimé, tagué `fiscalite_*`, compte comme texte budgétaire (§14).
 - **Malus de cohabitation** : en cohabitation, à l'Assemblée seulement, le score des groupes `majorite` perd `parlement_malus_cohabitation` sur chaque texte du Président (vote et prévision ; le Sénat n'est pas concerné).
 - Mode `decret` : adoption automatique au mois prévu, pas de vote.
 - Mode `bac_a_sable` : votes comme en `democratie` (mode « Réaliste »), mais aucune défaite (§10, §12) et dépôts illimités (§1).
@@ -106,6 +106,7 @@ e. **Choix chiffrés devenus coefficients** (`hypothese: true`) : `censure_duree
 - Les tags comptent : une loi sans levier mais dont les tags ont des réactions négatives fait monter la tension (§3), donc l'écart n'est nul que pour une loi sans levier, sans effet qualitatif et sans tag impopulaire.
 - Écarts au dernier mois simulé : tous les indicateurs, lignes budgétaires non nulles (`recettes.x` / `depenses.x`, triées par |écart|), satisfaction de chaque groupe, tension et chômage de chaque région, intentions de vote.
 - `vote` : prévision Assemblée puis Sénat (§4) à l'état courant ; vide en mode décret.
+- Réformes (§14) : `circuit` (révision constitutionnelle hors décret et hors dissolution : probabilités Congrès et référendum de bout en bout, oui moyen) ; `legislatives` (proportionnelle : prévision des législatives sans et avec la règle) ; adoption d'une révision au mois du Congrès (`prepMonths + 1`) ; lignes budgétaires des impôts créés comprises.
 - Coût : ≈ 20 ms pour 60 mois (test < 100 ms).
 
 
@@ -208,3 +209,64 @@ Lois du mois = adoptées avec `promulgueLe` = ce mois : tick, 49.3 fait entre de
 **Calage** (`npm run balance`, ligne « bascules » et section « Camps ») : critère = 0 bascule dans toutes les cohortes « au gouvernement », votes, calage 2026 et « Ne rien faire » identiques, défaites à ±2 sur 50. Mesure : 0 bascule partout ; Relance 39 → 37 et SMIC 39 → 37 défaites (la loi rapproche le Président de la gauche : meilleurs reports face au RN), autres scénarios et cohorte de dissolution inchangés. Réglages en cas d'écart : une bascule due à la popularité → baisser `parlement_relation_poids_popularite`, jamais les seuils ; une bascule due à une loi → `par_loi` à 0,1 ; plus de 2 défaites présidentielles d'écart → baisser `presidentielle_deplacement_par_loi` (0,06 puis 0,04 donnaient −3 sur Relance : 0,03 retenu).
 
 **Limites** : barrage défini par bloc (pas par position) ; popularité de départ commune à tous les camps (0,18 : victoire prévue ≈ 78 % pour le RN, ≈ 0 pour les autres camps choisis) ; pas de remaniement volontaire ni de majorité négociée ; fond des tags faible (dépend des axes des tags) ; bonus de vote discret (entre deux seuils, la relation n'agit pas sur le vote) ; profils génériques des camps approximatifs (voisinage de blocs) ; la relation ne dépend pas de la position du Président.
+
+## 14. Réformes de structure (`src/reformes.ts`, `gamedata/reformes.json`)
+
+Code : `src/reformes.ts` (catalogue, règles, montants, effets ; pur, sans tirage, n'importe pas `init.ts`), `tick.ts` (`circuit`, budget), `parliament.ts` (`fond`, `voteCongres`, `isBudget`, `can493`), `institutions.ts` (`scrutin`, `referendumOui`, `resoudreReferendum`, `forecastCircuit`), `index.ts` (`validateBill`, `canDeposit`, `deposit`, `amend`, `previewBill`). Coefficients `reforme_satisfaction_max` et `referendum_*` (requis, `hypothese: true`).
+
+**Contrat.** `BillSpec.reforme` (facultatif, un modèle au plus par texte) : `creer_impot { assiette, taux }`, `supprimer_impot { impot }`, `proportionnelle { seuil 0-10 %, prime 0-25 % }`, `suppression_493 { portee: totale | hors_budget }`, `capitalisation { part 1-20 % }`. Listes fermées dans `schemas.ts` (`MODELES`, `ASSIETTES`, `IMPOTS`, `VOIES`). `Bill.voie` (`congres` | `referendum`) : fixée au dépôt (`deposit(state, id, voie?)`, la première voie du modèle par défaut), seulement pour une révision constitutionnelle hors décret. `Bill.referendum { date, oui, adopte }`. Un texte en cours de circuit reste `preparation`. `rampMonths` sert aussi de montée en charge de la réforme.
+
+**Règles dérivées** (`regles(s)`, sur le modèle de `positionPresident`) : lues dans les lois adoptées, rien dans `GameState` (`version` reste 1, sauvegardes compatibles) : `{ proportionnelle?, sans493?, supprimes, crees, capitalisation? }`, exposées par `pouvoir().regles`. Doublon (`obstacleReforme`) : un autre texte de même clé (modèle, ou modèle et assiette ou impôt) en préparation ou adopté → refus au dépôt (`canDeposit`, tous modes) et à la validation. Une réforme compte comme le dépôt du mois. `amend` refuse, pour une réforme déposée, tout changement de clé et tout amendement après le premier vote. `validateBill` : taux dans les bornes de l'assiette, un des `tags_requis`, ni levier ni effet qualitatif ni loi de finances dans une révision, pas de levier lié à l'impôt supprimé (dans le même texte, puis dans toute loi ultérieure). `validateBill(state, spec, billId?)` : `billId` (projet amendé) est exclu du contrôle de doublon.
+
+**Budget.** d = recette en plus à pleine charge (Md€ 2026) :
+- créer : `R(τ) = k · τ · e^(−η τ)` (k = `rendement_par_unite`, η = `erosion` ; maximum de Laffer en 1/η) ;
+- supprimer : `−recette_2026` de l'impôt, sur sa ligne (`ligne`) ;
+- capitalisation : `−part/100 × cotisations_retraite_2026` sur `recettes.cotisations_sociales` ; `depenses.retraites` ne bouge pas (pensions dues : déficit de transition ; le gain sur les pensions arrive après 2030, non simulé).
+
+`montantsReformes(s, t, scale)` : montants du mois en Md€ courants (× `centralFactor`), × rampe `min(1, (k+1)/rampMonths)` (k = mois depuis la promulgation, convention d'`effectValue`) ; `null` sans réforme budgétaire. Dans le tick : `discR = disc + R[ligne]` aux étapes 5 et 6 (sans réforme, `discR === disc` : mêmes flottants) ; un impôt créé a sa ligne `recettes.impot_<assiette>`, ajoutée en fin d'objet après les lignes de `budget.json`, comptée dans l'impulsion (`− multiplicateur_prelevements_court_terme × R`), le total, le déficit et les PO. L'offre structurelle `Ol` (Okun) compte les effets `reforme` comme ceux des leviers.
+
+**Effets non budgétaires** (`effetsReforme`, à la promulgation) : format des effets de `levers.json`, élasticité par Md€ 2026 de recette en plus, amplitude = élasticité × d (une suppression inverse le signe) ; `debut = t + delai_mois`, `rampe = max(rampe_mois, rampMonths)` pour un effet `niveau`, `rampe_mois` seul pour un `choc` (forme copiée du levier, sinon la rampe écrase le pic). Cible `budget` interdite (validateur). Effets de groupe plafonnés à ±`reforme_satisfaction_max` (0,15 ; IR supprimé : +0,19 sinon pour les cadres) et pondérés par `satisfaction_poids_lois` (branche hors événement de `sumEffects`, sans le plafond des effets qualitatifs). `groupes_touches` (sens d > 0, × signe de d) s'ajoutent à `billGroups` : tension, popularité et vote seulement, jamais la satisfaction (§3). Un impôt supprimé efface les effets et remet à zéro le `delta` de ses leviers liés ; `promulgate` ignore ensuite ces leviers dans un texte déposé avant la suppression.
+
+**Circuit constitutionnel** (art. 89). Proportionnelle et suppression du 49.3 : `voies: ["congres", "referendum"]` ; les trois modèles budgétaires : `[]` (loi ordinaire, navette du §4, 49.3 possible).
+
+| Voie | Étapes | Règles |
+|---|---|---|
+| `congres` | Assemblée puis Sénat au mois du vote ; Congrès le mois suivant | texte identique : un rejet d'une chambre → `rejetee` (veto du Sénat, ni CMP ni dernier mot) ; Congrès = Assemblée et Sénat réunis (`voteCongres` : deux tirages de chambre), adopté si `5 × pour ≥ 3 × (pour + contre)` (3/5 des suffrages exprimés, constante de la Constitution) |
+| `referendum` | Assemblée puis Sénat ; scrutin `referendum_campagne_mois` (2) plus tard | oui > 50 % ; un seul tirage gaussien |
+
+L'étape se déduit des votes (`circuit`, tick) : tous les votes comptent, sans filtre de législature : un texte voté par les deux chambres survit à une dissolution (précédent de 1973) ; pendant une dissolution, l'étape est reportée d'un mois comme les autres votes. Pas de 49.3 sur une révision. Les nouveaux tirages (Congrès, référendum) ne concernent que les textes qui ont une `voie`.
+
+**Référendum** (`referendumOui`) : `oui = 100 σ(poids_popularite × (popularité − pivot) + poids_consignes × consignes + incertitude × z)`, consignes = moyenne, pondérée par les sièges de l'Assemblée, de `clamp(fond + relation, −1, 1)`.
+
+| Coefficient | Valeur | Rôle |
+|---|---|---|
+| `referendum_poids_popularite` | 4 | plébiscite sur le Président |
+| `referendum_pivot` | 0,35 | popularité neutre |
+| `referendum_poids_consignes` | 1 | consignes unanimes ≈ +23 points autour de 50 % |
+| `referendum_incertitude` | 0,3 | choc de campagne (logit), ≈ ±7 points |
+| `referendum_campagne_mois` | 2 | délai après le vote des chambres |
+| `referendum_duree_choc_mois` | 6 | chocs d'après scrutin |
+| `referendum_echec_relation` | 0,1 | relations de tous les groupes après un échec |
+
+Recoupements (banc, consignes approximatives, z = 0) : 1969 (popularité 0,45, consignes −0,3) → 52 % contre 47,6 % ; 1992 (0,3 ; 0,4) → 55 contre 51,0 ; 2000 (0,5 ; 0,8) → 80 contre 73,2 ; 2005 (0,35 ; 0,3) → 57 contre 45,3 : le modèle sous-estime le vote sanction de 2005. À l'état initial (popularité 0,18), oui ≈ 37 à 40 % : un référendum lancé tout de suite est perdu. `resoudreReferendum` tire z seulement en tick normal (`aleatoire: false` : z = 0, `s.rng` intact). Échec : chocs `event` `referendum:<billId>` (popularité −« moyenne », stabilité −« faible », tension +« faible », barème existant, `referendum_duree_choc_mois`), relations de tous les groupes − `referendum_echec_relation` (bornées à −1 ; les seuils du §13 jouent à l'étape 7b) ; en bac à sable aussi (ce n'est pas une défaite). Succès : popularité +« faible ». Événement `referendum { billId, oui, adopte }`.
+
+**49.3** (`can493`) : `sans493 = totale` → plus jamais ; `hors_budget` → seulement pour un texte budgétaire (`isBudget`). Refusé aussi sur une réforme dont un doublon a été déposé après son rejet (`obstacleReforme`).
+
+**Proportionnelle** (`scrutin`) : poids d'un bloc = voix de ses partis au-dessus du seuil (seuil par parti, sur les intentions de présidentielle) × `exp(legislatives_incertitude × z / legislatives_exposant)` × prime de popularité du camp `^(1/exposant)` : même incertitude relative et même prime qu'au scrutin majoritaire, ramenées à l'échelle des voix ; ni barrage ni ancrage local. Sièges : prime majoritaire `round(prime % × N)` au bloc en tête, le reste à la proportionnelle (plus forts restes) ; N = 577 − sièges des hors blocs. Même nombre de tirages : `forecastLegislatives` suit. Banc (seed 1) : RN 251 au scrutin majoritaire, 215 à la proportionnelle à 5 % (Reconquête et DLF sous le seuil), 265 avec une prime de 15 %.
+
+**Modes.** Décret : pas de voie, promulgation sans vote au mois prévu. Bac à sable : votes simulés, pas de défaite. Dissolution : report du §11 avant le circuit, votes et étape conservés.
+
+**Prévisualisation** (§8) : la branche « avec » promulgue la réforme (règles comprises) au mois du Congrès pour une révision ; `circuit` et `legislatives` décrits au §8.
+
+**Garantie du banc** : sans réforme, tout nouveau calcul du tick est derrière `R` (null) ou `b.voie` ; aucune clé ajoutée à `rec`/`dep` ; `scrutin` tire toujours ses 5 gauss ; `fond`, `can493`, `isBudget` et `billGroups` ne changent qu'avec `spec.reforme` ou une règle en vigueur ; aucun tirage nouveau. `npm run balance` : sortie d'avant = préfixe exact de la nouvelle (section « Réformes » ajoutée en fin).
+
+**Limites** :
+- montants indexés sur le compte central, sans élasticité conjoncturelle propre (un IR supprimé laisse un résidu de l'ordre de EPS × écart × base) ;
+- effets des leviers liés effacés d'un coup, alors que la recette décroît en rampe ;
+- LIOT et NI gardent leurs sièges à la proportionnelle ; seuil appliqué par parti aux intentions de présidentielle ;
+- pas d'abrogation, ni de suppression d'un impôt créé ;
+- gain de la capitalisation non simulé ; sa baisse de cotisations garde l'effet de demande d'une baisse de prélèvement (ponytail) ;
+- pas de référendum de l'art. 11, pas de blocage des voies constitutionnelles en cohabitation ;
+- prévisualisation au délai du Congrès (un référendum arriverait `referendum_campagne_mois − 1` mois plus tard) ;
+- proportionnelle en circuit constitutionnel par choix de jeu : en droit, elle relève de la loi ordinaire (art. 34, loi de 1985) ; `"voies": []` dans `reformes.json` suffit pour y revenir ;
+- Congrès sur la suppression du 49.3 ≈ 30 % au départ (banc) : le bonus de majorité (§4) fait suivre le bloc central malgré son opposition sur le fond ;

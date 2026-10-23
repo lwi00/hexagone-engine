@@ -1,8 +1,10 @@
 // Institutions (ENGINE.md §11) : gouvernement, dissolution, législatives anticipées, cohabitation.
-import type { GameState, Gouvernement, IssueLegislatives, LegislativesForecast, Pouvoir, ProfilPM, Rapport, Sieges, TurnEvent, YearMonth } from './types.ts';
+import type { Bill, GameState, Gouvernement, IssueLegislatives, LegislativesForecast, Pouvoir, ProfilPM, Rapport, Sieges, TurnEvent, YearMonth } from './types.ts';
 import { monthIndex, votesSimules } from './types.ts';
 import { C, INIT, REL0, campAutre, campBloc, dansBande, inst, politics, relKey, relation, seuil } from './init.ts';
-import { billAxes, fond, gauss, senatGroupes } from './parliament.ts';
+import { FORECAST_N, billAxes, fond, gauss, senatGroupes, voteBill, voteCongres } from './parliament.ts';
+import { qualitativeEffect } from './levers.ts';
+import { regles } from './reformes.ts';
 import { joueur, positionDe, positionPresident } from './presidentielle.ts';
 
 const D = politics.institutions;
@@ -12,7 +14,7 @@ const COALITIONS = new Map(D.coalitions_opposition.map((c) => [c.id, c]));
 const BLOC_DE = new Map(BLOCS.flatMap((b) => b.groupes.map((g) => [g, b.id])));
 const S0 = new Map(politics.assemblee.groupes.map((g) => [g.id, g.sieges]));
 const sum = (a: number[]) => a.reduce((x, y) => x + y, 0);
-const addMonths = (d: YearMonth, n: number): YearMonth => {
+export const addMonths = (d: YearMonth, n: number): YearMonth => {
   const m = monthIndex(d) + n;
   return { year: 2026 + Math.floor(m / 12), month: (((m % 12) + 12) % 12) + 1 };
 };
@@ -25,6 +27,12 @@ function repartir(total: number, poids: number[]): number[] {
   const ordre = q.map((x, i) => i).sort((i, j) => q[j] - n[j] - (q[i] - n[i]));
   const reste = total - sum(n);
   for (let k = 0; k < reste; k++) n[ordre[k]]++;
+  return n;
+}
+// Prime majoritaire (§14) : round(prime % × N) sièges au bloc en tête, le reste à la proportionnelle (plus forts restes).
+function primeMajoritaire(N: number, w: number[], prime: number): number[] {
+  const bonus = Math.round((prime / 100) * N), i = w.indexOf(Math.max(...w)), n = repartir(N - bonus, w);
+  n[i] += bonus;
   return n;
 }
 
@@ -40,17 +48,23 @@ export function scrutin(s: GameState, rng: number): { assemblee: GameState['parl
   const sortants = (ids: string[]) => sum(ids.map((id) => cur.get(id)?.sieges ?? 0));
   // Camp du Président : prime (ou malus) de popularité, que les intentions de présidentielle ne reflètent qu'à peine.
   const prime = Math.exp(C.legislatives_prime_popularite * (s.national.popularite - INIT.popularite));
+  const pr = regles(s).proportionnelle;
   const w = BLOCS.map((b) => {
     let z: number;
     [z, rng] = gauss(rng);
     const v = sum(b.parties.map((p) => s.intentions[p] ?? 0));
+    // Proportionnelle (§14) : voix des partis au-dessus du seuil ; même incertitude relative et même prime de popularité que le
+    // scrutin majoritaire, ramenées à l'échelle des voix (÷ exposant) ; ni barrage ni ancrage local.
+    if (pr) return sum(b.parties.map((p) => ((s.intentions[p] ?? 0) >= pr.seuil ? s.intentions[p] ?? 0 : 0)))
+      * Math.exp((C.legislatives_incertitude * z) / C.legislatives_exposant) * (b.id === campBloc(s) ? prime ** (1 / C.legislatives_exposant) : 1);
     return (v * (b.barrage ? C.legislatives_barrage : 1)) ** C.legislatives_exposant * Math.exp(C.legislatives_incertitude * z)
       * (b.id === campBloc(s) ? prime : 1);
   });
   const S = BLOCS.map((b) => sortants(b.groupes));
   const sw = sum(w), sS = sum(S), l = C.legislatives_ancrage_local;
   // Les hors blocs gardent leurs sièges ; le scrutin pourvoit aussi les sièges vacants (total 577).
-  const nb = repartir(577 - sortants(D.hors_blocs), BLOCS.map((_, i) => l * S[i] / sS + (1 - l) * w[i] / sw));
+  const nb = pr ? primeMajoritaire(577 - sortants(D.hors_blocs), w, pr.prime)
+    : repartir(577 - sortants(D.hors_blocs), BLOCS.map((_, i) => l * S[i] / sS + (1 - l) * w[i] / sw));
   const out = new Map<string, number>();
   BLOCS.forEach((b, i) => repartir(nb[i], b.groupes.map((g) => S0.get(g) ?? 0)).forEach((n, j) => out.set(b.groupes[j], n)));
   const assemblee = politics.assemblee.groupes.map((g) => ({
@@ -214,7 +228,7 @@ export function pouvoir(s: GameState): Pouvoir {
     ...i, cohabitation: i.gouvernement.profil === 'cohabitation', assise, dissolutionPossible,
     peutDissoudre: votesSimules(s.mode) && !i.dissolution && !s.defaite && t < 60 && t >= monthIndex(dissolutionPossible),
     joueur: joueur(s), relations: toutesRelations(s), senat: senatGroupes(s),
-    positionnement: positionPresident(s), positionnementInitial: positionDe(joueur(s)), campAutre: campAutre(s),
+    positionnement: positionPresident(s), positionnementInitial: positionDe(joueur(s)), campAutre: campAutre(s), regles: regles(s),
   };
 }
 
@@ -284,4 +298,48 @@ export function forecastLegislatives(state: GameState): LegislativesForecast {
     }),
     issues: { majorite: n.majorite / LEG_N, cohabitation: n.cohabitation / LEG_N, sans_majorite: n.sans_majorite / LEG_N },
   };
+}
+
+// Référendum (§14) : vote sur le texte et plébiscite sur le Président. Consignes = moyenne, pondérée par les sièges de l'Assemblée,
+// de clamp(fond + relation, −1, 1) ; oui (%) = 100 σ(poids_popularite × (popularité − pivot) + poids_consignes × consignes + incertitude × z).
+export function referendumOui(s: GameState, bill: Bill, z: number): number {
+  const a = s.parliament.assemblee, n = sum(a.map((g) => g.sieges));
+  const c = sum(a.map((g) => g.sieges * Math.max(-1, Math.min(1, fond(bill, 'assemblee', g.groupId) + relation(s, g))))) / n;
+  return 100 / (1 + Math.exp(-(C.referendum_poids_popularite * (s.national.popularite - C.referendum_pivot) + C.referendum_poids_consignes * c + C.referendum_incertitude * z)));
+}
+
+// Scrutin : un gauss seulement si alea (tick normal ; aleatoire:false → z = 0, s.rng intact). Écrit b.referendum. Échec (même en
+// bac à sable : ce n'est pas une défaite) : chocs de popularité, stabilité et tension, relations − referendum_echec_relation
+// (bornées à −1 ; les seuils §13 jouent à l'étape 7b). Succès : petit choc de popularité. Modifie s et b.
+export function resoudreReferendum(s: GameState, b: Bill, t: number, alea: boolean): { oui: number; adopte: boolean } {
+  let z = 0;
+  if (alea) [z, s.rng] = gauss(s.rng);
+  const oui = referendumOui(s, b, z), adopte = oui > 50;
+  b.referendum = { date: { ...s.date }, oui, adopte };
+  const choc = (kind: 'popularite' | 'stabilite' | 'tension', dir: number, mag: 'faible' | 'moyenne') =>
+    s.effects.push(qualitativeEffect(s, { kind: 'event', id: `referendum:${b.id}` }, { kind }, dir, mag, 'choc', t, 0, C.referendum_duree_choc_mois));
+  if (adopte) choc('popularite', 1, 'faible');
+  else {
+    choc('popularite', -1, 'moyenne'); choc('stabilite', -1, 'faible'); choc('tension', 1, 'faible');
+    s.relations = Object.fromEntries(Object.entries(toutesRelations(s)).map(([k, v]) => [k, Math.max(-1, v - C.referendum_echec_relation)]));
+  }
+  return { oui, adopte };
+}
+
+// Prévision de bout en bout, FORECAST_N graines fixes (motif de forecastVote) : Assemblée puis Sénat, puis Congrès (rng suivant)
+// et z du référendum (gauss sur le rng qui suit le Congrès). congres = P(AN ∧ Sénat ∧ 3/5) ; referendum = P(AN ∧ Sénat ∧ oui > 50) ;
+// oui = moyenne. Pur, n'avance pas state.rng.
+export function forecastCircuit(s: GameState, bill: Bill): { congres: number; referendum: number; oui: number } {
+  let congres = 0, referendum = 0, oui = 0;
+  for (let k = 0; k < FORECAST_N; k++) {
+    const st = { ...s, rng: (k * 2654435761) >>> 0 };
+    const an = voteBill(st, bill, 'assemblee'), se = voteBill({ ...st, rng: an.rng }, bill, 'senat');
+    const deux = an.result.adopte && se.result.adopte;
+    const c = voteCongres({ ...st, rng: se.rng }, bill);
+    const o = referendumOui(s, bill, gauss(c.rng)[0]);
+    oui += o / FORECAST_N;
+    if (deux && c.result.adopte) congres++;
+    if (deux && o > 50) referendum++;
+  }
+  return { congres: congres / FORECAST_N, referendum: referendum / FORECAST_N, oui };
 }

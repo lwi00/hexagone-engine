@@ -1,7 +1,8 @@
 // Contrat du moteur : partagé par le moteur, le Parlement, les LLM et l'interface.
 // Conventions détaillées : ENGINE.md. Ne pas modifier sans mettre à jour ENGINE.md.
 import { z } from 'zod';
-import { EffectTarget, Magnitude, REGION_CODES, SOCIAL_GROUPS } from './schemas.ts';
+import { ASSIETTES, EffectTarget, IMPOTS, Magnitude, REGION_CODES, SOCIAL_GROUPS } from './schemas.ts';
+import type { Regles } from './reformes.ts';
 
 export type RegionCode = (typeof REGION_CODES)[number];
 export type SocialGroup = (typeof SOCIAL_GROUPS)[number];
@@ -40,6 +41,7 @@ export type Pouvoir = Institutions & {
   senat: { groupId: string; sieges: number; rapport: Rapport }[]; // rapports courants du Sénat (§13)
   positionnement: Axes; positionnementInitial: Axes; // position du Président, déplacée par ses lois (§13)
   campAutre: boolean; // camp choisi hors du centre : PM fictif, profils génériques (§13)
+  regles: Regles; // règles en vigueur issues des réformes adoptées (§14)
 };
 export type PresidentielleForecast = {
   premierTour: { partyId: string; pct: number }[]; // moyennes
@@ -52,6 +54,15 @@ export type LegislativesForecast = {
 };
 
 // ---------- Projet de loi (produit par le LLM rédacteur, validé par zod) ----------
+// Modèle de réforme de structure (ENGINE.md §14). Bornes par assiette, tags requis, doublons et voie : validateBill.
+export const Reforme = z.discriminatedUnion('modele', [
+  z.object({ modele: z.literal('creer_impot'), assiette: z.enum(ASSIETTES), taux: z.number().positive() }), // unité de l'assiette
+  z.object({ modele: z.literal('supprimer_impot'), impot: z.enum(IMPOTS) }),
+  z.object({ modele: z.literal('proportionnelle'), seuil: z.number().min(0).max(10), prime: z.number().min(0).max(25) }), // % des voix ; % des sièges au bloc en tête
+  z.object({ modele: z.literal('suppression_493'), portee: z.enum(['totale', 'hors_budget']) }),
+  z.object({ modele: z.literal('capitalisation'), part: z.number().min(1).max(20) }), // % des cotisations retraite versé à des fonds
+]);
+export type Reforme = z.infer<typeof Reforme>;
 export const BillSpec = z.object({
   title: z.string().min(1),
   summary: z.string().min(1),
@@ -67,18 +78,19 @@ export const BillSpec = z.object({
   })),
   tags: z.array(z.string()).min(1), // ids de gamedata/tags.json
   prepMonths: z.number().int().min(0).max(24),
-  rampMonths: z.number().int().min(0).max(60), // montée en charge des effets qualitatifs uniquement
+  rampMonths: z.number().int().min(0).max(60), // montée en charge des effets qualitatifs et de la réforme
   estimatedCost: z.number(), // Md€/an, estimation du LLM (affichée, non utilisée par le moteur)
   // Accord sur le fond de chaque groupe parlementaire (clé « assemblee_<id> » ou « senat_<id> », de −1 à 1), donné par un
   // modèle de décision (Jev) ; remplace le produit scalaire des axes dans le score de vote (ENGINE.md §4b).
   positions: z.record(z.string(), z.number().min(-1).max(1)).optional(),
   loiDeFinances: z.number().int().optional(), // projet de loi de finances pour cette année (calendrier budgétaire, ENGINE.md §5d)
+  reforme: Reforme.optional(), // une réforme de structure au plus par texte (ENGINE.md §14)
 });
 export type BillSpec = z.infer<typeof BillSpec>;
 
 export type BillStatus = 'brouillon' | 'preparation' | 'rejetee' | 'adoptee' | 'retiree' | 'censuree';
 export type VoteResult = {
-  chambre: 'assemblee' | 'senat' | 'censure';
+  chambre: 'assemblee' | 'senat' | 'censure' | 'congres';
   date: YearMonth;
   pour: number; contre: number; abstention: number;
   adopte: boolean;
@@ -93,11 +105,14 @@ export type Bill = {
   promulgueLe?: YearMonth; // départ des effets
   usage493?: boolean;
   votes: VoteResult[];
+  // Révision constitutionnelle (§14) : voie fixée au dépôt hors décret ; un texte en cours de circuit reste 'preparation'.
+  voie?: 'congres' | 'referendum';
+  referendum?: { date: YearMonth; oui: number; adopte: boolean };
 };
 
 // ---------- Effets actifs (leviers, lois qualitatives, événements) ----------
 export type ActiveEffect = {
-  source: { kind: 'lever' | 'bill' | 'event'; id: string };
+  source: { kind: 'lever' | 'bill' | 'event' | 'reforme'; id: string }; // reforme : id = billId (§14)
   cible: z.infer<typeof EffectTarget>;
   amplitude: number; // valeur pleine dans l'unité de la cible (points de %, score 0-1, Md€/an, pb, crans)
   forme: 'niveau' | 'choc';
@@ -168,6 +183,7 @@ export type TurnEvent =
   | { kind: 'event'; id: string; titre: string; description: string; type: 'exogene' | 'echeance' | 'aleatoire' }
   | { kind: 'vote'; billId: string; result: VoteResult }
   | { kind: 'promulgation'; billId: string }
+  | { kind: 'referendum'; billId: string; oui: number; adopte: boolean } // §14
   | { kind: 'censure'; billId: string; adoptee: boolean }
   | { kind: 'indexation'; leverId: string; ancienne: number; nouvelle: number }
   | { kind: 'greve'; region: RegionCode; generale: boolean }
@@ -202,17 +218,21 @@ export type PreviewResult = {
   regions: { region: RegionCode; tension: number; chomage: number }[]; // écarts au dernier mois
   intentions: { partyId: string; ecart: number }[]; // points de %
   vote: VoteForecast[]; // vide en mode décret et pendant une dissolution
+  circuit?: { congres: number; referendum: number; oui: number }; // révision constitutionnelle (§14) : probabilités de bout en bout, oui moyen en %
+  legislatives?: { sans: LegislativesForecast; avec: LegislativesForecast }; // proportionnelle (§14)
 };
 
 // ---------- API du moteur (implémentée dans src/index.ts) ----------
 export interface Engine {
   newGame(opts: { seed: number; mode: GameMode; camp?: string }): GameState; // camp : §13, ignoré en Réaliste
   // Vérifie un BillSpec contre le catalogue (leviers et tags connus, bornes min/max, pas de cible dérivée). Liste vide = valide.
-  validateBill(state: GameState, spec: BillSpec): string[];
+  // billId : projet en cours d'amendement, exclu du contrôle de doublon des réformes (§14).
+  validateBill(state: GameState, spec: BillSpec, billId?: string): string[];
   // Ajoute un brouillon. Ne change rien d'autre.
   addDraft(state: GameState, spec: BillSpec): GameState;
   // Brouillon → préparation (vote au mois date + prepMonths ; en mode décret : adoption à ce mois-là, sans vote).
-  deposit(state: GameState, billId: string): GameState;
+  // voie : révision constitutionnelle hors décret (§14), parmi les voies du modèle ; absente ou invalide = la première.
+  deposit(state: GameState, billId: string, voie?: 'congres' | 'referendum'): GameState;
   withdraw(state: GameState, billId: string): GameState;
   // Après un rejet à l'Assemblée : 49.3 → motion de censure votée immédiatement.
   use493(state: GameState, billId: string): { state: GameState; events: TurnEvent[] };

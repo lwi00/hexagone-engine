@@ -1366,5 +1366,69 @@
     "description": "Premier tour (ENGINE.md §13) : transfert d'intentions vers le candidat du joueur selon le rapprochement de sa position, δ = cette valeur × (exp(−report_distance × d(p, position)) − exp(−report_distance × d(p, position initiale))). Somme conservée, identité exacte à dérive nulle.",
     "hypothese": true,
     "justification": "Une dérive de 0,2 vers LR fait gagner environ 0,5 point pris à LR, sous le bruit de sondage (presidentielle_incertitude 0,12, soit environ ±2 points sur 17 %). Un effet de −7 % pour une dérive de 0,2 a été jugé excessif. (Hypothèse de jeu.)"
+  },
+  {
+    "id": "reforme_satisfaction_max",
+    "value": 0.15,
+    "unit": "score 0-1",
+    "description": "Plafond, par effet de groupe, d'une réforme de structure (source 'reforme', ENGINE.md §14) : |élasticité × d| ≤ ce plafond, au barème « forte » de satisfaction.",
+    "hypothese": true,
+    "justification": "Sans lui, la suppression de l'IR donnerait +0,19 aux cadres (élasticité d'ir.bareme × 107 Md€). Hypothèse : ordre de grandeur des plus fortes réactions de groupe observées après une réforme fiscale."
+  },
+  {
+    "id": "referendum_poids_popularite",
+    "value": 4,
+    "unit": "logit par point de popularité 0-1",
+    "description": "Référendum (ENGINE.md §14) : oui (%) = 100 σ(referendum_poids_popularite × (popularité − referendum_pivot) + referendum_poids_consignes × consignes + referendum_incertitude × z). Poids du terme de plébiscite sur le Président.",
+    "hypothese": true,
+    "justification": "Un référendum est en partie un plébiscite sur le Président (1969, 2005). À la popularité initiale 0,18 avec des consignes neutres : oui ≈ 34 % ; à 0,45 : oui ≈ 60 %. Hypothèse à recouper dans le banc (1969, 1992, 2000, 2005)."
+  },
+  {
+    "id": "referendum_pivot",
+    "value": 0.35,
+    "unit": "score 0-1",
+    "description": "Référendum (§14) : popularité à laquelle le terme de plébiscite est neutre.",
+    "hypothese": true,
+    "justification": "Centre entre 1992 (Mitterrand impopulaire, oui à 51 %) et 2000 (oui à 73 % avec un consensus des partis). Hypothèse."
+  },
+  {
+    "id": "referendum_poids_consignes",
+    "value": 1,
+    "unit": "logit par unité de consigne (−1..1)",
+    "description": "Référendum (§14) : poids des consignes = moyenne, pondérée par les sièges, de clamp(fond + relation, −1, 1) des groupes de l'Assemblée.",
+    "hypothese": true,
+    "justification": "Consignes unanimes (+1) : environ +23 points de oui autour de 50 %. Ordre de grandeur de l'écart entre 2000 (consensus) et 2005 (partis divisés). Hypothèse."
+  },
+  {
+    "id": "referendum_incertitude",
+    "value": 0.3,
+    "unit": "logit (écart-type)",
+    "description": "Référendum (§14) : écart-type du choc de campagne z. Un seul tirage gaussien au scrutin ; aucun sous aleatoire:false (prévisualisation, z = 0).",
+    "hypothese": true,
+    "justification": "Environ ±7 points de oui autour de 50 %. Ordre de grandeur de l'écart entre les derniers sondages et le résultat (Maastricht 1992, TCE 2005). Hypothèse."
+  },
+  {
+    "id": "referendum_campagne_mois",
+    "value": 2,
+    "unit": "mois",
+    "description": "Révision constitutionnelle par référendum (§14) : délai entre l'adoption du texte par les deux chambres et le scrutin.",
+    "hypothese": true,
+    "justification": "Décret de convocation, puis campagne officielle d'environ deux semaines. En pratique 1 à 3 mois (2000 : vote des chambres en juin, référendum le 24 septembre). Hypothèse."
+  },
+  {
+    "id": "referendum_duree_choc_mois",
+    "value": 6,
+    "unit": "mois",
+    "description": "Durée des chocs (décroissance linéaire) d'un référendum perdu (popularité −« moyenne », stabilité −« faible », tension +« faible ») ou gagné (popularité +« faible »), §14.",
+    "hypothese": true,
+    "justification": "Même ordre que les chocs de dissolution et de loi spéciale. Hypothèse."
+  },
+  {
+    "id": "referendum_echec_relation",
+    "value": 0.1,
+    "unit": "relation −1..1",
+    "description": "Baisse de la relation de chaque groupe (Assemblée et Sénat) avec l'exécutif après un référendum perdu, bornée à −1 (§13, §14).",
+    "hypothese": true,
+    "justification": "Même ampleur que parlement_relation_dissolution : les seuils §13 peuvent faire basculer un groupe proche de sa frontière le mois suivant. Hypothèse."
   }
 ]

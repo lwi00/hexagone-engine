@@ -1,9 +1,12 @@
 // Banc d'équilibrage : scénarios types joués sans LLM, et calage 2026 sur la réalité. Usage : npm run balance
 // Sert à régler gamedata/coefficients.json : on lit les tableaux, on ajuste, on relance.
 import { engine } from '../src/index.ts';
-import { parBloc } from '../src/institutions.ts';
+import { forecastCircuit, parBloc } from '../src/institutions.ts';
 import { CANDIDATS } from '../src/presidentielle.ts';
-import type { BillSpec, GameState, TurnEvent } from '../src/types.ts';
+import { forecastVote } from '../src/parliament.ts';
+import { ASSIETTE, IMPOT, describeReforme, rendement } from '../src/reformes.ts';
+import { C, politics } from '../src/init.ts';
+import type { BillSpec, GameState, Reforme, TurnEvent } from '../src/types.ts';
 
 const loi = (title: string, levers: BillSpec['levers'], tags: string[], qualitative: BillSpec['qualitative'] = []): BillSpec =>
   ({ title, summary: title, articles: [title], levers, qualitative, tags, prepMonths: 1, rampMonths: 6, estimatedCost: 0 });
@@ -184,4 +187,66 @@ for (const camp of [undefined, ...CANDIDATS]) {
   let bas = 0;
   for (let i = 0; i < 15; i++) { const r = avance(s); s = r.state; bas += nRapports(r.report.events); }
   console.log(`${(camp ?? 'au gouvernement').padEnd(16)} ${String(a.majorite).padStart(4)} ${String(a.soutien_conditionnel).padStart(7)} ${String(a.opposition).padStart(4)}   ${pct(v0)} / ${pct(engine.forecastPresidentielle(s).victoire)}                ${bas}`);
+}
+
+console.log('\n== Réformes (décret, 50 graines, contre « Ne rien faire ») ==');
+{
+  // 60 mois joués sans arrêt à la défaite (présidentielle comprise) : seul l'écart à « Ne rien faire » compte.
+  const soixante = (lois: BillSpec[], seed: number) => {
+    let s = engine.newGame({ seed, mode: 'decret' });
+    for (const spec of lois) { s = engine.addDraft(s, spec); s = engine.deposit(s, s.bills[s.bills.length - 1].id); }
+    const snaps: GameState[] = [];
+    for (let i = 0; i < 60; i++) { s = engine.endTurn(s).state; snaps.push(s); }
+    return snaps;
+  };
+  const ref = (r: Reforme, tag: string): BillSpec => ({ ...loi(describeReforme(r), [], [tag]), reforme: r, rampMonths: 12 });
+  const MODELES: [string, Reforme, string, string][] = [
+    ...[...ASSIETTE.values()].map((a) => [a.id, { modele: 'creer_impot', assiette: a.id, taux: a.taux_defaut }, a.tags_requis[0], `recettes.impot_${a.id}`] as [string, Reforme, string, string]),
+    ...(['ifi', 'taxe_fonciere', 'ir'] as const).map((i) => [`supprimer ${i}`, { modele: 'supprimer_impot', impot: i }, 'fiscalite_baisse', `recettes.${IMPOT.get(i)!.ligne}`] as [string, Reforme, string, string]),
+    ...[5, 10].map((part) => [`capitalisation ${part} %`, { modele: 'capitalisation', part }, 'retraites_durcissement', 'recettes.cotisations_sociales'] as [string, Reforme, string, string]),
+  ];
+  const bases = Array.from({ length: 50 }, (_, k) => soixante([], k + 1));
+  const ligne = (s: GameState, l: string) => { const [c, k] = l.split('.') as ['recettes', string]; return s.budget[c][k] ?? 0; };
+  console.log('modèle (défaut)                ligne 2027  ligne 2030  déficit 2030  dette 2030  pop 2027   défaites démocratie');
+  for (const [nom, r, tag, l] of MODELES) {
+    const m = { l27: 0, l30: 0, def: 0, dette: 0, pop: 0 };
+    let def = 0;
+    const causes: Record<string, number> = {};
+    for (let k = 0; k < 50; k++) {
+      const a = soixante([ref(r, tag)], k + 1), b = bases[k];
+      m.l27 += (ligne(a[23], l) - ligne(b[23], l)) / 50; m.l30 += (ligne(a[59], l) - ligne(b[59], l)) / 50;
+      m.def += (a[59].national.deficit_public - b[59].national.deficit_public) / 50; m.dette += (a[59].national.dette_publique - b[59].national.dette_publique) / 50;
+      m.pop += (100 * (a[23].national.popularite - b[23].national.popularite)) / 50;
+      const { s } = joue([ref(r, tag)], k + 1, 'democratie');
+      if (s.defaite) { def++; causes[s.defaite.cause] = (causes[s.defaite.cause] ?? 0) + 1; }
+    }
+    console.log(`${nom.padEnd(30)} ${f(m.l27, 1).padStart(10)}  ${f(m.l30, 1).padStart(10)}  ${f(m.def, 2).padStart(12)}  ${f(m.dette, 1).padStart(10)}  ${f(m.pop, 1).padStart(7)}   ${String(def).padStart(2)}/50 ${JSON.stringify(causes)}`);
+  }
+
+  const a = ASSIETTE.get('tres_hauts_patrimoines')!;
+  console.log(`Laffer tres_hauts_patrimoines (Md€ 2026) : ${[1, 2, 3, 4, 5].map((t) => `${t} % → ${rendement(a, t).toFixed(1)}`).join(' ; ')}`);
+
+  // Circuit constitutionnel et législatives, seed 1, démocratie, état initial.
+  const s0 = engine.newGame({ seed: 1, mode: 'democratie' });
+  console.log('circuit (seed 1)               P(AN) P(Sénat) Congrès référendum  oui moyen');
+  for (const r of [{ modele: 'suppression_493', portee: 'totale' }, { modele: 'proportionnelle', seuil: 5, prime: 0 }] as Reforme[]) {
+    const bill = { id: 'x', spec: ref(r, 'institutions_democratie_directe'), status: 'preparation' as const, votes: [] };
+    const c = forecastCircuit(s0, bill);
+    console.log(`${r.modele.padEnd(30)} ${pct(forecastVote(s0, bill, 'assemblee').probabiliteAdoption)}  ${pct(forecastVote(s0, bill, 'senat').probabiliteAdoption).padStart(6)}  ${pct(c.congres).padStart(6)}  ${pct(c.referendum).padStart(9)}  ${f(c.oui, 1).padStart(9)}`);
+  }
+  const adopte = (r: Reforme) => {
+    const s = engine.addDraft(s0, ref(r, 'institutions_democratie_directe'));
+    Object.assign(s.bills[s.bills.length - 1], { status: 'adoptee', promulgueLe: s0.date });
+    return s;
+  };
+  console.log(`législatives (seed 1)          ${politics.institutions.blocs.map((b) => b.id.padStart(7)).join('')}   maj.  cohab. sans maj.`);
+  for (const [nom, s] of [['scrutin majoritaire', s0], ['proportionnelle 5 %', adopte({ modele: 'proportionnelle', seuil: 5, prime: 0 })],
+    ['proportionnelle 5 %, prime 15', adopte({ modele: 'proportionnelle', seuil: 5, prime: 15 })]] as [string, GameState][]) {
+    const fc = engine.forecastLegislatives(s);
+    console.log(`${nom.padEnd(30)} ${fc.blocs.map((b) => f(b.sieges, 0).padStart(7)).join('')}  ${pct(fc.issues.majorite)}  ${pct(fc.issues.cohabitation)}     ${pct(fc.issues.sans_majorite)}`);
+  }
+  // Recoupements historiques du référendum, consignes moyennes (−1..1) approximatives, z = 0 : formule de referendumOui.
+  const oui = (pop: number, c: number) => 100 / (1 + Math.exp(-(C.referendum_poids_popularite * (pop - C.referendum_pivot) + C.referendum_poids_consignes * c)));
+  console.log('recoupements (popularité, consignes → oui simulé / réel) : ' + ([['1969', 0.45, -0.3, '47,6'], ['1992', 0.3, 0.4, '51,0'], ['2000', 0.5, 0.8, '73,2'], ['2005', 0.35, 0.3, '45,3']] as const)
+    .map(([y, p, c, r]) => `${y} (${p}, ${c}) → ${oui(p, c).toFixed(0)} / ${r}`).join(' ; '));
 }

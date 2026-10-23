@@ -308,6 +308,32 @@ export const Lever = z.object({
 });
 export const Levers = z.array(Lever).min(30);
 
+// Réformes de structure (ENGINE.md §14) : listes fermées des modèles, des assiettes d'impôts nouveaux et des impôts supprimables.
+export const MODELES = ['creer_impot', 'supprimer_impot', 'proportionnelle', 'suppression_493', 'capitalisation'] as const;
+export const ASSIETTES = ['patrimoine_financier', 'tres_hauts_patrimoines', 'carbone', 'rachats_actions'] as const; // impôts nouveaux, sans levier existant
+export const IMPOTS = ['ifi', 'ttf', 'taxe_fonciere', 'cvae', 'droits_succession', 'is', 'ir'] as const; // impôts supprimables
+export const VOIES = ['congres', 'referendum'] as const; // circuit de l'art. 89 (absent = loi ordinaire)
+
+const EffetsReforme = Lever.shape.effets; // élasticité par Md€ 2026 de recette (d signé) ; kind budget interdit (validateur)
+const Touches = Lever.shape.groupes_touches; // sens pour d > 0, multiplié par sign(d)
+const Positions = z.record(z.string(), z.number().min(-1).max(1)); // clés assemblee_<id> / senat_<id> (format de spec.positions)
+const Commun = {
+  libelle: z.string(), effets: EffetsReforme, groupes_touches: Touches, positions: Positions,
+  tags_requis: z.array(z.string()), note: z.string().optional(), // tags_requis : au moins un présent (vide = libre)
+};
+const Hypothese = z.object({ value: z.number().nonnegative(), unit: z.string(), hypothese: z.literal(true), justification: z.string(), source: Source.optional() }).strict();
+export const Reformes = z.object({
+  modeles: z.array(z.object({ id: z.enum(MODELES), ...Commun, voies: z.array(z.enum(VOIES)) }).strict()),
+  assiettes: z.array(z.object({
+    id: z.enum(ASSIETTES), ...Commun, libelle_court: z.string(), unite: z.string(),
+    taux_min: z.number(), taux_max: z.number(), taux_defaut: z.number(),
+    rendement_par_unite: Sourced, // k : Md€ 2026 par unité de taux, avant érosion
+    erosion: Hypothese, // η par unité de taux : R(τ) = k·τ·e^(−ητ), maximum en 1/η
+  }).strict()),
+  impots: z.array(z.object({ id: z.enum(IMPOTS), ...Commun, ligne: z.enum(RECETTES), recette_2026: Sourced, leviers: z.array(z.string()) }).strict()),
+  capitalisation: z.object({ cotisations_retraite_2026: Sourced, note: z.string() }).strict(),
+}).strict();
+
 export const Coefficient = z.object({
   id: z.string(),
   value: z.number(),
@@ -356,6 +382,9 @@ export const REQUIRED_COEFFICIENTS = [
   // institutions (ENGINE.md §11)
   'legislatives_exposant', 'legislatives_barrage', 'legislatives_ancrage_local', 'legislatives_incertitude', 'legislatives_effet_popularite',
   'legislatives_prime_popularite', 'dissolution_choc_stabilite', 'dissolution_duree_choc_mois', 'dissolution_delai_mois', 'parlement_malus_cohabitation',
+  // réformes (ENGINE.md §14)
+  'reforme_satisfaction_max', 'referendum_poids_popularite', 'referendum_pivot', 'referendum_poids_consignes', 'referendum_incertitude',
+  'referendum_campagne_mois', 'referendum_duree_choc_mois', 'referendum_echec_relation',
   // barème qualitatif faible | moyenne | forte (SPEC 3.2), par type de cible
   ...BAREME_KINDS.flatMap((k) => ['faible', 'moyenne', 'forte'].map((m) => `bareme.${k}.${m}`)),
 ];

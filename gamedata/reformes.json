@@ -1,0 +1,1095 @@
+{
+  "modeles": [
+    {
+      "id": "creer_impot",
+      "libelle": "Créer un impôt nouveau",
+      "effets": [],
+      "groupes_touches": [],
+      "positions": {},
+      "tags_requis": [],
+      "voies": [],
+      "note": "Loi ordinaire (art. 34). Effets, groupes touchés, positions et tags requis : ceux de l'assiette."
+    },
+    {
+      "id": "supprimer_impot",
+      "libelle": "Supprimer un impôt existant",
+      "effets": [],
+      "groupes_touches": [],
+      "positions": {},
+      "tags_requis": [],
+      "voies": [],
+      "note": "Loi ordinaire (art. 34). Effets, groupes touchés et tags requis : ceux de l'impôt. Les leviers liés sont remis à zéro."
+    },
+    {
+      "id": "proportionnelle",
+      "libelle": "Scrutin proportionnel aux législatives",
+      "effets": [],
+      "groupes_touches": [],
+      "tags_requis": [],
+      "voies": [
+        "congres",
+        "referendum"
+      ],
+      "positions": {
+        "assemblee_rn": 0.7,
+        "assemblee_udr": 0.5,
+        "assemblee_dem": 0.9,
+        "assemblee_epr": 0,
+        "assemblee_hor": -0.5,
+        "assemblee_dr": -0.8,
+        "assemblee_soc": 0.5,
+        "assemblee_ecos": 0.8,
+        "assemblee_lfi_nfp": 0.8,
+        "assemblee_gdr": 0.6,
+        "assemblee_liot": -0.4,
+        "senat_lr": -0.7,
+        "senat_uc": 0.2,
+        "senat_ser": 0.4,
+        "senat_rdse": -0.3,
+        "senat_gest": 0.7,
+        "senat_crce_k": 0.6,
+        "senat_rdpi": 0,
+        "senat_lirt": -0.3
+      },
+      "note": "Choix de jeu : circuit constitutionnel (art. 89). En droit, le mode de scrutin relève de la loi ordinaire (art. 34, loi de 1985). Positions estimées d'après les programmes 2022-2024 et les débats de 2025 (MoDem et RN pour, LR et Horizons contre), ordre de grandeur."
+    },
+    {
+      "id": "suppression_493",
+      "libelle": "Suppression de l'article 49 alinéa 3",
+      "effets": [],
+      "groupes_touches": [],
+      "tags_requis": [],
+      "voies": [
+        "congres",
+        "referendum"
+      ],
+      "positions": {
+        "assemblee_lfi_nfp": 1,
+        "assemblee_gdr": 0.9,
+        "assemblee_ecos": 0.9,
+        "assemblee_soc": 0.7,
+        "assemblee_liot": 0.4,
+        "assemblee_rn": 0.3,
+        "assemblee_udr": 0.3,
+        "assemblee_epr": -0.8,
+        "assemblee_hor": -0.7,
+        "assemblee_dem": -0.4,
+        "assemblee_dr": -0.4,
+        "senat_lr": -0.4,
+        "senat_rdpi": -0.8,
+        "senat_uc": -0.3,
+        "senat_ser": 0.6,
+        "senat_crce_k": 0.9,
+        "senat_gest": 0.9,
+        "senat_lirt": -0.3
+      },
+      "note": "Révision constitutionnelle (art. 89). Positions estimées (gauche demandeuse depuis 2023, bloc central attaché à l'outil), ordre de grandeur."
+    },
+    {
+      "id": "capitalisation",
+      "libelle": "Part de retraite par capitalisation",
+      "tags_requis": [],
+      "voies": [],
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "retraites"
+          },
+          "elasticite": 0.0004,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : inquiétude des retraités sur le financement des pensions pendant la transition (d < 0 : −0,01 à 25 Md€)."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "fonctionnaires"
+          },
+          "elasticite": 0.0002,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : attachement des agents publics à la répartition."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "etudiants_jeunes"
+          },
+          "elasticite": -0.0003,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : les jeunes actifs gagnent un droit individuel capitalisé (d < 0 : satisfaction en hausse)."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.0002,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : les cadres, épargnants, accueillent plutôt favorablement des fonds de pension."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "retraites",
+          "direction": 1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "fonctionnaires",
+          "direction": 1,
+          "intensite": "faible"
+        },
+        {
+          "group": "etudiants_jeunes",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {
+        "assemblee_dr": 0.7,
+        "assemblee_hor": 0.6,
+        "assemblee_udr": 0.6,
+        "assemblee_epr": 0.4,
+        "assemblee_dem": 0.2,
+        "assemblee_rn": -0.4,
+        "assemblee_soc": -0.8,
+        "assemblee_ecos": -0.8,
+        "assemblee_lfi_nfp": -1,
+        "assemblee_gdr": -1,
+        "senat_lr": 0.7,
+        "senat_uc": 0.5,
+        "senat_lirt": 0.6,
+        "senat_rdpi": 0.4,
+        "senat_ser": -0.8,
+        "senat_gest": -0.8,
+        "senat_crce_k": -1
+      },
+      "note": "Loi ordinaire. Part des cotisations retraite versée à des fonds : déficit de transition seulement (gain sur les pensions après 2030, non simulé). Positions estimées (débats de 2025 sur une « dose de capitalisation »), ordre de grandeur."
+    }
+  ],
+  "assiettes": [
+    {
+      "id": "patrimoine_financier",
+      "libelle": "Impôt sur la fortune financière",
+      "libelle_court": "ISF financier (patrimoine net > 1,3 M€)",
+      "unite": "%",
+      "taux_min": 0.1,
+      "taux_max": 3,
+      "taux_defaut": 0.5,
+      "tags_requis": [
+        "fiscalite_hausse",
+        "redistribution"
+      ],
+      "rendement_par_unite": {
+        "value": 9,
+        "unit": "Md€ 2026 par point de taux",
+        "date": "2026-12",
+        "estimate": true,
+        "source": {
+          "url": "https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/fs-2023-rapport-isf-quatrieme_rapport_complet_17octobre_avis.pdf",
+          "title": "France Stratégie – Comité d'évaluation des réformes de la fiscalité du capital, quatrième rapport (octobre 2023)",
+          "accessed": "2026-10-23"
+        },
+        "note": "Base taxable ≈ 900 Md€ : base ISF 2017 ≈ 1 028 Md€ (DGFiP, citée par le comité) × part financière ≈ 0,65 × revalorisation des actifs ≈ 1,4 depuis 2017. Ordre de grandeur : la base ISF et la part financière sont à relever dans le rapport, non lues en entier."
+      },
+      "erosion": {
+        "value": 0.15,
+        "unit": "par point de taux",
+        "hypothese": true,
+        "justification": "Élasticité de la base taxable au taux de l'impôt sur la fortune : 0,1 à 0,3 par point (Seim 2017, Suède ; Jakobsen et al. 2020, Danemark). Valeur centrale basse, l'assiette étant financière (plus mobile mais mieux déclarée)."
+      },
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.002,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : cadres supérieurs détenteurs de patrimoine financier."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "independants"
+          },
+          "elasticite": -0.0015,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : chefs d'entreprise et professions libérales."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "retraites"
+          },
+          "elasticite": -0.0005,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : retraités aisés (faible part du groupe)."
+        },
+        {
+          "cible": {
+            "kind": "popularite"
+          },
+          "elasticite": 0.0036,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "choc",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "duree_mois": 6,
+          "hypothese": true,
+          "justification": "Même forme que patrimoine.ifi_bareme : popularité 0,0001 par % ÷ 0,028 Md€ par % = 0,0036 par Md€ (réaction à l'annonce, choc de 6 mois)."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {
+        "assemblee_rn": 0.5,
+        "assemblee_udr": -0.3,
+        "assemblee_soc": 0.8,
+        "assemblee_ecos": 0.8,
+        "assemblee_lfi_nfp": 0.9,
+        "assemblee_gdr": 0.9,
+        "assemblee_epr": -0.7,
+        "assemblee_hor": -0.7,
+        "assemblee_dem": -0.3,
+        "assemblee_dr": -0.8,
+        "senat_lr": -0.8,
+        "senat_uc": -0.5,
+        "senat_rdpi": -0.6,
+        "senat_ser": 0.8,
+        "senat_crce_k": 0.9,
+        "senat_gest": 0.8
+      },
+      "note": "Positions estimées (retour de l'ISF demandé par la gauche ; RN favorable à un impôt sur la fortune financière depuis 2022), ordre de grandeur, à sourcer."
+    },
+    {
+      "id": "tres_hauts_patrimoines",
+      "libelle": "Impôt plancher sur les très hauts patrimoines",
+      "libelle_court": "Impôt plancher patrimoines > 100 M€",
+      "unite": "%",
+      "taux_min": 0.5,
+      "taux_max": 5,
+      "taux_defaut": 2,
+      "tags_requis": [
+        "fiscalite_hausse",
+        "redistribution"
+      ],
+      "rendement_par_unite": {
+        "value": 10,
+        "unit": "Md€ 2026 par point de taux",
+        "date": "2026-12",
+        "estimate": true,
+        "source": {
+          "url": "https://www.institut-entreprise.fr/wp-content/uploads/2026/06/TCT_Taxe-Zucman-2026.pdf",
+          "title": "Institut de l'entreprise – Note sur la taxe Zucman (juin 2026)",
+          "accessed": "2026-10-23"
+        },
+        "note": "Patrimoine des ≈ 1 800 foyers au-delà de 100 M€ ≈ 1 000 Md€ (classement Challenges, après imputation de l'IR) : k = 10 Md€ par point en statique. Rendement au défaut (2 %) ≈ 9,9 Md€, entre Zucman (≈ 20 Md€, sans réaction ni imputation de l'IS) et les critiques (≈ 5 Md€ : Institut de l'entreprise, juin 2026, IS imputé ; CAE). Débat : https://www.publicsenat.fr/actualites/economie/taxe-zucman-quels-sont-les-arguments-pour-et-les-arguments-contre"
+      },
+      "erosion": {
+        "value": 0.35,
+        "unit": "par point de taux",
+        "hypothese": true,
+        "justification": "Forte mobilité des très hauts patrimoines (expatriation, optimisation, valorisation des titres non cotés) : maximum de Laffer vers 1/η ≈ 2,9 %. Hypothèse posée pour situer le rendement au défaut entre les deux chiffrages publics."
+      },
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.0002,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : effet marginal, très peu de foyers concernés."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "independants"
+          },
+          "elasticite": -0.0002,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : inquiétude des chefs d'entreprise (biens professionnels)."
+        },
+        {
+          "cible": {
+            "kind": "popularite"
+          },
+          "elasticite": 0.0036,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "choc",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "duree_mois": 6,
+          "hypothese": true,
+          "justification": "Même forme que patrimoine.ifi_bareme : popularité 0,0001 par % ÷ 0,028 Md€ par % = 0,0036 par Md€ (réaction à l'annonce, choc de 6 mois)."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {
+        "assemblee_soc": 0.9,
+        "assemblee_ecos": 0.9,
+        "assemblee_lfi_nfp": 1,
+        "assemblee_gdr": 1,
+        "assemblee_rn": -0.4,
+        "assemblee_udr": -0.7,
+        "assemblee_dr": -0.9,
+        "assemblee_epr": -0.6,
+        "assemblee_hor": -0.8,
+        "assemblee_dem": -0.3,
+        "senat_lr": -0.9,
+        "senat_uc": -0.5,
+        "senat_ser": 0.9,
+        "senat_crce_k": 1,
+        "senat_gest": 0.9
+      },
+      "note": "Taxe « Zucman » (2 % au-delà de 100 M€), rejetée à l'Assemblée le 31 octobre 2025 (PLF 2026). Positions d'après ce débat, ordre de grandeur."
+    },
+    {
+      "id": "carbone",
+      "libelle": "Taxe carbone additionnelle hors SEQE",
+      "libelle_court": "Taxe carbone additionnelle hors SEQE",
+      "unite": "€/tCO2",
+      "taux_min": 10,
+      "taux_max": 150,
+      "taux_defaut": 50,
+      "tags_requis": [
+        "fiscalite_hausse",
+        "ecologie_climat"
+      ],
+      "rendement_par_unite": {
+        "value": 0.15,
+        "unit": "Md€ 2026 par €/tCO2",
+        "date": "2026-12",
+        "estimate": true,
+        "source": {
+          "url": "https://www.i4ce.org/wp-content/uploads/2022/07/0326-i4ce2924-PC56-ContribuClimatEnergieFrance_V5-1.pdf",
+          "title": "I4CE – La contribution climat-énergie en France : fonctionnement, revenus et exonérations",
+          "accessed": "2026-10-23"
+        },
+        "note": "Assiette ≈ 150 MtCO2 hors SEQE et hors exonérations (transport, bâtiment, agriculture ; CPO 2019 et I4CE) : 1 €/t ≈ 0,15 Md€. Ordre de grandeur, à sourcer : l'assiette nette 2026 n'a pas été trouvée telle quelle (I4CE donne les revenus 2017 de la contribution, 5,4 Md€ à 30,5 €/t)."
+      },
+      "erosion": {
+        "value": 0.002,
+        "unit": "par €/tCO2",
+        "hypothese": true,
+        "justification": "Baisse des émissions taxées d'environ 20 % à 100 €/t (e^(−0,2) ≈ 0,82), ordre de grandeur des élasticités-prix de moyen terme des carburants et du chauffage."
+      },
+      "effets": [
+        {
+          "cible": {
+            "kind": "indicator",
+            "id": "inflation"
+          },
+          "elasticite": 0.055,
+          "unite_effet": "% (niveau) par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 1,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Forme d'energie.accise_gazole : inflation 0,0186 par €/MWh ÷ 0,34 Md€ par €/MWh ≈ 0,055 % de niveau des prix par Md€."
+        },
+        {
+          "cible": {
+            "kind": "tension"
+          },
+          "elasticite": 0.0097,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "choc",
+          "delai_mois": 1,
+          "rampe_mois": 0,
+          "duree_mois": 12,
+          "hypothese": true,
+          "justification": "Forme d'energie.accise_gazole : tension 0,003 par €/MWh ÷ 0,31 Md€ par €/MWh ≈ 0,0097 par Md€ (gilets jaunes, 2018), choc de 12 mois."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "ouvriers_employes",
+          "direction": -1,
+          "intensite": "forte"
+        },
+        {
+          "group": "agriculteurs",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "retraites",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {
+        "assemblee_ecos": 0.7,
+        "assemblee_soc": 0.3,
+        "assemblee_epr": 0,
+        "assemblee_rn": -0.9,
+        "assemblee_udr": -0.9,
+        "assemblee_dr": -0.6,
+        "assemblee_lfi_nfp": -0.3,
+        "senat_gest": 0.7,
+        "senat_lr": -0.6
+      },
+      "note": "La composante carbone est gelée depuis 2018 (44,6 €/t). Positions estimées, ordre de grandeur."
+    },
+    {
+      "id": "rachats_actions",
+      "libelle": "Taxe sur les rachats d'actions",
+      "libelle_court": "Taxe sur les rachats d'actions",
+      "unite": "%",
+      "taux_min": 1,
+      "taux_max": 20,
+      "taux_defaut": 8,
+      "tags_requis": [
+        "fiscalite_hausse",
+        "redistribution"
+      ],
+      "rendement_par_unite": {
+        "value": 0.3,
+        "unit": "Md€ 2026 par point de taux",
+        "date": "2026-12",
+        "estimate": true,
+        "source": {
+          "url": "https://www.francetransactions.com/actus/news-bourse/marches/cac40-nouveau-record-redistribution-98-milliards-euros.html",
+          "title": "FranceTransactions (d'après La Lettre Vernimmen) – CAC 40 : redistribution record de 98 milliards d'euros en 2024",
+          "accessed": "2026-10-23"
+        },
+        "note": "Rachats d'actions du CAC 40 : 25,5 Md€ en 2024, 30,1 Md€ en 2023, 34,8 Md€ en 2025 (même étude, citée par lemediadelinvestisseur.fr) ; base retenue ≈ 30 Md€/an, soit 0,30 Md€ par point en statique."
+      },
+      "erosion": {
+        "value": 0.03,
+        "unit": "par point de taux",
+        "hypothese": true,
+        "justification": "Bascule des rachats vers les dividendes (taxés autrement) : −21 % de base à 8 %, −45 % à 20 %. Hypothèse."
+      },
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.0005,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "Hypothèse : actionnariat salarié et épargne en actions des cadres."
+        },
+        {
+          "cible": {
+            "kind": "popularite"
+          },
+          "elasticite": 0.002,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "choc",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "duree_mois": 6,
+          "hypothese": true,
+          "justification": "Hypothèse : mesure populaire, un peu moins visible que l'ISF."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {
+        "assemblee_soc": 0.8,
+        "assemblee_ecos": 0.8,
+        "assemblee_lfi_nfp": 0.8,
+        "assemblee_gdr": 0.8,
+        "assemblee_rn": 0.3,
+        "assemblee_epr": -0.4,
+        "assemblee_hor": -0.5,
+        "assemblee_dr": -0.6,
+        "senat_lr": -0.6,
+        "senat_ser": 0.8,
+        "senat_crce_k": 0.9
+      },
+      "note": "Amendements de taxation des rachats déposés au PLF 2026 (gauche). Positions estimées, ordre de grandeur."
+    }
+  ],
+  "impots": [
+    {
+      "id": "ifi",
+      "libelle": "Impôt sur la fortune immobilière",
+      "ligne": "impots_patrimoine",
+      "recette_2026": {
+        "value": 2.8,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Montant Insee 2025 (2,71 Md€, note de budget.json) × 1,0331 (croissance des prélèvements obligatoires 2025→2026, RESF PLF 2026)."
+      },
+      "leviers": [
+        "patrimoine.ifi_bareme",
+        "patrimoine.ifi_seuil"
+      ],
+      "effets": [
+        {
+          "cible": {
+            "kind": "popularite"
+          },
+          "elasticite": 0.0036,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "choc",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "duree_mois": 6,
+          "hypothese": true,
+          "justification": "Même forme que patrimoine.ifi_bareme : popularité 0,0001 par % ÷ 0,028 Md€ par % = 0,0036 par Md€ (réaction à l'annonce, choc de 6 mois)."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "retraites",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    },
+    {
+      "id": "ttf",
+      "libelle": "Taxe sur les transactions financières",
+      "ligne": "impots_patrimoine",
+      "recette_2026": {
+        "value": 2.58,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Montant Insee 2025 (2,5 Md€, note de budget.json) × 1,0331 (croissance des prélèvements obligatoires 2025→2026, RESF PLF 2026)."
+      },
+      "leviers": [
+        "fiscalite.ttf"
+      ],
+      "effets": [
+        {
+          "cible": {
+            "kind": "popularite"
+          },
+          "elasticite": 0.0036,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "choc",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "duree_mois": 6,
+          "hypothese": true,
+          "justification": "Hypothèse : même forme que l'IFI (impôt perçu comme visant les plus aisés)."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    },
+    {
+      "id": "taxe_fonciere",
+      "libelle": "Taxe foncière",
+      "ligne": "impots_locaux",
+      "recette_2026": {
+        "value": 45.64,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Montant Insee 2025 (44,18 Md€, note de budget.json) × 1,0331 (croissance des prélèvements obligatoires 2025→2026, RESF PLF 2026)."
+      },
+      "leviers": [
+        "impots_locaux.taxe_fonciere"
+      ],
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "retraites"
+          },
+          "elasticite": -0.00087,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "impots_locaux.taxe_fonciere : −0,0004 par % ÷ 0,46 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.00065,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "impots_locaux.taxe_fonciere : −0,0003 ÷ 0,46."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "independants"
+          },
+          "elasticite": -0.00065,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "impots_locaux.taxe_fonciere : −0,0003 ÷ 0,46."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "agriculteurs"
+          },
+          "elasticite": -0.00065,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "impots_locaux.taxe_fonciere : −0,0003 ÷ 0,46."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "retraites",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "agriculteurs",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "note": "Recette des collectivités : sa suppression sans compensation creuse le solde public.",
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    },
+    {
+      "id": "cvae",
+      "libelle": "Cotisation sur la valeur ajoutée des entreprises",
+      "ligne": "impots_locaux",
+      "recette_2026": {
+        "value": 3.87,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Montant Insee 2025 (3,75 Md€, note de budget.json) × 1,0331 (croissance des prélèvements obligatoires 2025→2026, RESF PLF 2026)."
+      },
+      "leviers": [],
+      "effets": [
+        {
+          "cible": {
+            "kind": "indicator",
+            "id": "croissance_pib"
+          },
+          "elasticite": -0.013,
+          "unite_effet": "% (niveau) par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 12,
+          "rampe_mois": 36,
+          "hypothese": true,
+          "justification": "Hypothèse : +0,05 point de niveau de PIB à la suppression (impôt de production, effet d'offre), même calendrier qu'is.taux."
+        }
+      ],
+      "groupes_touches": [],
+      "note": "CVAE résiduelle, en extinction progressive.",
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    },
+    {
+      "id": "droits_succession",
+      "libelle": "Droits de succession et de donation",
+      "ligne": "droits_mutation",
+      "recette_2026": {
+        "value": 21.75,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Montant Insee 2025 (21,05 Md€, note de budget.json) × 1,0331 (croissance des prélèvements obligatoires 2025→2026, RESF PLF 2026)."
+      },
+      "leviers": [
+        "patrimoine.droits_succession"
+      ],
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "retraites"
+          },
+          "elasticite": -0.00088,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "patrimoine.droits_succession : −0,00015 par % ÷ 0,17 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.00088,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "patrimoine.droits_succession : −0,00015 par % ÷ 0,17 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "independants"
+          },
+          "elasticite": -0.00088,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "patrimoine.droits_succession : −0,00015 par % ÷ 0,17 Md€ par %."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "retraites",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        },
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    },
+    {
+      "id": "is",
+      "libelle": "Impôt sur les sociétés",
+      "ligne": "is",
+      "recette_2026": {
+        "value": 67.8,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Valeur de budget.json (recettes.is), contribution exceptionnelle comprise."
+      },
+      "leviers": [
+        "is.taux",
+        "is.contribution_exceptionnelle"
+      ],
+      "effets": [
+        {
+          "cible": {
+            "kind": "indicator",
+            "id": "croissance_pib"
+          },
+          "elasticite": -0.0063,
+          "unite_effet": "% (niveau) par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 12,
+          "rampe_mois": 36,
+          "hypothese": true,
+          "justification": "is.taux : −0,012 par point ÷ 1,9 Md€ par point."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    },
+    {
+      "id": "ir",
+      "libelle": "Impôt sur le revenu",
+      "ligne": "ir",
+      "recette_2026": {
+        "value": 107,
+        "unit": "Md€",
+        "date": "2026-12",
+        "source": {
+          "url": "https://www.insee.fr/fr/statistiques/fichier/2381408/econ-fin-pub-impots-categ.xlsx",
+          "title": "Insee – Impôts, données annuelles de 1995 à 2025, fichier econ-fin-pub-impots-categ.xlsx (paru le 28/08/2026)",
+          "accessed": "2026-10-20"
+        },
+        "estimate": true,
+        "note": "Valeur de budget.json (recettes.ir)."
+      },
+      "leviers": [
+        "ir.bareme",
+        "ir.taux_marginal_max",
+        "capital.pfu_part_ir",
+        "fiscalite.cdhr"
+      ],
+      "effets": [
+        {
+          "cible": {
+            "kind": "group",
+            "id": "cadres"
+          },
+          "elasticite": -0.0018,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "ir.bareme : élasticité par % ÷ 1 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "independants"
+          },
+          "elasticite": -0.0012,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "ir.bareme : élasticité par % ÷ 1 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "retraites"
+          },
+          "elasticite": -0.0009,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "ir.bareme : élasticité par % ÷ 1 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "fonctionnaires"
+          },
+          "elasticite": -0.0009,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "ir.bareme : élasticité par % ÷ 1 Md€ par %."
+        },
+        {
+          "cible": {
+            "kind": "group",
+            "id": "ouvriers_employes"
+          },
+          "elasticite": -0.0003,
+          "unite_effet": "points de score 0-1 par Md€ 2026 de recette en plus (d > 0) ; amplitude = élasticité × d",
+          "forme": "niveau",
+          "delai_mois": 0,
+          "rampe_mois": 0,
+          "hypothese": true,
+          "justification": "ir.bareme : élasticité par % ÷ 1 Md€ par %."
+        }
+      ],
+      "groupes_touches": [
+        {
+          "group": "cadres",
+          "direction": -1,
+          "intensite": "forte"
+        },
+        {
+          "group": "retraites",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "independants",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "fonctionnaires",
+          "direction": -1,
+          "intensite": "moyenne"
+        },
+        {
+          "group": "ouvriers_employes",
+          "direction": -1,
+          "intensite": "faible"
+        }
+      ],
+      "note": "Effets de groupe plafonnés par reforme_satisfaction_max (sinon +0,19 pour les cadres).",
+      "positions": {},
+      "tags_requis": [
+        "fiscalite_baisse"
+      ]
+    }
+  ],
+  "capitalisation": {
+    "cotisations_retraite_2026": {
+      "value": 250,
+      "unit": "Md€",
+      "date": "2026-12",
+      "estimate": true,
+      "source": {
+        "url": "https://www.cor-retraites.fr/sites/default/files/2025-06/M%C3%A9thodologie_RA.pdf",
+        "title": "COR – Rapport annuel de juin 2025, méthodologie (ressources du système de retraite)",
+        "accessed": "2026-10-23"
+      },
+      "note": "Cotisations retraite EFFECTIVES (salariés, employeurs privés et publics hors cotisations imputées de l'État employeur) : des fonds ne capitalisent que des cotisations versées. Fourchette 230-300 Md€ ; 250 retenu, la ventilation par nature n'ayant pas été lue telle quelle (ordre de grandeur, à sourcer dans les ressources par nature du rapport du COR)."
+    },
+    "note": "Les fonds réduisent les pensions par répartition seulement après l'horizon du jeu ; seul le déficit de transition est simulé."
+  }
+}

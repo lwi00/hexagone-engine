@@ -1,6 +1,7 @@
 // Effets actifs : création (leviers, lois qualitatives, événements), valeur au mois t, agrégation par cible.
 import type { ActiveEffect, Bill, GameState } from './types.ts';
 import { C, LEVERS, TAGS, centralFactor } from './init.ts';
+import { IMPOT, effetsReforme, groupesReforme, regles } from './reformes.ts';
 
 type Target = ActiveEffect['cible'];
 type Magnitude = 'faible' | 'moyenne' | 'forte';
@@ -74,7 +75,10 @@ export function promulgate(s: GameState, bill: Bill, t: number) {
   bill.status = 'adoptee';
   bill.promulgueLe = { ...s.date };
   const scale = centralFactor(s);
+  // Levier d'un impôt supprimé entre le dépôt et la promulgation : ignoré (§14). Vide sans réforme.
+  const sup = new Set(regles(s).supprimes.flatMap((i) => IMPOT.get(i)!.leviers));
   for (const { id, delta } of bill.spec.levers) {
+    if (sup.has(id)) continue;
     const def = LEVERS.get(id);
     const lv = s.levers[id];
     if (!def || !lv) continue;
@@ -95,6 +99,13 @@ export function promulgate(s: GameState, bill: Bill, t: number) {
   for (const q of bill.spec.qualitative) {
     s.effects.push(qualitativeEffect(s, { kind: 'bill', id: bill.id }, q.cible, q.direction, q.intensite, 'niveau', t, bill.spec.rampMonths));
   }
+  // Réforme de structure (ENGINE.md §14) : un impôt supprimé efface les réglages antérieurs de ses leviers ; effets non budgétaires.
+  const r = bill.spec.reforme;
+  if (r?.modele === 'supprimer_impot') for (const id of IMPOT.get(r.impot)!.leviers) {
+    s.effects = s.effects.filter((e) => !(e.source.kind === 'lever' && e.source.id === id));
+    if (s.levers[id]) s.levers[id].delta = 0;
+  }
+  if (r) s.effects.push(...effetsReforme(bill, t));
 }
 
 // Groupes sociaux touchés par une loi (groupes_touches des leviers selon le sens de la variation, réactions des tags).
@@ -108,6 +119,7 @@ export function billGroups(bill: Bill): { group: string; direction: number; inte
     net.set(group, (net.get(group) ?? 0) + direction * W[intensite as Magnitude]);
   for (const { id, delta } of bill.spec.levers) for (const g of LEVERS.get(id)?.groupes_touches ?? []) add(g.group, g.direction * Math.sign(delta), g.intensite);
   for (const tag of bill.spec.tags) for (const g of TAGS.get(tag)?.reactions_groupes ?? []) add(g.group, g.direction, g.intensite);
+  for (const g of groupesReforme(bill.spec.reforme)) add(g.group, g.direction, g.intensite); // §14
   const out: { group: string; direction: number; intensite: Magnitude }[] = [];
   for (const [group, v] of net) if (v !== 0) out.push({ group, direction: Math.sign(v), intensite: Math.abs(v) >= 3 ? 'forte' : Math.abs(v) >= 2 ? 'moyenne' : 'faible' });
   return out;

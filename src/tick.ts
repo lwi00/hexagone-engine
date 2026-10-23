@@ -1,13 +1,14 @@
 // Tick mensuel (ENGINE.md §1). Formules : descriptions de gamedata/coefficients.json ; normalisations : scripts/papersim.cjs.
-import type { Danger, DefeatCause, GameState, RegionCode, SocialGroup, TurnEvent, TurnReport } from './types.ts';
+import type { Bill, Danger, DefeatCause, GameState, RegionCode, SocialGroup, TurnEvent, TurnReport } from './types.ts';
 import { monthIndex, votesSimules } from './types.ts';
 import type { z } from 'zod';
 import type { RandomEvents } from './schemas.ts';
 import { C, CENTRAGE, INIT, LEVERS, budget, campAutre, campBloc, centralFactor, events, groups, inst, load, politics, randomEvents, regions, save } from './init.ts';
 import type { Core, Fin } from './init.ts';
 import { billGroups, promulgate, qualitativeEffect, sumEffects } from './levers.ts';
-import { rand, voteBill } from './parliament.ts';
-import { elections, majRelations, profilCamp } from './institutions.ts';
+import { rand, voteBill, voteCongres } from './parliament.ts';
+import { addMonths, elections, majRelations, profilCamp, resoudreReferendum } from './institutions.ts';
+import { montantsReformes } from './reformes.ts';
 import { presidentielle } from './presidentielle.ts';
 
 const mean = (a: number[]) => a.reduce((x, y) => x + y, 0) / a.length;
@@ -168,6 +169,33 @@ export function applyChoice(s: GameState, choixId: string, t: number, parDefaut 
   return [{ kind: 'choix', eventId: d.id, titre: d.titre, label: c.label, parDefaut }];
 }
 
+// Art. 89 (ENGINE.md §14) : Assemblée puis Sénat en termes identiques (pas de CMP ni de dernier mot : le Sénat a un veto), puis
+// Congrès le mois suivant ou référendum après campagne. Étape déduite des votes (tous, sans filtre elue : un texte voté par les
+// deux chambres survit à la dissolution, précédent de 1973). true = promulguer.
+function circuit(s: GameState, b: Bill, t: number, alea: boolean, out: TurnEvent[]): boolean {
+  const vote = (c: string) => b.votes.some((v) => v.chambre === c && v.adopte);
+  if (!(vote('assemblee') && vote('senat'))) {
+    const an = voteBill(s, b, 'assemblee'); s.rng = an.rng;
+    const se = voteBill(s, b, 'senat'); s.rng = se.rng;
+    b.votes.push(an.result, se.result);
+    out.push({ kind: 'vote', billId: b.id, result: an.result }, { kind: 'vote', billId: b.id, result: se.result });
+    if (!an.result.adopte || !se.result.adopte) b.status = 'rejetee';
+    else b.voteLe = addMonths(s.date, b.voie === 'congres' ? 1 : C.referendum_campagne_mois);
+    return false;
+  }
+  if (b.voie === 'congres') {
+    const c = voteCongres(s, b); s.rng = c.rng;
+    b.votes.push(c.result);
+    out.push({ kind: 'vote', billId: b.id, result: c.result });
+    if (!c.result.adopte) b.status = 'rejetee';
+    return c.result.adopte;
+  }
+  const r = resoudreReferendum(s, b, t, alea);
+  out.push({ kind: 'referendum', billId: b.id, oui: r.oui, adopte: r.adopte });
+  if (!r.adopte) b.status = 'rejetee';
+  return r.adopte;
+}
+
 // opts.aleatoire = false : sans événement aléatoire (prévisualisation, ENGINE.md §8).
 export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { state: GameState; report: TurnReport } {
   const s = structuredClone(prev);
@@ -238,6 +266,10 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   for (const b of s.bills) {
     if (b.status !== 'preparation' || !b.voteLe || monthIndex(b.voteLe) !== t) continue;
     if (dissoute && votesSimules(s.mode)) { b.voteLe = nextMonth(s.date); continue; } // Assemblée dissoute : examen reporté
+    if (b.voie && votesSimules(s.mode)) { // révision constitutionnelle (ENGINE.md §14)
+      if (circuit(s, b, t, opts.aleatoire !== false, out)) { promulgate(s, b, t); out.push({ kind: 'promulgation', billId: b.id }); }
+      continue;
+    }
     if (votesSimules(s.mode) && !b.votes.some((v) => v.chambre === 'assemblee' && v.adopte && monthIndex(v.date) >= elue)) {
       const an = voteBill(s, b, 'assemblee'); s.rng = an.rng;
       const se = voteBill(s, b, 'senat'); s.rng = se.rng;
@@ -295,28 +327,33 @@ export function endTurn(prev: GameState, opts: { aleatoire?: boolean } = {}): { 
   const get = (k: string) => E[k] ?? 0;
   const pensions = PEN_MD * 100 * (x.Pen / rf.Pen - 1) * scale; // change au 1er janvier, avec l'indice
   const disc = (line: string) => get(`budget:${line}`) + (line === 'depenses.retraites' ? pensions : 0);
+  const R = montantsReformes(s, t, scale); // null sans réforme budgétaire : rien ne change (ENGINE.md §14)
+  const discR = R ? (line: string) => disc(line) + (R[line] ?? 0) : disc;
+  const nouvelles = R ? Object.keys(R).filter((k) => k.startsWith('recettes.') && !(k.slice(9) in budget.recettes)) : [];
 
   // 5. Macro : impulsion discrétionnaire (multiplicateurs), offre O (dont LFI 2026), grèves du mois précédent.
   const pibPrev = x.pibH.reduce((a, b) => a + b, 0);
   let imp = 0;
-  for (const k of Object.keys(budget.recettes)) imp -= C.multiplicateur_prelevements_court_terme * disc(`recettes.${k}`);
+  for (const k of Object.keys(budget.recettes)) imp -= C.multiplicateur_prelevements_court_terme * discR(`recettes.${k}`);
   for (const k of Object.keys(budget.depenses)) {
     if (k === 'interets_dette') continue;
     const m = k === 'aides_sociales' || k === 'defense' ? C.multiplicateur_depenses_ciblees : C.multiplicateur_depenses_court_terme;
-    imp += m * disc(`depenses.${k}`);
+    imp += m * discR(`depenses.${k}`);
   }
+  for (const k of nouvelles) imp -= C.multiplicateur_prelevements_court_terme * R![k]; // impôts créés (§14)
   const lfi = (C.impact_politique_budgetaire_2026 / 100) * Math.min(1, (t + 1) / 12);
-  const Ol = (sumEffects(s.effects.filter((e) => e.source.kind === 'lever'), t, scale)['indicator:croissance_pib'] ?? 0) / 100;
+  const Ol = (sumEffects(s.effects.filter((e) => e.source.kind === 'lever' || e.source.kind === 'reforme'), t, scale)['indicator:croissance_pib'] ?? 0) / 100;
   const m = stepMacro(x, t, { O: get('indicator:croissance_pib') / 100, Ol, L: lfi, imp: imp / pibPrev, strike: I.I, ush: get('indicator:chomage_bit'), Ein: get('indicator:inflation') / 100 });
   const mr = stepMacro(rf, t, { O: 0, Ol: 0, L: lfi, imp: 0, strike: 0, ush: 0, Ein: 0 });
 
   // 6. Finances publiques
   const rec: Record<string, number> = {}, dep: Record<string, number> = {};
-  for (const [k, v] of Object.entries(budget.recettes)) rec[k] = v.value * m.central * (1 + ((EPS[k] ?? C.elasticite_tva_autres_po) * m.gap) / 100) + disc(`recettes.${k}`);
+  for (const [k, v] of Object.entries(budget.recettes)) rec[k] = v.value * m.central * (1 + ((EPS[k] ?? C.elasticite_tva_autres_po) * m.gap) / 100) + discR(`recettes.${k}`);
+  for (const k of nouvelles) rec[k.slice(9)] = R![k]; // impôts créés : ligne propre en fin d'objet (§14)
   for (const [k, v] of Object.entries(budget.depenses)) {
     if (k === 'interets_dette') continue;
     const eps = k === 'aides_sociales' ? C.part_chomage_aides_sociales * C.elasticite_depenses_chomage : 0;
-    dep[k] = v.value * m.central * (1 + (eps * m.gap) / 100) + disc(`depenses.${k}`);
+    dep[k] = v.value * m.central * (1 + (eps * m.gap) / 100) + discR(`depenses.${k}`);
   }
   const iMarche = C.taux_reference_bund_initial + fin.spread / 100;
   const intM = (fin.r / 100) * fin.D / 12;

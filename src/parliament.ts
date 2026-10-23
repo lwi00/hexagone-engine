@@ -6,6 +6,7 @@ import politics from '../gamedata/politics.json';
 import tags from '../gamedata/tags.json';
 import groups from '../gamedata/groups.json';
 import coefficients from '../gamedata/coefficients.json';
+import { constitutionnel, estBudgetaire, obstacleReforme, positionsReforme, regles } from './reformes.ts';
 
 type Coef = z.infer<typeof Coefficient>;
 type Axes = z.infer<typeof Positionnement>;
@@ -62,10 +63,11 @@ const bonus = (r: Rapport) => ({
   opposition: P.parlement_bonus_opposition,
 })[r];
 
-// Accord sur le fond (§4, §4b) : position du modèle de décision (spec.positions) si elle existe, sinon produit scalaire des axes
-// de la loi et du positionnement du groupe. Non borné (le vote garde son échelle) ; borné à ±1 pour les relations (§13).
+// Accord sur le fond (§4, §4b, §14) : position du modèle de décision (spec.positions) si elle existe, puis celle de la réforme
+// (reformes.json), sinon produit scalaire des axes de la loi et du positionnement du groupe. Non borné (le vote garde son échelle) ; borné à ±1 pour les relations (§13).
 export function fond(bill: Bill, chambre: 'assemblee' | 'senat', id: string, axes = billAxes(bill)): number {
-  const p = bill.spec.positions?.[`${chambre}_${id}`];
+  const k = `${chambre}_${id}`;
+  const p = bill.spec.positions?.[k] ?? positionsReforme(bill.spec.reforme)?.[k];
   if (p !== undefined) return p;
   const pos = (chambre === 'assemblee' ? AN : SE).get(id)?.positionnement ?? { economie: 0, societal: 0, europe: 0 };
   return axes.economie * pos.economie + axes.societal * pos.societal + axes.europe * pos.europe;
@@ -130,7 +132,7 @@ export function voteBill(state: GameState, bill: Bill, chambre: 'assemblee' | 's
 
 // Prévision d'un vote : Monte-Carlo de voteBill sur des graines fixes (déterministe, indépendant de state.rng).
 // ponytail: FORECAST_N tirages, erreur type ≈ 1,6 point sur la probabilité ; plus de tirages si l'affichage doit être plus fin.
-const FORECAST_N = 1000;
+export const FORECAST_N = 1000;
 export function forecastVote(state: GameState, bill: Bill, chambre: 'assemblee' | 'senat'): VoteForecast {
   const groupes = chambre === 'assemblee' ? state.parliament.assemblee : senatGroupes(state);
   const acc = new Map(groupes.map((g) => [g.groupId, { pour: 0, contre: 0, abstention: 0 }]));
@@ -160,13 +162,30 @@ export function voteCensure(state: GameState, bill: Bill): { result: VoteResult;
   };
 }
 
+// Congrès (art. 89 al. 3) : Assemblée et Sénat réunis, adoption aux trois cinquièmes des suffrages exprimés (constante constitutionnelle).
+export function voteCongres(state: GameState, bill: Bill): { result: VoteResult; rng: number } {
+  const an = voteBill(state, bill, 'assemblee'), se = voteBill({ ...state, rng: an.rng }, bill, 'senat');
+  const pour = an.result.pour + se.result.pour, contre = an.result.contre + se.result.contre;
+  return {
+    result: { chambre: 'congres', date: state.date, pour, contre, abstention: an.result.abstention + se.result.abstention,
+      adopte: 5 * pour >= 3 * (pour + contre),
+      parGroupe: [...an.result.parGroupe, ...se.result.parGroupe.map((g) => ({ ...g, groupId: `senat_${g.groupId}` }))] },
+    rng: se.rng,
+  };
+}
+
 const BUDGET_TAGS = /^(fiscalite_.*|austerite_depenses|relance_depenses)$/;
 export const isBudget = (bill: Bill) =>
-  bill.spec.tags.some((t) => BUDGET_TAGS.test(t)) && (bill.spec.estimatedCost !== 0 || bill.spec.levers.length > 0);
+  bill.spec.tags.some((t) => BUDGET_TAGS.test(t)) && (bill.spec.estimatedCost !== 0 || bill.spec.levers.length > 0 || estBudgetaire(bill.spec));
 
 // 49.3 : illimité pour un texte budgétaire, sinon parlement_limite_493 par année civile. Impossible en cohabitation (prérogative
-// du PM), pour un gouvernement démissionnaire et pendant une dissolution (ENGINE.md §11).
+// du PM), pour un gouvernement démissionnaire et pendant une dissolution (ENGINE.md §11). Jamais sur une révision constitutionnelle,
+// ni une fois le 49.3 supprimé par une réforme (§14).
 export function can493(state: GameState, bill: Bill): boolean {
+  if (bill.voie || constitutionnel(bill.spec)) return false;
+  if (bill.spec.reforme && obstacleReforme(state, bill.spec, bill.id)) return false; // doublon déposé après un rejet (§14)
+  const r = regles(state).sans493;
+  if (r === 'totale' || (r === 'hors_budget' && !isBudget(bill))) return false;
   const i = state.institutions;
   if (i && (i.gouvernement.profil === 'cohabitation' || i.gouvernement.demissionnaire || i.dissolution)) return false;
   if (isBudget(bill)) return true;

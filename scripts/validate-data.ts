@@ -16,6 +16,7 @@ const FILES: Record<string, z.ZodTypeAny> = {
   levers: S.Levers,
   coefficients: S.Coefficients,
   tags: S.Tags,
+  reformes: S.Reformes,
 };
 
 // Clés présentes dans le JSON mais absentes du schéma (zod les supprimerait en silence).
@@ -150,6 +151,43 @@ if (coefficients) {
   if (!only) S.REQUIRED_COEFFICIENTS.forEach((id) => { if (!ids.has(id)) errors.push(`coefficients: ${id} manquant`); });
 }
 if (tags && new Set(tags.map((t: any) => t.id)).size !== tags.length) errors.push('tags: ids en double');
+
+// Réformes (ENGINE.md §14) : listes fermées complètes, cibles, groupes, tags, leviers, groupes parlementaires, bornes, recettes.
+const reformes = data.reformes;
+if (reformes) {
+  const tagIds = new Set((tags ?? []).map((t: any) => t.id));
+  const groupesDe = (ch: 'assemblee' | 'senat') => new Set((politics?.[ch].groupes ?? []).map((g: any) => g.id));
+  const AN = groupesDe('assemblee'), SE = groupesDe('senat');
+  for (const [k, ids] of [['modeles', S.MODELES], ['assiettes', S.ASSIETTES], ['impots', S.IMPOTS]] as const) {
+    for (const id of ids) { const n = reformes[k].filter((x: any) => x.id === id).length; if (n !== 1) errors.push(`reformes.${k}: ${id} présent ${n} fois`); }
+    reformes[k].forEach((x: any) => {
+      const w = `reformes.${k}.${x.id}`;
+      x.effets.forEach((e: any) => {
+        checkTarget(w, e.cible);
+        if (e.cible.kind === 'budget') errors.push(`${w}: effet budget interdit (passe par montantsReformes)`);
+        if (e.forme === 'choc' && !e.duree_mois) errors.push(`${w}: effet choc sans duree_mois`);
+      });
+      x.groupes_touches.forEach((g: any) => { if (!(S.SOCIAL_GROUPS as readonly string[]).includes(g.group)) errors.push(`${w}: groupe inconnu ${g.group}`); });
+      if (tags) x.tags_requis.forEach((t: string) => { if (!tagIds.has(t)) errors.push(`${w}: tag inconnu ${t}`); });
+      if (politics) for (const cle of Object.keys(x.positions)) {
+        const m = /^(assemblee|senat)_(.+)$/.exec(cle);
+        if (!m || !(m[1] === 'assemblee' ? AN : SE).has(m[2])) errors.push(`${w}: groupe parlementaire inconnu ${cle}`);
+      }
+    });
+  }
+  reformes.assiettes.forEach((a: any) => {
+    if (!(a.taux_min < a.taux_defaut && a.taux_defaut <= a.taux_max)) errors.push(`reformes.assiettes.${a.id}: bornes incohérentes`);
+    // Pas loin au-delà du maximum de Laffer (η·τ = 1) ; 2 plutôt que 1,5 pour garder le taux de 5 % de tres_hauts_patrimoines.
+    if (a.erosion.value * a.taux_max > 2) errors.push(`reformes.assiettes.${a.id}: érosion × taux_max > 2`);
+  });
+  reformes.impots.forEach((i: any) => {
+    if (levers) i.leviers.forEach((l: string) => { if (!leverIds.has(l)) errors.push(`reformes.impots.${i.id}: levier inconnu ${l}`); });
+  });
+  if (budget) for (const ligne of new Set<string>(reformes.impots.map((i: any) => i.ligne))) {
+    const tot = sum(reformes.impots.filter((i: any) => i.ligne === ligne).map((i: any) => i.recette_2026.value));
+    if (tot > budget.recettes[ligne].value) errors.push(`reformes.impots: recettes ${ligne} = ${tot} > budget ${budget.recettes[ligne].value}`);
+  }
+}
 
 if (errors.length) {
   console.error(errors.map((e) => `✗ ${e}`).join('\n'));

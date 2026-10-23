@@ -18,6 +18,7 @@ Format imposé par `src/schemas.ts` (schéma v2), validé par `npm run validate`
 - **Barème qualitatif** (événements, `groupes_touches` des leviers) : `faible | moyenne | forte`, converti par les coefficients `bareme.<kind>.<magnitude>` (voir coefficients.json). `bareme.notation.*` (1/2/3 crans) est un coefficient supplémentaire : `notation` n'est pas dans `BAREME_KINDS`.
 - **Calage à t0** : toutes les équations d'opinion (satisfaction, popularité, vote, tension, stabilité) sont écrites en écart à l'état initial ou avec une constante de calage : sans action du joueur ni événement, l'état du 1er janvier 2026 est un point fixe.
 - **Bases comptables** : les comptes 2025 de l'Insee (mai 2026) sont en base 2020. Le RESF du PLF 2026 (octobre 2025) et la ventilation COFOG 2024 sont en base 2014. Les niveaux ne sont donc pas strictement comparables (voir `budget.mapping_notes`).
+- **Réformes** (`reformes.json`, ENGINE.md §14) : les élasticités des effets sont exprimées **par Md€ 2026 de recette en plus** (d > 0 ; une suppression d'impôt a d < 0 et inverse les effets), et les `groupes_touches` sont donnés **dans le sens d > 0** (multipliés par le signe de d par le moteur). Aucun effet `budget` : les montants passent par le moteur (`montantsReformes`).
 - **Sources secondaires** : utilisées seulement quand la source primaire était inaccessible (erreur 403, PDF illisible, quota de recherche épuisé). Elles sont signalées dans les notes.
 
 ## Grandeurs partagées entre fichiers (vérifiées identiques)
@@ -117,6 +118,7 @@ Format imposé par `src/schemas.ts` (schéma v2), validé par `npm run validate`
 - **Valeurs calées** : `taux_apparent_dette` = 2,01 % (12 mois simulés → 73,6 Md€ d'intérêts en 2026) ; `part_dette_refinancee_mois` = 0,0054 (175,8 Md€ d'amortissements / 2 737 Md€ de dette négociable / 12) ; `spread_constante` = 70 pb ; `vitesse_transmission_taux` supprimé.
 - **Ajouts phase 0.5** : `bareme.notation.*` = 1/2/3 crans ; `spread_poids_agence_secondaire` = 0,5 (DBRS, Scope) ; seuil de grèves régional `max(0,6 ; T0_r + 0,15)` (au lieu de + 0,05, plus faible que `bareme.tension.moyenne`) ; initialisation de l'historique de ḡ (Okun) à la croissance potentielle et de la moyenne glissante du déficit (spread) au déficit 2025.
 - **Barème** (hypothèses de jeu, effet présent chaque mois où il est actif) : croissance 0,1/0,25/0,5 % du niveau du PIB ; chômage 0,05/0,15/0,3 pt ; inflation 0,1/0,3/0,8 % du niveau des prix ; pauvreté 0,1/0,3/0,6 pt ; satisfaction 0,02/0,05/0,10 ; popularité 0,01/0,03/0,06 ; tension 0,03/0,07/0,15 ; stabilité 0,02/0,05/0,10 ; budget 1/5/15 Md€/an ; prime de risque 5/15/40 pb ; notation 1/2/3 crans. Échelle cohérente avec les leviers (ex. âge légal +1 an : popularité −0,03 = moyenne, tension +0,06 ≈ moyenne ; 1 point de CSG : satisfaction −0,016 ≈ faible ; 1 point de TVA : 7,5 Md€ entre moyenne et forte).
+- **Réformes (ENGINE.md §14)** : `reforme_satisfaction_max` (0,15) et 7 coefficients `referendum_*` (poids de popularité 4, pivot 0,35, poids des consignes 1, incertitude 0,3, campagne 2 mois, chocs 6 mois, relation −0,1), tous `hypothese: true`, recoupés dans le banc (1969, 1992, 2000, 2005).
 - **Coefficients `hypothese: true`** : 66 sur 94 (poids d'opinion, inerties, barème, Okun, Phillips, seuils, durée de vie de la dette tant que le PDF AFT n'est pas lu directement…).
 
 ### Simulation papier (phase 0.5)
@@ -140,6 +142,20 @@ Script reproductible dans le scratchpad de la session (`papersim.cjs`), équatio
 - **Source** : https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions-avec-outre-mer.geojson, consultée le 2026-10-20. Contours IGN Admin Express COG (édition 2018), codes et noms Insee COG (millésime 2018). Les limites régionales sont inchangées depuis 2016.
 - **Traitement** : mapshaper 0.6 (`-simplify 25% keep-shapes -clean`, précision 0,0001°). Les îlots de moins d'environ 1 km² ont été supprimés et les surfaces restent à ±1 % de la source.
 - **Licence** : **Licence Ouverte Etalab 2.0** (IGN / INSEE). Attribution obligatoire, avec la date de mise à jour : « Contours : IGN – Admin Express COG, édition 2018 ; codes et noms : INSEE – COG, millésime 2018 ; via github.com/gregoiredavid/france-geojson ; simplifié avec mapshaper. » Le dépôt intermédiaire n'a pas de licence propre. L'attribution figure aussi dans le membre `attribution` du fichier et doit apparaître dans l'interface de la carte.
+
+## reformes.json — catalogue des réformes de structure
+
+- **Contenu** : 5 modèles (`creer_impot`, `supprimer_impot`, `proportionnelle`, `suppression_493`, `capitalisation`) avec leurs voies (circuit de l'art. 89 pour la proportionnelle et le 49.3), 4 assiettes d'impôt nouveau (taux min/max/défaut, rendement par unité k, érosion η : R(τ) = k·τ·e^(−ητ)), 7 impôts supprimables (ligne, recette 2026, leviers liés), cotisations retraite effectives 2026 (capitalisation). Chaque entrée porte ses effets (format de `levers.json`), groupes touchés, positions des groupes parlementaires (`assemblee_<id>`, `senat_<id>`) et tags requis.
+- **Sources** :
+  - ISF financier : France Stratégie, comité d'évaluation des réformes de la fiscalité du capital (rapport d'octobre 2023) pour la base ISF 2017 (≈ 1 028 Md€, DGFiP) ; érosion d'après Seim (2017) et Jakobsen et al. (2020).
+  - Très hauts patrimoines : Institut de l'entreprise (note de juin 2026, rendement divisé par quatre une fois l'IS imputé) et Public Sénat (arguments pour et contre la taxe Zucman, rejetée le 31 octobre 2025) ; patrimoine ≈ 1 000 Md€ (classement Challenges).
+  - Carbone : I4CE (contribution climat-énergie : revenus 2017 de 5,4 Md€ à 30,5 €/t, exonérations de 6,3 Md€ en 2018) ; CPO 2019.
+  - Rachats d'actions : La Lettre Vernimmen via FranceTransactions (CAC 40 : 25,5 Md€ en 2024, 30,1 Md€ en 2023 ; 34,8 Md€ en 2025).
+  - Impôts supprimables : montants Insee 2025 des notes de `budget.json` × 1,0331 (IFI 2,80 ; TTF 2,58 ; taxe foncière 45,64 ; CVAE 3,87 ; droits de succession 21,75 Md€), IS et IR = lignes de `budget.json`. Effets = élasticités des leviers liés ÷ leur élasticité budgétaire.
+  - Capitalisation : COR, rapport annuel de juin 2025 (méthodologie, ressources du système).
+- **Conventions** : voir « Réformes » dans les conventions communes (élasticités par Md€ 2026 de recette en plus, `groupes_touches` dans le sens d > 0).
+- **Estimations** (`estimate: true` partout) : base de l'ISF financier (≈ 900 Md€ = 1 028 × 0,65 × 1,4) ; assiette carbone nette ≈ 150 MtCO2 (**ordre de grandeur, à sourcer** : non trouvée telle quelle) ; rachats ≈ 30 Md€/an (moyenne 2023-2025) ; cotisations retraite effectives ≈ 250 Md€ (**à sourcer** dans les ressources par nature du COR, fourchette 230-300) ; positions des groupes estimées d'après les programmes 2022-2024 et les débats de 2025 (**à sourcer**). Érosions η : hypothèses (`hypothese: true`).
+- **Limites** : rendement statique indexé sur le compte central (pas d'élasticité conjoncturelle propre) ; érosion × taux max ≤ 2 (1,75 pour les très hauts patrimoines à 5 %, au-delà du maximum de Laffer à 2,9 %) ; la proportionnelle est classée constitutionnelle par choix de jeu (`"voies": []` pour revenir à la loi ordinaire, art. 34).
 
 ---
 
